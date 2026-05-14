@@ -1,0 +1,15 @@
+node_modules
+dist
+.next
+.turbo
+.env
+.env.local
+.env.*.local
+*.log
+coverage
+Move.lock
+build
+.DS_Store
+Thumbs.db
+*.pem
+*Key_hackathon*.md

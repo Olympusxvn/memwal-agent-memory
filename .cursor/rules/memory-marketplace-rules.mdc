@@ -1,0 +1,68 @@
+---
+description: MemWal++ Walrus track — memory economy, hybrid architecture, hackathon demo discipline
+globs: "**/*"
+alwaysApply: true
+---
+
+# Memory Marketplace + Bounty Agents - Cursor Rules
+
+**Project**: Memory Marketplace on Walrus + Sui Overflow 2026  
+**Track**: Walrus Specialized + Agentic Web  
+**Goal**: Decentralized verifiable memory marketplace with autonomous bounty-hunter agents.
+
+## 1. Project vision
+
+- Build a **memory economy** where agents can buy, sell, fork, improve, and earn from memories in a **verifiable** way.
+- Priorities: **Verifiable · Privacy-first · Autonomous**.
+- Maximize: MemWal + Walrus, NemoClaw/OpenClaw, agentmemory + memoirs (local layer).
+
+## 2. Architecture principles
+
+- **Hybrid memory**: local-first (speed + privacy) → Walrus (durable + verifiable + shareable).
+- Clear separation: local scoring / PII → MemWal+Walrus → Sui Move → orchestration.
+- Prefer **cryptographic truth** and **auditability** over convenience.
+
+## 3. Tech stack
+
+- TypeScript (strict), Move (Sui), Turborepo + pnpm.
+- Agents: NemoClaw / OpenClaw.
+- Memory: local adapters + MemWal + Walrus (Seal where applicable).
+- Chain: Sui Move + package WAL for demo economics unless bridged.
+- Frontend: Next.js (+ optional Tauri).
+
+## 4. Coding standards
+
+- Clean, surgical, minimal changes.
+- Small functions, single responsibility.
+- Explicit errors; logs that help **judges** follow the demo.
+
+## 5. Repo conventions
+
+- Read **`docs/ARCHITECTURE.md`** and **`PROJECT.md`** before large refactors; package matrix in **`docs/decisions/ADR-013.md`**.
+- `packages/core/` — business logic.
+- `packages/memwal-client/` — MemWal / Walrus / hooks.
+- `packages/local-memory/` — local adapters + quality scorer.
+- `packages/sui-contracts/` — Move + tests.
+- `packages/shared/` — **types only**, no I/O.
+
+## 6. Workflow order (when building features)
+
+1. OpenSpec / spec when behavior is non-trivial.
+2. Local layer + tests.
+3. MemWal integration.
+4. Move contracts + `sui move test`.
+5. Agent swarm behaviors.
+6. Dashboard last for vertical slices.
+
+## 7. Security
+
+- Delegate keys only for MemWal; never owner keys in repo.
+- PII redaction before Walrus push.
+- Explicit access control for memory spaces.
+
+## 8. Hackathon demo
+
+- Short, visual, verifiable flow (bounty → acquire → improve → fork → payout).
+- Every SDK import must appear in the demo or `pnpm demo`.
+
+When in doubt: **verifiability > convenience**, **agent autonomy**, clean code over clever code.

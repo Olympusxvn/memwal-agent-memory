@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  move:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Sui CLI (snap)
+        run: sudo snap install sui --classic
+      - name: Move build & test
+        working-directory: packages/sui-contracts
+        run: |
+          sui move build
+          sui move test
+
+  js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - name: Install
+        run: pnpm install
+      - name: Native deps (better-sqlite3)
+        run: pnpm rebuild better-sqlite3
+      - name: Unit tests (local-memory)
+        run: pnpm test
+      - name: Turbo
+        run: pnpm exec turbo run lint check build

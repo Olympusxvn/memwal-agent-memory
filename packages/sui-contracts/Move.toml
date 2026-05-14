@@ -1,0 +1,6 @@
+[package]
+name = "memwalpp_contracts"
+edition = "2024"
+
+[addresses]
+memwalpp_contracts = "0x0"

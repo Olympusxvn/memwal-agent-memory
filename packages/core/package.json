@@ -1,0 +1,19 @@
+{
+  "name": "@memwalpp/core",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo \"no lint yet\""
+  },
+  "dependencies": {
+    "@memwalpp/memwal-client": "workspace:*",
+    "@memwalpp/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

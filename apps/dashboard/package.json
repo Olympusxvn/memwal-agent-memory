@@ -1,0 +1,28 @@
+{
+  "name": "dashboard",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "check": "tsc --noEmit",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@memwalpp/shared": "workspace:*",
+    "@memwalpp/ui": "workspace:*",
+    "@mysten/dapp-kit": "^0.14.53",
+    "@mysten/sui": "^1.21.2",
+    "@tanstack/react-query": "^5.62.8",
+    "next": "15.1.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/react": "^19.0.2",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "15.1.2",
+    "typescript": "^5.7.2"
+  }
+}

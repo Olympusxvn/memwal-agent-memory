@@ -1,0 +1,27 @@
+{
+  "name": "memwalpp",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "check": "turbo run check",
+    "test": "pnpm --filter @memwalpp/local-memory exec vitest run",
+    "test:local": "pnpm --filter @memwalpp/local-memory exec vitest",
+    "lint": "turbo run lint",
+    "demo": "tsx scripts/demo-runner.ts",
+    "contracts:build": "cd packages/sui-contracts && sui move build",
+    "contracts:test": "cd packages/sui-contracts && sui move test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "tsx": "^4.19.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "pnpm@10.18.2",
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3"]
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

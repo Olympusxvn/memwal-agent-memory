@@ -1,0 +1,16 @@
+{
+  "name": "@memwalpp/shared",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo \"no lint yet\""
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
