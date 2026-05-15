@@ -2,24 +2,36 @@
 
 [![Sui Overflow 2026](https://img.shields.io/badge/Sui_Overflow-2026-6fbcff)](https://overflow.sui.io)
 [![Walrus Track](https://img.shields.io/badge/Walrus-Track-4ade80)](https://mystenlabs.notion.site/walrus-track-problem-statement)
+[![Sui](https://img.shields.io/badge/Sui-Chain-4DA2FF)](https://sui.io)
+[![Walrus](https://img.shields.io/badge/Walrus-Storage-7C3AED)](https://www.walrus.xyz)
+[![GitHub](https://img.shields.io/badge/GitHub-Olympusxvn%2Fmemwalpp-181717?logo=github)](https://github.com/Olympusxvn/memwalpp)
 [![pnpm](https://img.shields.io/badge/pnpm-10.18-f69220?logo=pnpm&logoColor=white)](https://pnpm.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 
-**A verifiable memory economy for autonomous agents** — built for **[Sui Overflow 2026](https://overflow.sui.io)** (**Walrus track** · [problem statement](https://mystenlabs.notion.site/walrus-track-problem-statement)).
+**Hybrid agent memory: local-first speed + Walrus durable truth via MemWal + Sui Move marketplace.**
 
-> **Judges:** start with [`SUBMISSION.md`](SUBMISSION.md) → run `pnpm agent:demo` (no API keys required).
+Built for **[Sui Overflow 2026](https://overflow.sui.io)** — **[Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement)**.
+
+### For judges (5–10 min)
+
+| Step | Action |
+|------|--------|
+| 1 | Read [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) or [`SUBMISSION.md`](SUBMISSION.md) |
+| 2 | `pnpm install && pnpm agent:demo && pnpm agent:bounty-hunt` |
+| 3 | Skim Walrus path: `packages/core/src/memory/memory-sync-service.ts` |
+
+No API keys required. Optional live Walrus blob ids: see [`.env.example`](.env.example).
 
 ## Contents
 
+- [For judges](#for-judges-5–10-min)
 - [Overview](#overview)
-- [Repository layout](#monorepo-layout)
-- [Architecture](#architecture-at-a-glance)
-- [Build order (recommended)](#build-order-recommended)
 - [Quick start](#quick-start)
+- [Architecture](#architecture-at-a-glance)
 - [On-chain package](#published-move-package-sui-mainnet)
-- [Documentation index](#documentation)
-- [Checklists](#walrus-track-checklist)
+- [Documentation](#documentation)
+- [Walrus track checklist](#walrus-track-checklist)
 
 ---
 
@@ -247,7 +259,8 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | [`docs/specs/indexer-schema.sql`](docs/specs/indexer-schema.sql) | Kiosk / marketplace indexer DDL |
 | [`.cursor/rules/memory-marketplace-rules.mdc`](.cursor/rules/memory-marketplace-rules.mdc) | Primary Cursor project rules |
 | [`openspec/README.md`](openspec/README.md) | Pointer: specs live under `docs/specs/` until split |
-| [`SUBMISSION.md`](SUBMISSION.md) | **Hackathon submission brief** (features, Walrus path, runbook) |
+| [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | **5–10 min judge runbook** |
+| [`SUBMISSION.md`](SUBMISSION.md) | Hackathon submission brief + “why Walrus track” |
 
 ---
 
@@ -268,7 +281,7 @@ Use **MemWal delegate keys** only. Never commit owner keys. Keep secrets in loca
 
 ## License
 
-Add SPDX license (MIT or Apache-2.0, etc.) before public release.
+[MIT](LICENSE)
 
 ---
 

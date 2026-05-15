@@ -7,6 +7,6 @@ MemWal++ — run the judge demos:
   pnpm agent:demo          Hybrid memory + hooks (offline-safe)
   pnpm agent:bounty-hunt   Two-agent bounty swarm
 
-See SUBMISSION.md for the full hackathon brief.
+See JUDGE_GUIDE.md and SUBMISSION.md for the hackathon brief.
 `);
 process.exit(0);
