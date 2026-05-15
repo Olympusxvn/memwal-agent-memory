@@ -163,6 +163,16 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 
 MemWal++ satisfies the Walrus track by placing **durable agent memory on Walrus** via the official MemWal path, while keeping day-to-day agent work **local-first**.
 
+**Judge commands:** `pnpm agent:demo` · `pnpm agent:bounty-hunt` · [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md)
+
+| Track criterion | MemWal++ evidence |
+|-----------------|-------------------|
+| Durable storage on Walrus | MemWal `remember` → blob id on `MemoryRecord.walrusBlobId` |
+| Verifiable / recallable | `pullQuery`, MemWal semantic recall, hybrid hydrate |
+| Real integration | Runnable demos + Vitest + `sui move test` |
+| Agent + app story | `MemWalAgentBridge` hooks, not dead imports |
+| On-chain linkage | `bounty::submit_fulfillment(walrus_blob_id)` on mainnet package |
+
 ```mermaid
 flowchart LR
   subgraph Agent["apps/agent-swarm"]

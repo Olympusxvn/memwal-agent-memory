@@ -1,27 +1,47 @@
 # Roadmap — Memory Marketplace (MemWal++)
 
+**Status:** Phases **0–4 complete** ✓ (Sui Overflow 2026 Walrus Track submission ready)
+
 ## Milestone + artifact (tóm tắt)
 
-| Phase | Milestone | Artifact bắt buộc (deliverable) |
-|-------|-----------|----------------------------------|
-| **0** | Project setup | GSD: `PROJECT.md` / roadmap; OpenSpec/ADR: kiến trúc monorepo + ranh giới package (**ADR-013**); repo: `pnpm-workspace`, `turbo`, CI, `.env.example`, [`docs/GIT-AND-VERSIONING.md`](docs/GIT-AND-VERSIONING.md). |
-| **1** | Foundation packages | OpenSpec: contract `shared` / types / `local-memory`; GSD plan + code; `pnpm run check` xanh; API foundation “đóng” — không import vòng. |
-| **2** | MemWal integration | OpenSpec Phase 2 durable sync; GSD plan; `@memwalpp/memwal-client` facade + **`DurableMemoryStore`**; **`MemorySyncService`** in `core`; peer `@mysten/sui` khớp SDK. |
-| **3** | Sui Move contracts ✓ | OpenSpec + GSD; Move sources + `sui move test`; [`deploy.md`](docs/deploy.md) + [`deploy-manifest.json`](packages/sui-contracts/deploy-manifest.json); TS `moveTarget` in shared. |
-| **4** | Autonomous agents + submission | Agent hooks + demos ✓; [`SUBMISSION.md`](SUBMISSION.md); judge path `pnpm agent:demo`. |
+| Phase | Milestone | Status |
+|-------|-----------|--------|
+| **0** | Project setup | ✓ `PROJECT.md`, monorepo, CI, ADR-013, `.env.example` |
+| **1** | Foundation packages | ✓ `shared`, `local-memory`, OpenSpecs, Vitest, acyclic DAG |
+| **2** | MemWal integration | ✓ `DurableMemoryStore`, `MemorySyncService`, Phase 2 OpenSpecs |
+| **3** | Sui Move contracts | ✓ Mainnet package, [`docs/deploy.md`](docs/deploy.md), `sui move test` |
+| **4** | Autonomous agents + submission | ✓ `MemWalAgentBridge`, `agent:demo`, `SUBMISSION.md`, `JUDGE_GUIDE.md` |
 
-**Thứ tự công cụ (Phase 1+):** OpenSpec → GSD → Superpowers (implement) → Review → Acceptance.
-
-**Phụ thuộc:** Có thể song song **minimum Move publish** với cuối Phase 2 nếu demo cần `packageId` sớm.
+**Thứ tự công cụ (Phase 1+):** OpenSpec → GSD → Implement → Review → Acceptance.
 
 ---
 
 ## Chi tiết theo phase (exit criteria)
 
-| Phase | Exit criteria (PASS khi) |
-|-------|---------------------------|
-| **0** | `PROJECT.md`, `ROADMAP.md` (bảng này), `docs/ARCHITECTURE.md`, `docs/decisions/ADR-013.md`, `pnpm-workspace.yaml`, `turbo.json`, root `package.json`, `.env.example`, CI cài đặt + check/lint/build xanh trên PR. |
-| **1** | `shared` / `local-memory` (và types liên quan) có spec ngắn hoặc ADR pointer; không có cycle `packages/*`; `pnpm run check` toàn monorepo. |
-| **2** | `docs/specs/openspec-memwal-client.md` acceptance ✓; consumer chỉ import `@memwalpp/memwal-client` cho remember/recall facade. |
-| **3** | Move build + test trong CI; package ID + object IDs trong `docs/deploy.md`, `SUBMISSION.md`, `pnpm contracts:info`. |
-| **4** | Agent flow demo được mô tả + một đường chạy (`pnpm demo` hoặc script tương đương) dùng hooks/MemWal theo ADR-005/010. |
+| Phase | Exit criteria | Status |
+|-------|----------------|--------|
+| **0** | `PROJECT.md`, `ROADMAP.md`, `docs/ARCHITECTURE.md`, ADR-013, pnpm/turbo, CI, `.env.example` | ✓ |
+| **1** | `shared` / `local-memory` specs; no `packages/*` cycles; `pnpm check` green | ✓ |
+| **2** | MemWal facade + sync; `openspec-memwal-client.md` acceptance | ✓ |
+| **3** | Move test + package ID in `deploy.md`, `SUBMISSION.md`, `pnpm contracts:info` | ✓ |
+| **4** | Agent demos + hooks (ADR-005/010/011); judge path `pnpm agent:demo` | ✓ |
+
+---
+
+## Post-submission backlog
+
+| Item | Notes |
+|------|-------|
+| Indexer worker | `docs/specs/indexer-schema.sql` |
+| Dashboard PTBs | Wire `moveTarget()` + dApp Kit |
+| Live bounty PTB in `agent:bounty-hunt` | Stub bounty today |
+| Seal PTB | Compose with Mysten Seal package IDs |
+| OpenClaw plugin publish | `apps/agent-swarm/plugin/` |
+
+---
+
+## Judge quick links
+
+- [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md)
+- [`SUBMISSION.md`](SUBMISSION.md)
+- [`docs/deploy.md`](docs/deploy.md)

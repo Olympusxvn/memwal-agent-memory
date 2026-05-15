@@ -11,17 +11,23 @@
 
 **Hybrid agent memory: local-first speed + Walrus durable truth via MemWal + Sui Move marketplace.**
 
+[![Submission ready](https://img.shields.io/badge/submission-ready-brightgreen)](SUBMISSION.md)
+
 Built for **[Sui Overflow 2026](https://overflow.sui.io)** — **[Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement)**.
 
-### For judges (5–10 min)
+### For judges (5–10 min) — start here
 
-| Step | Action |
-|------|--------|
-| 1 | Read [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) or [`SUBMISSION.md`](SUBMISSION.md) |
-| 2 | `pnpm install && pnpm agent:demo && pnpm agent:bounty-hunt` |
-| 3 | Skim Walrus path: `packages/core/src/memory/memory-sync-service.ts` |
+```bash
+pnpm install && pnpm agent:demo && pnpm agent:bounty-hunt
+```
 
-No API keys required. Optional live Walrus blob ids: see [`.env.example`](.env.example).
+| | |
+|---|---|
+| **Runbook** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) |
+| **Brief** | [`SUBMISSION.md`](SUBMISSION.md) |
+| **Walrus code path** | `packages/core/src/memory/memory-sync-service.ts` |
+
+No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PASS`. Optional live Walrus: [`.env.example`](.env.example) + `MEMWAL_AUTO_PUSH=1`.
 
 ## Contents
 
@@ -279,7 +285,8 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | [`.cursor/rules/memory-marketplace-rules.mdc`](.cursor/rules/memory-marketplace-rules.mdc) | Primary Cursor project rules |
 | [`openspec/README.md`](openspec/README.md) | Pointer: specs live under `docs/specs/` until split |
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | **5–10 min judge runbook** |
-| [`SUBMISSION.md`](SUBMISSION.md) | Hackathon submission brief + “why Walrus track” |
+| [`SUBMISSION.md`](SUBMISSION.md) | **Final submission brief** (Walrus value + why win) |
+| [`ROADMAP.md`](ROADMAP.md) | Phases 0–4 complete ✓ |
 
 ---
 
