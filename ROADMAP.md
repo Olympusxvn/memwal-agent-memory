@@ -6,7 +6,7 @@
 |-------|-----------|----------------------------------|
 | **0** | Project setup | GSD: `PROJECT.md` / roadmap; OpenSpec/ADR: kiến trúc monorepo + ranh giới package (**ADR-013**); repo: `pnpm-workspace`, `turbo`, CI, `.env.example`, [`docs/GIT-AND-VERSIONING.md`](docs/GIT-AND-VERSIONING.md). |
 | **1** | Foundation packages | OpenSpec: contract `shared` / types / `local-memory`; GSD plan + code; `pnpm run check` xanh; API foundation “đóng” — không import vòng. |
-| **2** | MemWal integration | OpenSpec MemWal client; GSD plan; `@memwalpp/memwal-client` facade + offline-safe factory; peer `@mysten/sui` khớp SDK. |
+| **2** | MemWal integration | OpenSpec Phase 2 durable sync; GSD plan; `@memwalpp/memwal-client` facade + **`DurableMemoryStore`**; **`MemorySyncService`** in `core`; peer `@mysten/sui` khớp SDK. |
 | **3** | Sui Move contracts | OpenSpec module/event/escrow; GSD plan; Move package + `sui move test`; `packageId` + manifest indexer/client. |
 | **4** | Autonomous agents | OpenSpec agent + hooks; GSD plan; `core` / `agent-swarm` factories thật + UAT theo spec. |
 

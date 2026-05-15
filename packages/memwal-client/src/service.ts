@@ -4,12 +4,19 @@ import type { MemWalClientConfig } from "./config.js";
 import { loadMemWalConfigFromEnv } from "./config.js";
 import { MemWalConfigError } from "./errors.js";
 
+export interface MemWalRecallHit {
+  text: string;
+  blobId?: string;
+  distance?: number;
+}
+
 export interface MemWalService {
   remember(
     text: string,
     opts?: { namespace?: string; metadata?: Record<string, string> },
   ): Promise<{ jobId?: string; blobId?: string }>;
-  recall(query: string, limit?: number): Promise<string[]>;
+  recall(query: string, limit?: number, namespace?: string): Promise<MemWalRecallHit[]>;
+  health(): Promise<{ ok: boolean; version?: string }>;
   destroy(): void;
   readonly isLive: boolean;
 }
@@ -25,12 +32,16 @@ class OfflineMemWalService implements MemWalService {
     );
   }
 
-  recall(): Promise<string[]> {
+  recall(): Promise<MemWalRecallHit[]> {
     return Promise.reject(
       new MemWalConfigError(
         "MemWal is not configured. Set MEMWAL_PRIVATE_KEY and MEMWAL_ACCOUNT_ID (see .env.example).",
       ),
     );
+  }
+
+  health(): Promise<{ ok: boolean; version?: string }> {
+    return Promise.resolve({ ok: false });
   }
 
   destroy(): void {
@@ -67,12 +78,26 @@ class LiveMemWalService implements MemWalService {
     return { jobId: accepted.job_id };
   }
 
-  async recall(query: string, limit = 10): Promise<string[]> {
+  async recall(query: string, limit = 10, namespace?: string): Promise<MemWalRecallHit[]> {
     if (!query.trim()) {
       throw new RangeError("recall: query must be non-empty");
     }
-    const result = await this.inner.recall(query, limit, this.defaultNamespace);
-    return result.results.map((m) => m.text);
+    const ns = namespace ?? this.defaultNamespace;
+    const result = await this.inner.recall(query, limit, ns);
+    return result.results.map((m) => ({
+      text: m.text,
+      blobId: m.blob_id,
+      distance: m.distance,
+    }));
+  }
+
+  async health(): Promise<{ ok: boolean; version?: string }> {
+    try {
+      const h = await this.inner.health();
+      return { ok: h.status === "ok" || h.status === "healthy", version: h.version };
+    } catch {
+      return { ok: false };
+    }
   }
 
   destroy(): void {

@@ -158,5 +158,7 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 | [`specs/openspec-package-shared.md`](specs/openspec-package-shared.md) | Phase 1 — `shared` OpenSpec |
 | [`specs/openspec-package-core.md`](specs/openspec-package-core.md) | Phase 1 — `core` OpenSpec |
 | [`specs/openspec-package-local-memory.md`](specs/openspec-package-local-memory.md) | Phase 1 — `local-memory` OpenSpec |
-| [`specs/openspec-memwal-client.md`](specs/openspec-memwal-client.md) | MemWal client facade (implemented) |
+| [`specs/openspec-memwal-client.md`](specs/openspec-memwal-client.md) | MemWal client facade (Phase 2a — implemented) |
+| [`specs/openspec-memwal-phase2-durable-sync.md`](specs/openspec-memwal-phase2-durable-sync.md) | Phase 2 — durable store + bidirectional sync |
+| [`process/plans/memwal-phase2-gsd.md`](process/plans/memwal-phase2-gsd.md) | Phase 2 GSD implementation plan |
 | [`specs/indexer-schema.sql`](specs/indexer-schema.sql) | Kiosk / marketplace indexer |

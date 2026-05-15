@@ -38,7 +38,7 @@ Exports via **`packages/core/src/index.ts`** barrel only.
 
 ## 4. DAG note
 
-Current graph: `shared` ← `memwal-client` ← (types only for hooks); `core` → `shared` + `memwal-client`. **No** `core` → `local-memory` yet — avoids premature coupling.
+Current graph: `shared` ← `memwal-client`, `local-memory`; `core` → `shared` + `memwal-client` + `local-memory` (`MemorySyncService`). `memwal-client` **must not** import `local-memory`.
 
 ---
 

@@ -56,7 +56,7 @@ flowchart BT
 | `shared` | any `@memwalpp/*` | Foundation leaf |
 | `memwal-client` | `core`, `local-memory` | I/O boundary stays thin |
 | `local-memory` | `core`, `memwal-client` | Leaf scorer / future DB; no orchestration upward |
-| `core` | `local-memory` | **Deferred** until a concrete use-case needs it; then only **core → local-memory**, never reverse |
+| `core` | `local-memory` | **Active (Phase 2 Wave 2)** — `MemorySyncService` in `@memwalpp/core`; **core → local-memory** only, never reverse |
 
 Apps (`apps/*`) may depend on any combination of the four; **packages must not import `apps/*`**.
 

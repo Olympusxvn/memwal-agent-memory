@@ -7,6 +7,10 @@ import type { MemWalConfig } from "@mysten-incubation/memwal";
 export interface MemWalClientConfig extends MemWalConfig {
   /** When true, `remember` blocks until Walrus indexing completes (default false). */
   waitForRemember?: boolean;
+  /** Max retry attempts for transport errors (default 3). */
+  retryMaxAttempts?: number;
+  /** Minimum ms between consecutive durable API calls (default 0). */
+  minRequestIntervalMs?: number;
 }
 
 function trimOrEmpty(v: string | undefined): string {
@@ -31,6 +35,8 @@ export function loadMemWalConfigFromEnv(
   const namespace = trimOrEmpty(env.MEMWAL_NAMESPACE) || "default";
   const waitRaw = trimOrEmpty(env.MEMWAL_WAIT_FOR_REMEMBER).toLowerCase();
   const waitForRemember = waitRaw === "1" || waitRaw === "true" || waitRaw === "yes";
+  const retryMax = Number.parseInt(trimOrEmpty(env.MEMWAL_RETRY_MAX), 10);
+  const minInterval = Number.parseInt(trimOrEmpty(env.MEMWAL_MIN_REQUEST_INTERVAL_MS), 10);
 
   return {
     key,
@@ -38,6 +44,9 @@ export function loadMemWalConfigFromEnv(
     serverUrl,
     namespace,
     waitForRemember,
+    retryMaxAttempts: Number.isFinite(retryMax) && retryMax > 0 ? retryMax : undefined,
+    minRequestIntervalMs:
+      Number.isFinite(minInterval) && minInterval >= 0 ? minInterval : undefined,
   };
 }
 
