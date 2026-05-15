@@ -12,9 +12,11 @@
     "agent:demo": "pnpm --filter agent-swarm run demo",
     "agent:bounty-hunt": "pnpm --filter agent-swarm run bounty-hunt",
     "contracts:build": "cd packages/sui-contracts && sui move build",
-    "contracts:test": "cd packages/sui-contracts && sui move test"
+    "contracts:test": "cd packages/sui-contracts && sui move test",
+    "contracts:info": "tsx scripts/move-package-info.ts"
   },
   "devDependencies": {
+    "@memwalpp/shared": "workspace:*",
     "@types/node": "^22.10.1",
     "tsx": "^4.19.2",
     "turbo": "^2.3.3",

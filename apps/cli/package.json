@@ -11,6 +11,7 @@
     "check": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@memwalpp/shared": "workspace:*",
     "@memwalpp/memwal-client": "workspace:*"
   },
   "devDependencies": {

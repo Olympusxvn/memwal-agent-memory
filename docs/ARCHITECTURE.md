@@ -85,6 +85,22 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 
 **Walrus:** encrypted blobs, erasure coding, PoA, Seal key gating — underpins MemWal storage narrative.
 
+### Layer D — Move contracts reference
+
+**Package:** `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` · [`deploy.md`](deploy.md) · [`specs/openspec-move-contracts.md`](specs/openspec-move-contracts.md)
+
+| Module | Key objects / flows | Walrus link |
+|--------|---------------------|-------------|
+| `memory_nft` | `MemoryPack` — `blob_ids`, `poa_proofs`, `memwal_delegate` | Stores Walrus object ids on-chain |
+| `marketplace` | Shared `Marketplace` — list/buy in package `WAL` | Pack sale references blob metadata |
+| `bounty` | Shared `Bounty` — **WAL escrow** | `submit_fulfillment(walrus_blob_id)` |
+| `delegate_bridge` | `DelegateRotated` event | Off-chain MemWal PTB composition |
+| `access_policy` | `SealAccessGranted` | Delegate must match pack |
+| `wal` | OTW + `TreasuryCap` at publish | Demo settlement coin |
+| `royalty` | 250 bps marketplace fee | Pure math |
+
+**TS constants:** `@memwalpp/shared` — `MARKETPLACE_PACKAGE_ID`, `moveTarget()`, `MAINNET_DEPLOYED_OBJECTS`.
+
 ---
 
 ## 3. Data flows (demo-critical)
@@ -201,5 +217,8 @@ flowchart LR
 | [`process/plans/memwal-phase2-gsd.md`](process/plans/memwal-phase2-gsd.md) | Phase 2 GSD implementation plan |
 | [`specs/openspec-agent-swarm-integration.md`](specs/openspec-agent-swarm-integration.md) | Phase 3 agent swarm + hooks |
 | [`specs/openspec-wave4-submission.md`](specs/openspec-wave4-submission.md) | Wave 4 submission polish |
+| [`specs/openspec-move-contracts.md`](specs/openspec-move-contracts.md) | Phase 3 Move contracts |
+| [`deploy.md`](deploy.md) | Mainnet deploy + interact |
+| [`process/plans/phase3-gsd.md`](process/plans/phase3-gsd.md) | Phase 3 GSD |
 | [`../SUBMISSION.md`](../SUBMISSION.md) | Hackathon submission brief |
 | [`specs/indexer-schema.sql`](specs/indexer-schema.sql) | Kiosk / marketplace indexer |

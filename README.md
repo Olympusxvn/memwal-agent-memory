@@ -168,15 +168,33 @@ Within Turborepo, `build` / `check` chains follow **`^build` / `^check`** so ups
 
 ---
 
-## Published Move package (Sui Mainnet)
+## Move contracts (Sui Mainnet) — Phase 3 ✓
 
 | Field | Value |
 |-------|--------|
 | **Package ID** | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
 | **Suiscan** | [Package on mainnet](https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050) |
-| **Modules** | `wal`, `memory_nft`, `marketplace`, `royalty`, `bounty`, `delegate_bridge`, `access_policy` |
+| **Shared Marketplace** | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
+| **Deploy guide** | [`docs/deploy.md`](docs/deploy.md) |
+| **OpenSpec** | [`docs/specs/openspec-move-contracts.md`](docs/specs/openspec-move-contracts.md) |
 
-**WAL note:** this deployment defines a **`WAL` coin type minted by the package** for demo economics. It is not automatically interchangeable with any other asset that shares the ticker — use an explicit bridge or wrap if you need a different coin type.
+| Module | Capabilities |
+|--------|----------------|
+| `memory_nft` | Mint `MemoryPack` with Walrus `blob_ids`, royalty bps, delegate slot |
+| `marketplace` | List / buy / cancel — WAL payment + 2.5% fee + creator royalty |
+| `bounty` | **WAL escrow** — post, submit Walrus fulfillment, approve / refund |
+| `delegate_bridge` | Rotate `memwal_delegate` after ownership transfer |
+| `access_policy` | Delegate-only Seal approval event |
+| `wal` | Package-local demo `WAL` coin (`TreasuryCap` at publish) |
+| `royalty` | Fee / royalty basis-point helpers |
+
+```bash
+pnpm contracts:build
+pnpm contracts:test
+pnpm contracts:info    # print package ID + PTB target examples
+```
+
+**WAL note:** package-minted **demo `WAL`** — not ecosystem WAL unless bridged ([`docs/deploy.md`](docs/deploy.md)).
 
 ---
 
@@ -241,6 +259,7 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | `pnpm demo` | `scripts/demo-runner.ts` |
 | `pnpm agent:demo` | Offline-safe hybrid memory hook demo (`apps/agent-swarm`) |
 | `pnpm agent:bounty-hunt` | Two-agent bounty flow (poster → hunter → sync) |
+| `pnpm contracts:info` | Deployed Move package IDs + PTB targets |
 
 ---
 

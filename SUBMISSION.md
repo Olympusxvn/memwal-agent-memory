@@ -108,12 +108,22 @@ Optional live Walrus: set `MEMWAL_*` in `.env`, run `MEMWAL_AUTO_PUSH=1 pnpm age
 
 ---
 
-## On-chain package (Sui Mainnet)
+## On-chain package (Sui Mainnet) — Phase 3 ✓
 
 | | |
 |---|---|
 | **Package ID** | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
 | **Explorer** | [Suiscan](https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050) |
+| **Marketplace (shared)** | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
+| **Deploy / interact** | [`docs/deploy.md`](docs/deploy.md) · `pnpm contracts:info` |
+
+| Capability | Move module |
+|------------|-------------|
+| MemoryPack NFT + Walrus refs | `memory_nft` |
+| Marketplace list/buy (WAL) | `marketplace` |
+| Bounty escrow + fulfillment blob | `bounty` |
+| MemWal delegate rotation | `delegate_bridge` |
+| Seal gate (event) | `access_policy` |
 
 ---
 
@@ -140,3 +150,5 @@ Built with AI coding assistants (Cursor, Claude) per **ADR-012**. Architecture d
 | [`README.md`](README.md) | Full contributor docs |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | System design + Walrus § |
 | [`docs/diagrams/memwalpp-merged-architecture.svg`](docs/diagrams/memwalpp-merged-architecture.svg) | Architecture diagram |
+| [`docs/deploy.md`](docs/deploy.md) | Move package deploy + PTB guide |
+| [`docs/specs/openspec-move-contracts.md`](docs/specs/openspec-move-contracts.md) | Move OpenSpec |

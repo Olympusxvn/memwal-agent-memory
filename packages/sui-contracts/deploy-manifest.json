@@ -1,0 +1,30 @@
+{
+  "packageName": "memwalpp_contracts",
+  "network": "mainnet",
+  "packageId": "0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050",
+  "originalId": "0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050",
+  "version": 1,
+  "toolchainVersion": "1.70.2",
+  "modules": [
+    "wal",
+    "memory_nft",
+    "royalty",
+    "marketplace",
+    "bounty",
+    "delegate_bridge",
+    "access_policy"
+  ],
+  "objects": {
+    "upgradeCap": "0xada975edf109c28a8b74f3789312b90acef29aa7fa28a5e936dc489055e0fd66",
+    "walTreasuryCap": "0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e",
+    "marketplace": "0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548"
+  },
+  "explorer": {
+    "package": "https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050"
+  },
+  "notes": {
+    "walCoin": "Package-local WAL (OTW at publish). Not ecosystem WAL unless bridged.",
+    "marketplace": "Shared object created in marketplace::init at publish.",
+    "memwalDelegate": "Rotated via delegate_bridge; MemWal SDK calls composed off-chain."
+  }
+}

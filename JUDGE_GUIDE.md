@@ -71,7 +71,10 @@ Look for: `✓ Promoted — blob …` in step 3 (poster push).
 
 ```bash
 pnpm contracts:test   # requires Sui CLI
+pnpm contracts:info   # package + marketplace object IDs
 ```
+
+Move details: [`docs/deploy.md`](docs/deploy.md)
 
 ---
 
