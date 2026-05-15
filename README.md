@@ -1,6 +1,14 @@
 # MemWal++
 
+[![Sui Overflow 2026](https://img.shields.io/badge/Sui_Overflow-2026-6fbcff)](https://overflow.sui.io)
+[![Walrus Track](https://img.shields.io/badge/Walrus-Track-4ade80)](https://mystenlabs.notion.site/walrus-track-problem-statement)
+[![pnpm](https://img.shields.io/badge/pnpm-10.18-f69220?logo=pnpm&logoColor=white)](https://pnpm.io)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Node](https://img.shields.io/badge/Node-%3E%3D20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+
 **A verifiable memory economy for autonomous agents** — built for **[Sui Overflow 2026](https://overflow.sui.io)** (**Walrus track** · [problem statement](https://mystenlabs.notion.site/walrus-track-problem-statement)).
+
+> **Judges:** start with [`SUBMISSION.md`](SUBMISSION.md) → run `pnpm agent:demo` (no API keys required).
 
 ## Contents
 
@@ -162,28 +170,51 @@ Within Turborepo, `build` / `check` chains follow **`^build` / `^check`** so ups
 
 ## Quick start
 
-**Requirements:** Node.js 20+, pnpm 10, [Sui CLI](https://docs.sui.io/guides/developer/getting-started/sui-install)
+**Requirements:** Node.js 20+, pnpm 10 · [Sui CLI](https://docs.sui.io/guides/developer/getting-started/sui-install) for contracts only
+
+### Judge path (~3 minutes, no secrets)
 
 ```bash
 pnpm install
-pnpm contracts:build
-pnpm contracts:test
-pnpm build
-pnpm agent:demo          # hybrid memory demo (no MemWal keys required)
-pnpm agent:bounty-hunt   # poster + hunter agents (shared SQLite when available)
-pnpm --filter dashboard dev
+pnpm agent:demo          # hybrid memory + hooks (offline OK)
+pnpm agent:bounty-hunt   # poster + hunter swarm
 ```
 
-Copy [`.env.example`](.env.example) to `.env.local` and set `NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID` to the package ID above.
+Expected: colored step output, `── RESULT ──` summary, **exit 0**.
 
-Optional MemWal promotion (live durable):
+### Developer path
 
 ```bash
-# .env: MEMWAL_PRIVATE_KEY, MEMWAL_ACCOUNT_ID, MEMWAL_SERVER_URL
+pnpm install
+cp .env.example .env      # optional: MEMWAL_* for live Walrus blob ids
+pnpm contracts:build
+pnpm contracts:test
+pnpm check
+pnpm build
+pnpm --filter @memwalpp/core test
+```
+
+### Live Walrus promotion (optional)
+
+```bash
+# .env — delegate key only (ADR-002); never commit
+MEMWAL_PRIVATE_KEY=...
+MEMWAL_ACCOUNT_ID=...
+MEMWAL_SERVER_URL=http://localhost:3001
 MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt
 ```
 
-**Indexer:** [`docs/specs/indexer-schema.sql`](docs/specs/indexer-schema.sql)
+When live, demos print **Walrus blob refs** on `MemoryRecord.walrusBlobId` after `pushOne`.
+
+### Dashboard
+
+```bash
+pnpm --filter dashboard dev
+```
+
+Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre-filled for mainnet.
+
+**Indexer schema:** [`docs/specs/indexer-schema.sql`](docs/specs/indexer-schema.sql)
 
 ---
 
@@ -216,6 +247,7 @@ MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt
 | [`docs/specs/indexer-schema.sql`](docs/specs/indexer-schema.sql) | Kiosk / marketplace indexer DDL |
 | [`.cursor/rules/memory-marketplace-rules.mdc`](.cursor/rules/memory-marketplace-rules.mdc) | Primary Cursor project rules |
 | [`openspec/README.md`](openspec/README.md) | Pointer: specs live under `docs/specs/` until split |
+| [`SUBMISSION.md`](SUBMISSION.md) | **Hackathon submission brief** (features, Walrus path, runbook) |
 
 ---
 

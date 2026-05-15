@@ -1,31 +1,58 @@
 import type { SwarmHookContext } from "@memwalpp/core";
 
-import { DEMO_BOUNTY } from "./stub-bounty.js";
 import type { AgentRuntime } from "../runtime/create-runtime.js";
+import {
+  demoBanner,
+  demoInfo,
+  demoOk,
+  demoPreview,
+  demoSkip,
+  demoStep,
+  demoSummary,
+} from "../util/demo-log.js";
+import { DEMO_BOUNTY } from "./stub-bounty.js";
+
+const STEPS = 5;
 
 export async function runAgentDemo(runtime: AgentRuntime): Promise<void> {
   const { bridge, sync, durableLive, storeKind } = runtime;
   const namespace = DEMO_BOUNTY.namespace;
 
-  console.log("\n=== MemWal++ agent:demo ===\n");
-  console.log(`Store: ${storeKind} | Durable: ${durableLive ? "live (MEMWAL_* set)" : "offline (local-only OK)"}\n`);
+  demoBanner(
+    "MemWal++ · agent:demo",
+    "Hybrid memory: local-first → redact → quality gate → MemWal/Walrus",
+  );
 
+  demoStep(1, STEPS, "Runtime");
+  demoInfo("Local store", storeKind === "sqlite" ? "SQLite (persistent)" : "in-memory");
+  demoInfo(
+    "Durable (MemWal/Walrus)",
+    durableLive ? "LIVE — set MEMWAL_* in .env" : "offline — demo works without keys",
+  );
+  demoInfo("Namespace", namespace);
+
+  demoStep(2, STEPS, "Seed bounty requirement (local)");
   await bridge.saveMemory(DEMO_BOUNTY.requirement, {
     role: "seed",
     bountyId: DEMO_BOUNTY.id,
   });
+  demoOk("Saved to LocalMemoryStore");
 
+  demoStep(3, STEPS, "Promote to durable (pushOne → redactForUpstream)");
   const seedRows = await runtime.local.recall({ namespace, query: "", limit: 5 });
   const seedId = seedRows[0]?.id;
+  let promotedBlob = "—";
   if (seedId) {
     const push = await sync.pushOne(seedId, { namespace });
-    console.log(
-      push.pushed
-        ? `✓ pushOne → blob ${push.blobId ?? "(pending)"}`
-        : `○ pushOne skipped (${push.reason ?? "unknown"})`,
-    );
+    if (push.pushed) {
+      promotedBlob = push.blobId ?? "(pending)";
+      demoOk(`Promoted — Walrus blob ref: ${promotedBlob}`);
+    } else {
+      demoSkip(`Not promoted (${push.reason}) — expected when offline`);
+    }
   }
 
+  demoStep(4, STEPS, "Agent turn — beforeRemember + afterThink");
   const hunterCtx: SwarmHookContext = {
     namespace,
     agentId: "hunter-demo",
@@ -36,22 +63,36 @@ export async function runAgentDemo(runtime: AgentRuntime): Promise<void> {
 
   const prompt = "How do we fulfill the bounty with verifiable Walrus proof?";
   const augmented = await bridge.beforeRemember(hunterCtx, prompt);
-  console.log("\n--- beforeRemember (context injected) ---");
-  console.log(augmented.slice(0, 600) + (augmented.length > 600 ? "…" : ""));
+  const injected = augmented.length - prompt.length;
+  demoOk(`beforeRemember injected ${injected} chars of hybrid context`);
+  if (injected > 0) {
+    demoPreview("Context preview", augmented, 400);
+  }
 
   const thinkResponse =
     "Use MemorySyncService: local recall, redactForUpstream, quality gate, then MemWal remember. " +
     "Judges verify walrusBlobId on synced rows.";
 
   await bridge.afterThink(hunterCtx, thinkResponse);
-  console.log("\n--- afterThink ---");
-  console.log(`Captured memory id: ${hunterCtx.lastMemoryId ?? "(none)"}`);
+  demoOk(`afterThink captured memory ${hunterCtx.lastMemoryId ?? "—"}`);
 
+  demoStep(5, STEPS, "onTaskComplete — syncPending + outcome stub (ADR-005)");
   await bridge.onTaskComplete(
     hunterCtx,
     "Demo task complete — hybrid memory path exercised.",
   );
-  console.log("\n--- onTaskComplete ---");
-  console.log("syncPending + outcome stub logged.\n");
-  console.log("=== demo finished (exit 0) ===\n");
+  demoOk("syncPending + toOutcomeEvent logged");
+
+  const synced = seedId
+    ? (await runtime.local.getById(seedId))?.synced
+    : false;
+
+  demoSummary({
+    "Walrus track": "MemWal remember → blobId on MemoryRecord.walrusBlobId",
+    "Hybrid sync": "MemorySyncService in @memwalpp/core",
+    "Hooks": "beforeRemember / afterThink / onTaskComplete",
+    "Durable": durableLive ? "live" : "offline (OK for judges)",
+    "Seed synced": synced ? "yes" : "no (offline gate)",
+    "Blob ref": promotedBlob,
+  });
 }

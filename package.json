@@ -4,7 +4,8 @@
   "scripts": {
     "build": "turbo run build",
     "check": "turbo run check",
-    "test": "pnpm --filter @memwalpp/local-memory exec vitest run",
+    "test": "pnpm test:packages",
+    "test:packages": "pnpm --filter @memwalpp/local-memory exec vitest run && pnpm --filter @memwalpp/core exec vitest run && pnpm --filter @memwalpp/memwal-client exec vitest run",
     "test:local": "pnpm --filter @memwalpp/local-memory exec vitest",
     "lint": "turbo run lint",
     "demo": "tsx scripts/demo-runner.ts",

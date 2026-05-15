@@ -1,15 +1,32 @@
 import type { SwarmHookContext } from "@memwalpp/core";
 
-import { DEMO_BOUNTY } from "./stub-bounty.js";
 import type { AgentRuntime } from "../runtime/create-runtime.js";
+import {
+  demoBanner,
+  demoInfo,
+  demoOk,
+  demoSkip,
+  demoStep,
+  demoSummary,
+} from "../util/demo-log.js";
+import { DEMO_BOUNTY } from "./stub-bounty.js";
+
+const STEPS = 6;
 
 export async function runBountyHunt(runtime: AgentRuntime): Promise<void> {
   const { bridge, sync, durableLive, storeKind } = runtime;
   const namespace = DEMO_BOUNTY.namespace;
 
-  console.log("\n=== MemWal++ agent:bounty-hunt (2 agents) ===\n");
-  console.log(`Bounty: ${DEMO_BOUNTY.title}`);
-  console.log(`Store: ${storeKind} | Durable: ${durableLive ? "live" : "offline"}\n`);
+  demoBanner(
+    "MemWal++ · agent:bounty-hunt",
+    "Two-agent swarm: Poster seeds bounty → Hunter recalls & improves → sync",
+  );
+
+  demoStep(1, STEPS, "Bounty (stub — Move escrow in contracts package)");
+  demoInfo("Title", DEMO_BOUNTY.title);
+  demoInfo("Reward", `${DEMO_BOUNTY.rewardWal} WAL (demo coin)`);
+  demoInfo("Store", storeKind === "sqlite" ? "SQLite" : "in-memory");
+  demoInfo("Durable", durableLive ? "live" : "offline");
 
   const posterCtx: SwarmHookContext = {
     namespace,
@@ -19,18 +36,26 @@ export async function runBountyHunt(runtime: AgentRuntime): Promise<void> {
     packId: DEMO_BOUNTY.id,
   };
 
+  demoStep(2, STEPS, "Agent: Poster — post requirement to local memory");
   await bridge.saveMemory(
     `[BOUNTY] ${DEMO_BOUNTY.title}\n${DEMO_BOUNTY.requirement}`,
     { role: "bounty-poster", bountyId: DEMO_BOUNTY.id },
   );
+  demoOk("Poster memory saved");
+  void posterCtx;
 
+  demoStep(3, STEPS, "Poster — pushOne (redact → MemWal → Walrus)");
   const posterRows = await runtime.local.recall({ namespace, query: "", limit: 5 });
   const posterMemoryId = posterRows.find((r) => r.metadata?.role === "bounty-poster")?.id;
+  let posterBlob = "—";
   if (posterMemoryId) {
     const push = await sync.pushOne(posterMemoryId, { namespace });
-    console.log(
-      `[poster] pushOne: ${push.pushed ? "promoted" : `skipped (${push.reason})`}`,
-    );
+    if (push.pushed) {
+      posterBlob = push.blobId ?? "(pending)";
+      demoOk(`Promoted — blob ${posterBlob}`);
+    } else {
+      demoSkip(`Skipped (${push.reason})`);
+    }
   }
 
   const hunterCtx: SwarmHookContext = {
@@ -41,25 +66,34 @@ export async function runBountyHunt(runtime: AgentRuntime): Promise<void> {
     packId: DEMO_BOUNTY.id,
   };
 
+  demoStep(4, STEPS, "Agent: Hunter — beforeRemember (pullQuery hybrid recall)");
   const prompt = "Evaluate and fulfill the Walrus verification bounty.";
   const withMemory = await bridge.beforeRemember(hunterCtx, prompt);
-  console.log(`\n[hunter] beforeRemember: +${withMemory.length - prompt.length} chars context\n`);
+  const injected = withMemory.length - prompt.length;
+  demoOk(injected > 0 ? `Injected ${injected} chars from hybrid memory` : "Recall local-only (no match)");
 
+  demoStep(5, STEPS, "Agent: Hunter — afterThink + onTaskComplete");
   const improved =
     "Integrated bounty context: promote redacted memories via MemorySyncService; " +
     "durable_wins on sealed conflict (ADR-010); emit outcome for on-chain proof digest.";
 
   await bridge.afterThink(hunterCtx, improved);
-  console.log(`[hunter] afterThink: memory ${hunterCtx.lastMemoryId ?? "—"}`);
+  demoOk(`Captured hunter memory ${hunterCtx.lastMemoryId ?? "—"}`);
 
   await bridge.onTaskComplete(
     hunterCtx,
-    "Bounty fulfillment draft complete — ready for Move escrow in Phase 3 contracts.",
+    "Bounty fulfillment draft complete — ready for Move escrow.",
   );
+  demoOk("syncPending + outcome stub emitted");
 
+  demoStep(6, STEPS, "exportPack — collect Walrus blob refs");
   const exported = await bridge.exportPack();
-  console.log(`\n[hunter] exportPack blobIds: ${exported.blobIds.length}`);
-  console.log("\n=== bounty-hunt finished (exit 0) ===\n");
+  demoOk(`${exported.blobIds.length} durable blob id(s) in pack export`);
 
-  void posterCtx;
+  demoSummary({
+    "Agents": "poster + hunter",
+    "Flow": "post → push → recall → improve → sync",
+    "Walrus": durableLive ? `blob ref: ${posterBlob}` : "offline — set MEMWAL_* to promote",
+    "Next": "Move bounty PTB + dashboard (Phase 3–4)",
+  });
 }

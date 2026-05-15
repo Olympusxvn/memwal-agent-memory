@@ -143,7 +143,45 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 
 ---
 
-## 8. Related documents
+## 8. Walrus Track highlights (judge narrative)
+
+MemWal++ satisfies the Walrus track by placing **durable agent memory on Walrus** via the official MemWal path, while keeping day-to-day agent work **local-first**.
+
+```mermaid
+flowchart LR
+  subgraph Agent["apps/agent-swarm"]
+    H[Hooks beforeRemember afterThink]
+  end
+  subgraph Core["packages/core"]
+    S[MemorySyncService]
+    R[redactForUpstream]
+  end
+  subgraph Durable["packages/memwal-client"]
+    M[MemWal SDK remember]
+  end
+  subgraph Storage["Walrus"]
+    B[Encrypted blobs + PoA]
+  end
+  H --> S
+  S --> R
+  R --> M
+  M --> B
+  B -.->|walrusBlobId| S
+```
+
+| Walrus requirement | How MemWal++ addresses it |
+|--------------------|---------------------------|
+| Durable blob storage | MemWal `remember` → Walrus blob id on `MemoryRecord.walrusBlobId` |
+| Verifiable recall | `pullQuery` / MemWal semantic recall hydrates local cache |
+| Agent integration | `pnpm agent:demo`, `pnpm agent:bounty-hunt` — not dead code |
+| Privacy before upload | `redactForUpstream` in sync layer before any durable write |
+| On-chain economy | Move package (marketplace, bounty, NFT) + outcome events (ADR-005) |
+
+**Judge commands:** see [`../SUBMISSION.md`](../SUBMISSION.md) and README § Quick start.
+
+---
+
+## 9. Related documents
 
 | Document | Use |
 |----------|-----|
@@ -161,4 +199,7 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 | [`specs/openspec-memwal-client.md`](specs/openspec-memwal-client.md) | MemWal client facade (Phase 2a — implemented) |
 | [`specs/openspec-memwal-phase2-durable-sync.md`](specs/openspec-memwal-phase2-durable-sync.md) | Phase 2 — durable store + bidirectional sync |
 | [`process/plans/memwal-phase2-gsd.md`](process/plans/memwal-phase2-gsd.md) | Phase 2 GSD implementation plan |
+| [`specs/openspec-agent-swarm-integration.md`](specs/openspec-agent-swarm-integration.md) | Phase 3 agent swarm + hooks |
+| [`specs/openspec-wave4-submission.md`](specs/openspec-wave4-submission.md) | Wave 4 submission polish |
+| [`../SUBMISSION.md`](../SUBMISSION.md) | Hackathon submission brief |
 | [`specs/indexer-schema.sql`](specs/indexer-schema.sql) | Kiosk / marketplace indexer |

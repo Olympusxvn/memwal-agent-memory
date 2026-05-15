@@ -8,7 +8,7 @@
 | **1** | Foundation packages | OpenSpec: contract `shared` / types / `local-memory`; GSD plan + code; `pnpm run check` xanh; API foundation “đóng” — không import vòng. |
 | **2** | MemWal integration | OpenSpec Phase 2 durable sync; GSD plan; `@memwalpp/memwal-client` facade + **`DurableMemoryStore`**; **`MemorySyncService`** in `core`; peer `@mysten/sui` khớp SDK. |
 | **3** | Sui Move contracts | OpenSpec module/event/escrow; GSD plan; Move package + `sui move test`; `packageId` + manifest indexer/client. |
-| **4** | Autonomous agents | OpenSpec agent + hooks; GSD plan; `core` / `agent-swarm` factories thật + UAT theo spec. |
+| **4** | Autonomous agents + submission | Agent hooks + demos ✓; [`SUBMISSION.md`](SUBMISSION.md); judge path `pnpm agent:demo`. |
 
 **Thứ tự công cụ (Phase 1+):** OpenSpec → GSD → Superpowers (implement) → Review → Acceptance.
 
