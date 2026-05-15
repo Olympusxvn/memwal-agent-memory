@@ -58,9 +58,9 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 
 | Concern | Implementation |
 |---------|----------------|
-| Hooks (before / after) | `packages/memwal-client` — auto-capture, quality gate, PII redaction, sync triggers |
-| Skills | `apps/agent-swarm` — browse, bid, evaluate, integrate, fulfill bounties |
-| Agent contract | `IMemWalAgent` — `saveMemory`, `queryMemory`, `exportPack`, `importPack` |
+| Hooks | `@memwalpp/core` **`MemWalAgentBridge`** — `beforeRemember` / `afterThink` / `onTaskComplete` (ADR-011); delegates **`MemorySyncService`** (redact + gate + push) |
+| Skills & demos | `apps/agent-swarm` — OpenClaw plugin manifest, skills, **`pnpm agent:demo`**, **`pnpm agent:bounty-hunt`** |
+| Agent contract | `IMemWalAgent` in `memwal-client`; implementation in **`core/agent/MemWalAgentBridge.ts`** |
 
 ### Layer C — Hybrid memory system
 

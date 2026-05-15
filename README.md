@@ -122,8 +122,10 @@ memwalpp/
 | **Move contracts** | Published on mainnet | See package ID below; sources under `packages/sui-contracts` |
 | **`@memwalpp/shared`** | Types expanded | `ObjectId`, `MemoryRecord`, `Bounty`, `AgentAction`, indexer rows — see `packages/shared/src/` |
 | **Dashboard** | Scaffold | Next 15 + dApp Kit; wire env package ID |
-| **MemWal client** | Stubs + interfaces | Replace with `@memwal/sdk` + relayer (ADR-001) |
-| **Local memory** | Stubs | Adapters for agentmemory / memoirs patterns |
+| **MemWal client** | Active | `MemWalClient`, `DurableMemoryStore`, retries (Phase 2) |
+| **Core sync** | Active | `MemorySyncService`, `MemWalAgentBridge` (Phase 2–3) |
+| **Agent swarm** | Demo-ready | `pnpm agent:demo`, `pnpm agent:bounty-hunt` (offline-safe) |
+| **Local memory** | Active | SQLite + in-memory; adapters for agentmemory / memoirs |
 | **Indexer** | Schema only | `docs/specs/indexer-schema.sql` — wire a worker next |
 | **OpenSpec / skills** | Present | `openspec/`, `.cursor/skills/`, `skills-lock.json` |
 
@@ -167,10 +169,19 @@ pnpm install
 pnpm contracts:build
 pnpm contracts:test
 pnpm build
+pnpm agent:demo          # hybrid memory demo (no MemWal keys required)
+pnpm agent:bounty-hunt   # poster + hunter agents (shared SQLite when available)
 pnpm --filter dashboard dev
 ```
 
 Copy [`.env.example`](.env.example) to `.env.local` and set `NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID` to the package ID above.
+
+Optional MemWal promotion (live durable):
+
+```bash
+# .env: MEMWAL_PRIVATE_KEY, MEMWAL_ACCOUNT_ID, MEMWAL_SERVER_URL
+MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt
+```
 
 **Indexer:** [`docs/specs/indexer-schema.sql`](docs/specs/indexer-schema.sql)
 
@@ -185,6 +196,8 @@ Copy [`.env.example`](.env.example) to `.env.local` and set `NEXT_PUBLIC_MARKETP
 | `pnpm build` | Turborepo build |
 | `pnpm check` | Typecheck / lint |
 | `pnpm demo` | `scripts/demo-runner.ts` |
+| `pnpm agent:demo` | Offline-safe hybrid memory hook demo (`apps/agent-swarm`) |
+| `pnpm agent:bounty-hunt` | Two-agent bounty flow (poster → hunter → sync) |
 
 ---
 

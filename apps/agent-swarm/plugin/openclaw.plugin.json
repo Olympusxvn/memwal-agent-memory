@@ -1,0 +1,9 @@
+{
+  "id": "memwalpp-oc-memwal",
+  "name": "MemWal++ Hybrid Memory",
+  "version": "0.0.1",
+  "description": "OpenClaw plugin contract — hooks wired via @memwalpp/core MemWalAgentBridge",
+  "entry": "../src/runtime/create-runtime.ts",
+  "hooks": ["beforeRemember", "afterThink", "onTaskComplete"],
+  "skills": ["../skills/memwal-sync", "../skills/bounty-hunt"]
+}

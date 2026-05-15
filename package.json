@@ -8,6 +8,8 @@
     "test:local": "pnpm --filter @memwalpp/local-memory exec vitest",
     "lint": "turbo run lint",
     "demo": "tsx scripts/demo-runner.ts",
+    "agent:demo": "pnpm --filter agent-swarm run demo",
+    "agent:bounty-hunt": "pnpm --filter agent-swarm run bounty-hunt",
     "contracts:build": "cd packages/sui-contracts && sui move build",
     "contracts:test": "cd packages/sui-contracts && sui move test"
   },

@@ -19,3 +19,15 @@ export {
   isTombstone,
   mergeDurableHitIntoRecord,
 } from "./memory/merge.js";
+export {
+  MemWalAgentBridge,
+  createMemWalAgentBridge,
+  type MemWalAgentBridgeDeps,
+} from "./agent/MemWalAgentBridge.js";
+export {
+  createMemWalSwarmHooks,
+  extractRecallQuery,
+  formatMemoryContext,
+  type MemWalSwarmHooks,
+} from "./agent/memwal-swarm-hooks.js";
+export type { AgentBridgeConfig, SwarmHookContext } from "./agent/types.js";
