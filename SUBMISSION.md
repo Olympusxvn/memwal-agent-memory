@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | **Repository** | https://github.com/Olympusxvn/memwalpp |
-| **Live demo (dashboard)** | https://memwalpp-dashboard-86ydhjnmd-olympusxvns-projects.vercel.app/ |
+| **Live demo (dashboard)** | https://memwalpp-dashboard.vercel.app/ |
 | **Judge runbook (start here)** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) — **5–10 minutes**, no API keys required |
 | **Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [SVG diagram](docs/diagrams/memwalpp-merged-architecture.svg) |
 

@@ -23,7 +23,7 @@ pnpm install && pnpm agent:demo && pnpm agent:bounty-hunt
 
 | | |
 |---|---|
-| **Live demo (dashboard)** | https://memwalpp-dashboard-86ydhjnmd-olympusxvns-projects.vercel.app/ |
+| **Live demo (dashboard)** | https://memwalpp-dashboard.vercel.app/ |
 | **Runbook** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) |
 | **Brief** | [`SUBMISSION.md`](SUBMISSION.md) |
 | **Walrus code path** | `packages/core/src/memory/memory-sync-service.ts` |
