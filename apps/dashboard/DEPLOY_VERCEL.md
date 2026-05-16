@@ -8,9 +8,9 @@
 4. **Node.js:** 20.x (matches root `engines.node`).
 5. **Install / Build:** leave default if Vercel reads `apps/dashboard/vercel.json`; otherwise:
    - Install: `cd ../.. && pnpm install --frozen-lockfile`
-   - Build: `cd ../.. && pnpm exec turbo run build --filter=dashboard...`
+   - Build: `cd ../.. && pnpm exec turbo run build --filter=@memwalpp/dashboard...`
 
-Repo root `vercel.json` documents the same turbo filter when deploying from the repository root.
+Repo root `vercel.json` sets `rootDirectory` to `apps/dashboard` and `outputDirectory` to `.next` (relative to that root — avoids `apps/dashboard/apps/dashboard/.next`).
 
 ## Environment variables (Vercel → Project → Settings)
 

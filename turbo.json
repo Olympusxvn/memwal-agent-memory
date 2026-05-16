@@ -6,6 +6,25 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "dist/**", "build/**"]
     },
+    "@memwalpp/shared#build": {
+      "outputs": []
+    },
+    "@memwalpp/ui#build": {
+      "outputs": []
+    },
+    "@memwalpp/local-memory#build": {
+      "outputs": []
+    },
+    "@memwalpp/memwal-client#build": {
+      "outputs": []
+    },
+    "@memwalpp/core#build": {
+      "outputs": []
+    },
+    "@memwalpp/dashboard#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
     "check": {
       "dependsOn": ["^check"],
       "outputs": []

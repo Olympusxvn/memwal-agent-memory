@@ -1,10 +1,10 @@
 {
-  "name": "dashboard",
+  "name": "@memwalpp/dashboard",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:monorepo": "cd ../.. && pnpm exec turbo run build --filter=dashboard...",
+    "build:monorepo": "cd ../.. && pnpm exec turbo run build --filter=@memwalpp/dashboard...",
     "start": "next start",
     "check": "tsc --noEmit",
     "lint": "next lint"
