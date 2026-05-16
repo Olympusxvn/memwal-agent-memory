@@ -8,7 +8,7 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 
-- **Vercel:** root `vercel.json` (`rootDirectory: apps/dashboard`, `outputDirectory: .next`), `apps/dashboard/vercel.json`, package **`@memwalpp/dashboard`**, `.env.production` / `.env.example`, `DEPLOY_VERCEL.md`; turbo build `--filter=@memwalpp/dashboard...`.
+- **Vercel:** single root `vercel.json` (`rootDirectory: apps/dashboard`, `outputDirectory: .next`), package **`@memwalpp/dashboard`**, turbo `--filter=@memwalpp/dashboard --filter=!memwalpp-cli`, `.env.production` / `.env.example`, `DEPLOY_VERCEL.md`.
 - **`pnpm test`** still runs the ordered package matrix; **`pnpm test:turbo`** runs `turbo run test` for packages that define a `test` script.
 - **`@memwalpp/local-memory` / `@memwalpp/memwal-client`:** default `test` script is now **`vitest run`** (CI-friendly); use **`pnpm run test:watch`** for watch mode.
 - **Dashboard:** `SuiClientProvider` registers mainnet/testnet/devnet; default network follows **`NEXT_PUBLIC_SUI_NETWORK`** with safe fallback to mainnet.
@@ -40,37 +40,44 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 ### Vercel + Turborepo monorepo — lessons learned (2026-05)
 
-**Double `apps/dashboard` in the output path**
+**1. Double path: `apps/dashboard/apps/dashboard/.next`**
 
-- With **`rootDirectory: apps/dashboard`**, every path in `vercel.json` is relative to that folder.
-- Setting **`outputDirectory: apps/dashboard/.next`** makes Vercel look for **`apps/dashboard/apps/dashboard/.next`** and the deploy fails.
-- **Fix:** use **`outputDirectory: ".next"`** (or leave Next.js default) when the app root is already `apps/dashboard`.
+- With **`rootDirectory: apps/dashboard`**, paths in `vercel.json` are **relative to that folder**.
+- **`outputDirectory: apps/dashboard/.next`** (or the same path in the Vercel UI) resolves to **`apps/dashboard/apps/dashboard/.next`** → deploy fails with “Output Directory not found”.
+- **Fix:** **`outputDirectory: ".next"`** only. In the Vercel dashboard, clear any manual Output Directory override or set it to **`.next`**, not `apps/dashboard/.next`.
 
-**Turbo filter must match `package.json` `name`**
+**2. One `vercel.json` at the repository root**
 
-- The dashboard app is published in the workspace as **`@memwalpp/dashboard`** (not `dashboard`).
-- Build from the monorepo root: **`pnpm exec turbo run build --filter=@memwalpp/dashboard...`** — the trailing **`...`** builds workspace dependencies (`@memwalpp/shared`, `@memwalpp/ui`) first.
+- Do **not** add a second **`apps/dashboard/vercel.json`** — it merges with the root file and duplicates install/build/output rules.
+- Install and turbo must run from the **monorepo root** when Root Directory is `apps/dashboard`:
+  - `installCommand`: `cd ../.. && pnpm install --no-frozen-lockfile --ignore-scripts`
+  - `buildCommand`: `cd ../.. && pnpm exec turbo run build --filter=@memwalpp/dashboard --filter=!memwalpp-cli`
 
-**Turbo `outputs` per package**
+**3. Turbo filter and package name**
 
-- Next.js app: declare **`@memwalpp/dashboard#build`** with **`outputs: [".next/**", "!.next/cache/**"]`** in `turbo.json`.
-- Packages whose `build` is only **`tsc --noEmit`** produce no artifacts — set **`outputs: []`** on `@memwalpp/shared#build`, `@memwalpp/ui#build`, etc., so Turbo does not warn “no output files found” and remote cache stays predictable.
+- Workspace package name must be **`@memwalpp/dashboard`** (`apps/dashboard/package.json` `name` field) — filters like `dashboard` or `@memwalpp/dashboard...` can pull the wrong graph.
+- Use **`--filter=@memwalpp/dashboard`** (no trailing **`...`**) for a focused deploy: turbo still runs **`dependsOn: ["^build"]`** so **`@memwalpp/shared`** and **`@memwalpp/ui`** build, without building unrelated apps.
+- Exclude CLI from the deploy graph: **`--filter=!memwalpp-cli`** so **`memwalpp-cli`** is not built on Vercel when only the dashboard is deployed.
 
-**Install on Vercel**
+**4. Turbo `outputs` in `turbo.json`**
 
-- **`pnpm install --no-frozen-lockfile`** can unblock first deploys when the lockfile was just updated; prefer syncing and committing **`pnpm-lock.yaml`**, then tighten to **`--frozen-lockfile`** in CI once stable.
-- With **Root Directory = `apps/dashboard`**, keep **`apps/dashboard/vercel.json`** install/build as **`cd ../.. && …`** so pnpm still runs at the **repository root** (workspace root).
+- Put **`.next/**`** only on **`@memwalpp/dashboard#build`** (e.g. `[".next/**", "!.next/cache/**"]`), plus **`env`** for `NEXT_PUBLIC_SUI_NETWORK` and `NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID`.
+- Do **not** put **`.next/**`** on the generic **`build`** task — other packages are not Next apps and Turbo will warn or cache incorrectly.
+- Packages with **`tsc --noEmit`** only: **`outputs: []`** on `@memwalpp/shared#build`, `@memwalpp/ui#build`, `@memwalpp/core#build`, etc.
+- **`memwalpp-cli#build`** can use **`outputs: ["dist/**"]`** when built locally; it is excluded from the Vercel filter above.
 
-**Dashboard env (mainnet)**
+**5. Install and scripts**
 
-- Commit safe defaults in **`apps/dashboard/.env.production`**: `NEXT_PUBLIC_SUI_NETWORK=mainnet`, `NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID=…`.
-- Local dev: copy **`apps/dashboard/.env.local.example`** → **`.env.local`** (gitignored).
+- **`pnpm install --no-frozen-lockfile`** on Vercel can unblock deploys right after lockfile changes; keep **`--frozen-lockfile`** in GitHub Actions once the lockfile is committed.
+- **`--ignore-scripts`** on Vercel avoids native postinstall (e.g. `better-sqlite3`) for the dashboard app, which does not need them.
+- Dashboard **`build`** script stays **`next build`**; Vercel/turbo orchestration lives in root **`vercel.json`**, not in duplicated per-app deploy config.
 
-**Do not use `output: "standalone"` in `next.config.ts` for Vercel-hosted Next.js** unless you self-host in Docker; Vercel runs `next build` natively.
+**6. Pitfalls**
 
-**Single `vercel.json` at repo root (2026-05 follow-up)**
+- Do **not** set **`ignoreCommand`** to a command that always exits **0** (e.g. `echo 'ignoring build'`) — Vercel treats that as “skip this deployment” for every push.
+- Do **not** use **`output: "standalone"`** in `next.config.ts` for Vercel-hosted Next.js unless self-hosting in Docker.
 
-- Remove **`apps/dashboard/vercel.json`** — a second config plus UI **Output Directory** overrides caused the double `apps/dashboard/apps/dashboard/.next` path.
-- **`buildCommand`:** `turbo run build --filter=@memwalpp/dashboard --filter=!memwalpp-cli` (no `...` suffix — avoids pulling unrelated packages; `^build` still builds `@memwalpp/shared` and `@memwalpp/ui`).
-- Do **not** set **`ignoreCommand`** to a command that always exits 0 (e.g. `echo …`) — Vercel would skip every deployment.
-- Generic **`build.outputs`** in `turbo.json` should not include `.next/**` — only **`@memwalpp/dashboard#build`** declares Next.js artifacts.
+**7. Dashboard env (mainnet)**
+
+- Committed defaults: **`apps/dashboard/.env.production`** — `NEXT_PUBLIC_SUI_NETWORK=mainnet`, `NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID=…`.
+- Local dev: **`cp apps/dashboard/.env.local.example .env.local`** (`.env.local` is gitignored).
