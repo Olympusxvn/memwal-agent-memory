@@ -21,13 +21,21 @@ Repo root `vercel.json` documents the same turbo filter when deploying from the 
 
 Optional overrides: see root `.env.example`.
 
+## Local env
+
+```bash
+cd apps/dashboard
+cp .env.local.example .env.local   # mainnet + package id for `pnpm dev`
+```
+
+See also `.env.example` and committed `.env.production` (Vercel production build).
+
 ## Local production smoke test
 
 ```bash
 # from repository root
 pnpm install
-pnpm exec turbo run build --filter=dashboard...
-cd apps/dashboard && pnpm start
+cd apps/dashboard && pnpm run build:monorepo && pnpm start
 ```
 
 ## Notes
