@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:monorepo": "cd ../.. && pnpm exec turbo run build --filter=@memwalpp/dashboard...",
+    "build:monorepo": "cd ../.. && pnpm exec turbo run build --filter=@memwalpp/dashboard --filter=!memwalpp-cli",
     "start": "next start",
     "check": "tsc --noEmit",
     "lint": "next lint"

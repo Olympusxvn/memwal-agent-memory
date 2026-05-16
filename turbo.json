@@ -1,10 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["NODE_ENV", "CI", "NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID", "NEXT_PUBLIC_SUI_NETWORK", "SUI_NETWORK"],
+  "globalEnv": [
+    "NODE_ENV",
+    "CI",
+    "NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID",
+    "NEXT_PUBLIC_SUI_NETWORK",
+    "SUI_NETWORK"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**", "build/**"]
+      "outputs": ["dist/**", "build/**"]
     },
     "@memwalpp/shared#build": {
       "outputs": []
@@ -21,9 +27,13 @@
     "@memwalpp/core#build": {
       "outputs": []
     },
+    "memwalpp-cli#build": {
+      "outputs": ["dist/**"]
+    },
     "@memwalpp/dashboard#build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["NEXT_PUBLIC_SUI_NETWORK", "NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID"]
     },
     "check": {
       "dependsOn": ["^check"],

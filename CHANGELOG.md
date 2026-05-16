@@ -67,3 +67,10 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 - Local dev: copy **`apps/dashboard/.env.local.example`** → **`.env.local`** (gitignored).
 
 **Do not use `output: "standalone"` in `next.config.ts` for Vercel-hosted Next.js** unless you self-host in Docker; Vercel runs `next build` natively.
+
+**Single `vercel.json` at repo root (2026-05 follow-up)**
+
+- Remove **`apps/dashboard/vercel.json`** — a second config plus UI **Output Directory** overrides caused the double `apps/dashboard/apps/dashboard/.next` path.
+- **`buildCommand`:** `turbo run build --filter=@memwalpp/dashboard --filter=!memwalpp-cli` (no `...` suffix — avoids pulling unrelated packages; `^build` still builds `@memwalpp/shared` and `@memwalpp/ui`).
+- Do **not** set **`ignoreCommand`** to a command that always exits 0 (e.g. `echo …`) — Vercel would skip every deployment.
+- Generic **`build.outputs`** in `turbo.json` should not include `.next/**` — only **`@memwalpp/dashboard#build`** declares Next.js artifacts.
