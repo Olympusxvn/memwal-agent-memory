@@ -15,7 +15,7 @@
     "@mysten/dapp-kit": "^0.14.53",
     "@mysten/sui": "^1.21.2",
     "@tanstack/react-query": "^5.62.8",
-    "next": "15.1.2",
+    "next": "15.1.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
