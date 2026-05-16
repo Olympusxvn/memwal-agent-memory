@@ -8,6 +8,7 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 
+- **Vercel:** root `vercel.json` + `apps/dashboard/vercel.json`, `.env.production` (mainnet + package id), `DEPLOY_VERCEL.md` import guide; turbo build `--filter=dashboard...`.
 - **`pnpm test`** still runs the ordered package matrix; **`pnpm test:turbo`** runs `turbo run test` for packages that define a `test` script.
 - **`@memwalpp/local-memory` / `@memwalpp/memwal-client`:** default `test` script is now **`vitest run`** (CI-friendly); use **`pnpm run test:watch`** for watch mode.
 - **Dashboard:** `SuiClientProvider` registers mainnet/testnet/devnet; default network follows **`NEXT_PUBLIC_SUI_NETWORK`** with safe fallback to mainnet.
