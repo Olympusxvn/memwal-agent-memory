@@ -51,6 +51,9 @@ importers:
       '@memwalpp/memwal-client':
         specifier: workspace:*
         version: link:../../packages/memwal-client
+      '@memwalpp/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
     devDependencies:
       typescript:
         specifier: ^5.7.2

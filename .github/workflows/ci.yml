@@ -6,6 +6,7 @@ on:
   pull_request:
 
 # Pin Sui CLI to a **mainnet** GitHub release (ubuntu-x86_64). Bump SUI_RELEASE_TAG when upgrading toolchain.
+# Release assets: https://github.com/MystenLabs/sui/releases (filename: sui-<tag>-ubuntu-x86_64.tgz)
 env:
   SUI_RELEASE_TAG: mainnet-v1.71.1
 
@@ -14,15 +15,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Sui CLI (GitHub release binary)
+
+      - name: Cache Sui CLI (release tarball extract)
+        uses: actions/cache@v4
+        id: sui-cli
+        with:
+          path: .cache/sui-cli
+          key: sui-${{ env.SUI_RELEASE_TAG }}-ubuntu-x86_64-v2
+
+      - name: Install Sui CLI
+        if: steps.sui-cli.outputs.cache-hit != 'true'
         run: |
           set -euo pipefail
-          mkdir -p "$HOME/bin"
-          curl -fsSL "https://github.com/MystenLabs/sui/releases/download/${SUI_RELEASE_TAG}/sui-${SUI_RELEASE_TAG}-ubuntu-x86_64.tgz" -o /tmp/sui.tgz
-          tar -xzf /tmp/sui.tgz -C "$HOME/bin"
-          chmod +x "$HOME/bin/sui"
-          echo "$HOME/bin" >> "$GITHUB_PATH"
+          mkdir -p .cache/sui-cli
+          curl -fsSL \
+            "https://github.com/MystenLabs/sui/releases/download/${SUI_RELEASE_TAG}/sui-${SUI_RELEASE_TAG}-ubuntu-x86_64.tgz" \
+            -o /tmp/sui.tgz
+          tar -xzf /tmp/sui.tgz -C .cache/sui-cli
+          chmod +x .cache/sui-cli/sui
+          .cache/sui-cli/sui --version
+
+      - name: Add Sui to PATH
+        run: |
+          set -euo pipefail
+          echo "${{ github.workspace }}/.cache/sui-cli" >> "$GITHUB_PATH"
           sui --version
+
       - name: Move build & test
         working-directory: packages/sui-contracts
         run: |
@@ -41,11 +59,16 @@ jobs:
         with:
           node-version: "20"
           cache: "pnpm"
+
+      # CI=true → pnpm uses frozen lockfile by default; spell it out and keep pnpm-lock.yaml in sync.
       - name: Install
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
       - name: Native deps (better-sqlite3)
         run: pnpm rebuild better-sqlite3
-      - name: Unit tests (local-memory)
+
+      - name: Unit tests (packages)
         run: pnpm test
-      - name: Turbo
+
+      - name: Turbo (lint, check, build)
         run: pnpm exec turbo run lint check build
