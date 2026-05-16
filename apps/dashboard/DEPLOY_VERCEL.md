@@ -3,15 +3,15 @@
 ## One-time import
 
 1. [Import](https://vercel.com/new) the GitHub repo `Olympusxvn/memwalpp`.
-2. **Root Directory:** `apps/dashboard` (required for this monorepo).
+2. **Root Directory:** `apps/dashboard` (required — set in Vercel UI only; not valid inside `vercel.json`).
 3. **Framework Preset:** Next.js (auto-detected).
 4. **Node.js:** 20.x (matches root `engines.node`).
 5. **Do not** set Output Directory in the Vercel UI to `apps/dashboard/.next` — root `vercel.json` uses **`outputDirectory: ".next"`** relative to `apps/dashboard`.
-6. **Install / Build** (from repo root `vercel.json` only — no `apps/dashboard/vercel.json`):
-   - Install: `cd ../.. && pnpm install --no-frozen-lockfile --ignore-scripts`
-   - Build: `cd ../.. && pnpm exec turbo run build --filter=@memwalpp/dashboard --filter=!memwalpp-cli`
+6. **Install / Build** (from repo root `vercel.json`; Vercel runs these with monorepo-aware cwd when Root Directory is set):
+   - Install: `pnpm install --no-frozen-lockfile`
+   - Build: `turbo run build --filter=@memwalpp/dashboard`
 
-`memwalpp-cli` is excluded from the dashboard deploy graph; workspace deps (`@memwalpp/shared`, `@memwalpp/ui`) still build via turbo `dependsOn: ["^build"]`.
+Workspace deps (`@memwalpp/shared`, `@memwalpp/ui`) still build via turbo `dependsOn: ["^build"]`.
 
 ## Environment variables (Vercel → Project → Settings)
 

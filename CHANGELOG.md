@@ -8,7 +8,7 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 
-- **Vercel:** single root `vercel.json` (`rootDirectory: apps/dashboard`, `outputDirectory: .next`), package **`@memwalpp/dashboard`**, turbo `--filter=@memwalpp/dashboard --filter=!memwalpp-cli`, `.env.production` / `.env.example`, `DEPLOY_VERCEL.md`.
+- **Vercel:** root `vercel.json` (no `rootDirectory` key — set **Root Directory = `apps/dashboard`** in Vercel UI), `outputDirectory: .next`, turbo `--filter=@memwalpp/dashboard`, `.env.production` / `.env.example`, `DEPLOY_VERCEL.md`.
 - **`pnpm test`** still runs the ordered package matrix; **`pnpm test:turbo`** runs `turbo run test` for packages that define a `test` script.
 - **`@memwalpp/local-memory` / `@memwalpp/memwal-client`:** default `test` script is now **`vitest run`** (CI-friendly); use **`pnpm run test:watch`** for watch mode.
 - **Dashboard:** `SuiClientProvider` registers mainnet/testnet/devnet; default network follows **`NEXT_PUBLIC_SUI_NETWORK`** with safe fallback to mainnet.
@@ -42,7 +42,8 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 **1. Double path: `apps/dashboard/apps/dashboard/.next`**
 
-- With **`rootDirectory: apps/dashboard`**, paths in `vercel.json` are **relative to that folder**.
+- Set **Root Directory = `apps/dashboard`** in the **Vercel project settings** (not in `vercel.json` — the schema rejects **`rootDirectory`** as an unknown property).
+- With that root, paths in `vercel.json` are **relative to `apps/dashboard`**.
 - **`outputDirectory: apps/dashboard/.next`** (or the same path in the Vercel UI) resolves to **`apps/dashboard/apps/dashboard/.next`** → deploy fails with “Output Directory not found”.
 - **Fix:** **`outputDirectory: ".next"`** only. In the Vercel dashboard, clear any manual Output Directory override or set it to **`.next`**, not `apps/dashboard/.next`.
 

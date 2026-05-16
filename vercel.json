@@ -1,8 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "rootDirectory": "apps/dashboard",
-  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile --ignore-scripts",
-  "buildCommand": "cd ../.. && pnpm exec turbo run build --filter=@memwalpp/dashboard --filter=!memwalpp-cli",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "turbo run build --filter=@memwalpp/dashboard",
   "outputDirectory": ".next"
 }
