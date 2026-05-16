@@ -16,15 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache Sui CLI (release tarball extract)
+      # Cache extracted binaries (runner workspace — path is always valid for actions/cache).
+      - name: Cache Sui CLI
         uses: actions/cache@v4
         id: sui-cli
         with:
           path: .cache/sui-cli
-          key: sui-${{ env.SUI_RELEASE_TAG }}-ubuntu-x86_64-v2
+          key: sui-${{ env.SUI_RELEASE_TAG }}-ubuntu-x86_64-v3
 
-      - name: Install Sui CLI
+      - name: Download and extract Sui CLI
         if: steps.sui-cli.outputs.cache-hit != 'true'
+        shell: bash
         run: |
           set -euo pipefail
           mkdir -p .cache/sui-cli
@@ -33,19 +35,25 @@ jobs:
             -o /tmp/sui.tgz
           tar -xzf /tmp/sui.tgz -C .cache/sui-cli
           chmod +x .cache/sui-cli/sui
-          .cache/sui-cli/sui --version
 
-      - name: Add Sui to PATH
+      - name: Verify Sui CLI and set SUI_BINARY
+        shell: bash
         run: |
           set -euo pipefail
-          echo "${{ github.workspace }}/.cache/sui-cli" >> "$GITHUB_PATH"
-          sui --version
+          SUI_BIN="${GITHUB_WORKSPACE}/.cache/sui-cli/sui"
+          test -x "$SUI_BIN"
+          echo "SUI_BINARY=$SUI_BIN" >> "$GITHUB_ENV"
+          # Also put on PATH for any nested tooling that shells out to `sui`.
+          echo "${GITHUB_WORKSPACE}/.cache/sui-cli" >> "$GITHUB_PATH"
+          "$SUI_BIN" --version
 
       - name: Move build & test
         working-directory: packages/sui-contracts
+        shell: bash
         run: |
-          sui move build
-          sui move test
+          set -euo pipefail
+          "$SUI_BINARY" move build
+          "$SUI_BINARY" move test
 
   js:
     runs-on: ubuntu-latest
@@ -60,7 +68,6 @@ jobs:
           node-version: "20"
           cache: "pnpm"
 
-      # CI=true → pnpm uses frozen lockfile by default; spell it out and keep pnpm-lock.yaml in sync.
       - name: Install
         run: pnpm install --frozen-lockfile
 
