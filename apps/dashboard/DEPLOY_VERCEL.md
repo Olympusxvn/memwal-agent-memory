@@ -1,5 +1,9 @@
 # Deploy `apps/dashboard` to Vercel
 
+**Current deployment:** https://memwalpp-dashboard-86ydhjnmd-olympusxvns-projects.vercel.app/
+
+If judges see **401**, turn off **Deployment Protection** (Vercel → Project → Settings → Deployment Protection) or add a stable Production URL alias.
+
 ## One-time import
 
 1. [Import](https://vercel.com/new) the GitHub repo `Olympusxvn/memwalpp`.

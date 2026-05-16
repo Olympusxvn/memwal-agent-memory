@@ -7,6 +7,7 @@
 | Resource | Link |
 |----------|------|
 | Repository | https://github.com/Olympusxvn/memwalpp |
+| Live demo (dashboard) | https://memwalpp-dashboard-86ydhjnmd-olympusxvns-projects.vercel.app/ |
 | Submission brief | [`SUBMISSION.md`](SUBMISSION.md) |
 | Architecture | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | Diagram | [`docs/diagrams/memwalpp-merged-architecture.svg`](docs/diagrams/memwalpp-merged-architecture.svg) |
