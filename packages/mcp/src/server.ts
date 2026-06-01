@@ -1,6 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
+import type { ChainClient } from "@memwalpp/memwal-client";
+
 import { assertAuthorized, type ToolKind, toolKind } from "./middleware/auth.js";
 import { createMcpLogger, logToolCall, nextCorrelationId } from "./middleware/logger.js";
 import { McpRateLimitError, RateLimiter } from "./middleware/rate-limit.js";
@@ -8,7 +10,13 @@ import { resolveMcpConfig } from "./runtime/create-deps.js";
 import type { MemWalMcpDeps, ToolSession } from "./types.js";
 import { MCP_SERVER_NAME, MCP_SERVER_VERSION } from "./types.js";
 import {
-  handleChainStub,
+  handleBuyMemoryPack,
+  handleCreateBounty,
+  handleForkMemory,
+  handleFulfillBounty,
+  handleListMemoryPack,
+} from "./tools/chain-handlers.js";
+import {
   handleGetLineage,
   handleGetStats,
   handlePromote,
@@ -44,11 +52,12 @@ export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
     transport: config.transport ?? "stdio",
   };
 
-  const rt: ToolRuntime = {
+  const rt: ToolRuntime & { chain: ChainClient | null } = {
     sync: deps.sync,
     local: deps.local,
     durable: deps.durable,
     config,
+    chain: deps.chain ?? null,
   };
 
   const logger = createMcpLogger("mcp");
@@ -176,25 +185,66 @@ export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
 
   wrapTool(
     "getLineage",
-    "[R] Fork/version graph (stub until Move v2).",
+    "[R] Fork/version graph — on-chain index when Move v2 objects are bootstrapped.",
     { recordId: z.string().optional(), packId: z.string().optional() },
     () => Promise.resolve(handleGetLineage()),
   );
 
-  for (const chainTool of [
-    "forkMemory",
+  wrapTool(
     "createBounty",
+    "[C] Post WAL escrow bounty (v1 or v2 when bootstrapped). Requires delegate key + treasury cap env.",
+    {
+      description: z.string().min(1).max(4000),
+      amountMist: z.string().optional(),
+      deadlineHours: z.number().int().min(1).max(720).optional(),
+      minScore: z.number().int().min(0).max(100).optional(),
+    },
+    (args) => handleCreateBounty(rt, args as Parameters<typeof handleCreateBounty>[1]),
+  );
+
+  wrapTool(
     "fulfillBounty",
+    "[C+D] Promote record → Walrus blob id → submit_fulfillment on-chain (Gate: yes).",
+    {
+      bountyId: z.string(),
+      recordId: z.string(),
+      namespace: z.string().optional(),
+    },
+    (args) => handleFulfillBounty(rt, args as Parameters<typeof handleFulfillBounty>[1]),
+  );
+
+  wrapTool(
     "listMemoryPack",
+    "[C] List owned MemoryPack on marketplace (v1 or v2).",
+    {
+      packObjectId: z.string(),
+      priceMist: z.string(),
+    },
+    (args) => handleListMemoryPack(rt, args as Parameters<typeof handleListMemoryPack>[1]),
+  );
+
+  wrapTool(
     "buyMemoryPack",
-  ] as const) {
-    wrapTool(
-      chainTool,
-      `[C] On-chain tool — stub until Sprint S4.`,
-      { recordId: z.string().optional(), bountyId: z.string().optional(), packId: z.string().optional() },
-      () => Promise.resolve(handleChainStub(chainTool)),
-    );
-  }
+    "[C] Buy listed pack by pack id; mints demo WAL from treasury if needed.",
+    {
+      packId: z.string(),
+      priceMist: z.string(),
+    },
+    (args) => handleBuyMemoryPack(rt, args as Parameters<typeof handleBuyMemoryPack>[1]),
+  );
+
+  wrapTool(
+    "forkMemory",
+    "[C+D] Promote improved memory then fork_pack on-chain (v2 only).",
+    {
+      parentPackObjectId: z.string(),
+      recordId: z.string(),
+      newBlobIds: z.array(z.string()).optional(),
+      royaltyBps: z.number().int().min(0).max(1000).optional(),
+      namespace: z.string().optional(),
+    },
+    (args) => handleForkMemory(rt, args as Parameters<typeof handleForkMemory>[1]),
+  );
 
   return {
     mcp,

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SiteHeader } from "../../components/SiteHeader";
+import { KioskChainActions } from "../../components/KioskChainActions";
 
 export default function KioskPage() {
   const placeholder = [
@@ -14,12 +15,15 @@ export default function KioskPage() {
         <section className="section">
           <h1 className="section__title">Memory Kiosk</h1>
           <p className="section__subtitle">
-            Placeholder listings until the Postgres indexer is wired. Connect your wallet in the header (mainnet).
+            Connect wallet (mainnet) for live PTBs. Indexer-backed listings arrive in a later slice;
+            use chain actions below for verifiable bounty escrow.
           </p>
-          <ul className="demo-steps">
+          <KioskChainActions />
+          <ul className="demo-steps" style={{ marginTop: "1.5rem" }}>
             {placeholder.map((row) => (
               <li key={row.packId}>
                 <strong>{row.packId}</strong> — seller {row.seller} — {row.priceMist} mist WAL
+                <span style={{ opacity: 0.7 }}> (placeholder until indexer)</span>
               </li>
             ))}
           </ul>

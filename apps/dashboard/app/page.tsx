@@ -123,7 +123,8 @@ export default function HomePage() {
               <strong>agent:bounty-hunt</strong> — poster + hunter agents; same sync path with bounty fulfillment stub.
             </li>
             <li>
-              Connect wallet above (mainnet) to explore kiosk flows; on-chain PTBs land in a later phase.
+              Connect wallet on <Link href="/kiosk">Memory Kiosk</Link> for live <code>post_bounty</code> PTBs
+              (operator demo wallet + treasury cap).
             </li>
           </ul>
         </section>

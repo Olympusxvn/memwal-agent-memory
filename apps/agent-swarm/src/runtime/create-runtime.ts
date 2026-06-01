@@ -16,7 +16,9 @@ import type { LocalMemoryStore } from "@memwalpp/local-memory";
 import { InMemoryLocalMemoryStore, SqliteLocalStore } from "@memwalpp/local-memory";
 import {
   createDurableMemoryStore,
+  tryCreateChainClientFromEnv,
   tryCreateMemWalServiceFromEnv,
+  type ChainClient,
 } from "@memwalpp/memwal-client";
 
 export interface AgentRuntime {
@@ -25,6 +27,7 @@ export interface AgentRuntime {
   bridge: IMemWalAgentBridge;
   durableLive: boolean;
   storeKind: "sqlite" | "memory";
+  chain: ChainClient | null;
 }
 
 function sqliteNativeAvailable(): boolean {
@@ -98,5 +101,6 @@ export function createAgentRuntime(options?: {
     bridge,
     durableLive: service.isLive,
     storeKind,
+    chain: tryCreateChainClientFromEnv(),
   };
 }

@@ -195,7 +195,7 @@ export function handleChainStub(toolName: string): Record<string, unknown> {
 
 export function handleGetLineage(): Record<string, unknown> {
   return {
-    skipReason: "not_implemented",
-    message: "Lineage index ships with Move v2 (Phase 7).",
+    skipReason: "indexer_pending",
+    message: "Query pack dynamic field (PackExt) via Sui RPC after v2 upgrade bootstrap.",
   };
 }

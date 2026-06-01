@@ -40,6 +40,28 @@ export { withRetry } from "./retry.js";
 export type { RetryOptions } from "./retry.js";
 
 export type {
+  ChainClient,
+  ChainClientConfig,
+  ChainExecuteResult,
+  SuiNetwork,
+} from "./chain/index.js";
+export {
+  buildBuyPackTx,
+  buildForkPackTx,
+  buildListPackTx,
+  buildPostBountyTx,
+  buildSubmitFulfillmentTx,
+  chainUsesV2,
+  createChainClient,
+  DEFAULT_BOUNTY_AMOUNT_MIST,
+  descriptionHashBytes,
+  loadChainConfigFromEnv,
+  SUI_CLOCK_OBJECT_ID,
+  tryCreateChainClientFromEnv,
+  walrusBlobIdFromString,
+} from "./chain/index.js";
+
+export type {
   MemWalConfig,
   RecallResult,
   RememberResult,

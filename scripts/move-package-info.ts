@@ -34,5 +34,7 @@ console.log("\nExample PTB targets:");
 console.log(`  mint:   ${moveTarget("memory_nft", "mint_pack")}`);
 console.log(`  list:   ${moveTarget("marketplace", "list_pack")}`);
 console.log(`  bounty: ${moveTarget("bounty", "post_bounty")}`);
+console.log(`  bounty_v2: ${moveTarget("bounty_v2", "post_bounty_v2")}`);
+console.log(`  buy_v2: ${moveTarget("marketplace_v2", "buy_pack_v2")}`);
 console.log(`  seal:   ${moveTarget("access_policy", "seal_approve_for_blob")}`);
 console.log("\nDocs: docs/deploy.md · packages/sui-contracts/README.md\n");

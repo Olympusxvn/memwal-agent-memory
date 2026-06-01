@@ -1,6 +1,6 @@
 import type { MemorySyncService } from "@memwalpp/core";
 import type { LocalMemoryStore } from "@memwalpp/local-memory";
-import type { DurableMemoryStore } from "@memwalpp/memwal-client";
+import type { ChainClient, DurableMemoryStore } from "@memwalpp/memwal-client";
 
 export type McpTransport = "stdio" | "http";
 
@@ -35,6 +35,7 @@ export interface MemWalMcpDeps {
   sync: MemorySyncService;
   local: LocalMemoryStore;
   durable: DurableMemoryStore;
+  chain?: ChainClient | null;
   config?: MemWalMcpConfig;
 }
 

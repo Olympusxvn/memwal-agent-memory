@@ -8,8 +8,10 @@ const require = createRequire(import.meta.url);
 import { createMemorySyncService, noopSyncLogger } from "@memwalpp/core";
 import type { LocalMemoryStore } from "@memwalpp/local-memory";
 import { InMemoryLocalMemoryStore, SqliteLocalStore } from "@memwalpp/local-memory";
+import type { ChainClient } from "@memwalpp/memwal-client";
 import {
   createDurableMemoryStore,
+  tryCreateChainClientFromEnv,
   tryCreateMemWalServiceFromEnv,
 } from "@memwalpp/memwal-client";
 
@@ -99,5 +101,5 @@ export function createMemWalMcpDepsFromEnv(config?: MemWalMcpConfig): MemWalMcpD
     },
     logger: noopSyncLogger,
   });
-  return { sync, local, durable, config: resolved };
+  return { sync, local, durable, chain: tryCreateChainClientFromEnv(), config: resolved };
 }

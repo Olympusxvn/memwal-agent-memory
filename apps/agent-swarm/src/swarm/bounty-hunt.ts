@@ -11,7 +11,7 @@ import {
 } from "../util/demo-log.js";
 import { DEMO_BOUNTY } from "./stub-bounty.js";
 
-const STEPS = 6;
+const STEPS = 7;
 
 export async function runBountyHunt(runtime: AgentRuntime): Promise<void> {
   const { bridge, sync, durableLive, storeKind } = runtime;
@@ -90,10 +90,28 @@ export async function runBountyHunt(runtime: AgentRuntime): Promise<void> {
   const exported = await bridge.exportPack();
   demoOk(`${exported.blobIds.length} durable blob id(s) in pack export`);
 
+  demoStep(7, STEPS, "Optional — post bounty on Sui (S4 chain client)");
+  if (!runtime.chain) {
+    demoSkip("Chain offline — set SUI_DELEGATE_PRIVATE_KEY + MARKETPLACE_OBJECT_ID");
+  } else {
+    try {
+      const posted = await runtime.chain.postBounty({
+        amountMist: 1_000_000_000n,
+        deadlineMs: BigInt(Date.now() + 86_400_000),
+        description: `${DEMO_BOUNTY.title}\n${DEMO_BOUNTY.requirement}`,
+      });
+      demoOk(`On-chain bounty tx ${posted.txDigest}`);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      demoSkip(`Chain post failed (${msg})`);
+    }
+  }
+
   demoSummary({
     "Agents": "poster + hunter",
     "Flow": "post → push → recall → improve → sync",
     "Walrus": durableLive ? `blob ref: ${posterBlob}` : "offline — set MEMWAL_* to promote",
-    "Next": "Move bounty PTB + dashboard (Phase 3–4)",
+    "Chain": runtime.chain ? "live (delegate key configured)" : "offline — SUI_DELEGATE_PRIVATE_KEY",
+    "Next": "Dashboard kiosk PTBs + v2 upgrade bootstrap",
   });
 }

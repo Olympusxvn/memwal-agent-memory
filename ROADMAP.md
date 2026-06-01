@@ -3,7 +3,7 @@
 **Project:** `memwal-agent-memory`
 **Track:** Sui Overflow 2026 — Walrus Track
 **Mainnet package:** `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`
-**Last updated:** May 31, 2026
+**Last updated:** June 1, 2026
 
 > Canonical references: [`PROJECT.md`](PROJECT.md) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md)
 
@@ -17,11 +17,11 @@
 | Hybrid memory (local + sync) | **Complete** | `MemorySyncService`, redaction, quality gate, Vitest |
 | MemWal / Walrus durable layer | **Complete** | `@memwalpp/memwal-client`, `DurableMemoryStore` |
 | Move contracts v1 (mainnet) | **Complete** | Package published; `sui move test`; [`docs/deploy.md`](docs/deploy.md) |
-| Agent demos + hooks | **Mostly complete** | `pnpm agent:demo`, `pnpm agent:bounty-hunt`; stub bounty (no live PTB yet) |
+| Agent demos + hooks | **Mostly complete** | `pnpm agent:demo`, `pnpm agent:bounty-hunt`; optional live `postBounty` when chain env set |
 | Project docs + OpenSpecs | **Complete** | Master + MCP + Move refactor specs; `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
-| MCP Server (`packages/mcp`) | **Complete** | stdio E2E verified; chain tools stub → S4 |
-| Move v2 refactor (upgrade-in-place) | **Planned** | Spec only — [`openspec-move-contracts-refactor.md`](docs/specs/openspec-move-contracts-refactor.md) |
-| Dashboard live PTBs | **Planned** | UI exists; full wallet + chain flows not wired |
+| MCP Server (`packages/mcp`) | **Complete** | stdio E2E; chain tools wired (`createBounty`, …) when delegate key + marketplace env set |
+| Move v2 refactor (upgrade-in-place) | **Complete (repo)** | v2 modules + tests; mainnet upgrade + bootstrap → operator (S4) |
+| Dashboard live PTBs | **Partial** | Kiosk wallet `post_bounty` (v1); list/buy + v2 PTBs after bootstrap |
 
 **Demo north star (all phases):** bounty → acquire → improve → fork → payout — every claim traceable to a **Walrus blob id** or **on-chain event**.
 
@@ -38,8 +38,8 @@
 | **4** | Autonomous agents + judge demos | ◐ Mostly complete | `openspec-agent-swarm-integration.md` |
 | **5** | Documentation & project branding | ✓ Complete | `openspec-memwal-agent-memory.md`, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md`, Walrus UI |
 | **6** | MCP Server (universal access) | ✓ Complete | E2E: `pnpm mcp:e2e`; `.cursor/mcp.json` |
-| **7** | Move contracts v2 refactor | ○ Planned | `openspec-move-contracts-refactor.md` |
-| **8** | Dashboard + live chain integration | ○ Planned | PTBs, indexer, live bounty |
+| **7** | Move contracts v2 refactor | ✓ Complete (repo) | `openspec-move-contracts-refactor.md` |
+| **8** | Dashboard + live chain integration | ◐ In progress | PTBs, indexer, live bounty |
 | **9** | Submission polish & judge experience | ○ Planned | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
 
 **Legend:** ✓ Complete · ◐ In progress / partial · ○ Planned
@@ -147,7 +147,7 @@
 | `@memwalpp/mcp` package scaffolded | ✓ |
 | stdio + HTTP transports | ✓ |
 | Tools: `remember`, `recall`, `search`, `sync`, `promote`, `softDelete`, `verify`, `getStats` | ✓ |
-| Chain tools (`createBounty`, `fulfillBounty`, …) | ○ stub → Sprint S4 |
+| Chain tools (`createBounty`, `fulfillBounty`, …) | ✓ wired — live when `SUI_DELEGATE_PRIVATE_KEY` + marketplace env set |
 | Redaction enforced server-side (no bypass) | ✓ |
 | Claude Desktop / Cursor config + E2E test | ✓ |
 | `pnpm mcp:start` / `pnpm mcp:e2e` | ✓ |
@@ -226,7 +226,7 @@ Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 spe
 | **S1** ✓ | Docs + OpenSpecs | Master spec, MCP spec, Move refactor spec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
 | **S2** | MCP scaffold + E2E | `packages/mcp` — stdio, memory tools, `pnpm mcp:e2e` ✓ |
 | **S3** ✓ | Move v2 implementation | `memory_ext`, `bounty_v2`, `marketplace_v2`; `sui move test` green — **mainnet upgrade + bootstrap → S4** |
-| **S4** | Live chain wiring | Dashboard PTBs; live bounty in `agent:bounty-hunt` |
+| **S4** ◐ | Live chain wiring | Chain PTB client (`memwal-client`), MCP + agent-swarm tools, kiosk `post_bounty` — **v2 mainnet upgrade pending** |
 | **S5** | Submission | Judge guide, demo polish, video |
 
 ---

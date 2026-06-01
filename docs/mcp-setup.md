@@ -79,7 +79,19 @@ Runs `packages/mcp/test/e2e-stdio.test.ts`: spawns stdio server, `tools/list`, `
 | `sync` | durable | Promotes all pending rows |
 | `getStats` | read | Row counts + `durableLive` |
 
-Chain tools (`createBounty`, `fulfillBounty`, …) return `not_implemented` until Sprint S4.
+Chain tools (`createBounty`, `fulfillBounty`, `listMemoryPack`, `buyMemoryPack`, `forkMemory`) execute PTBs when `SUI_DELEGATE_PRIVATE_KEY` (or `MEMWAL_PRIVATE_KEY`) and marketplace object IDs are set; otherwise they return `{ skipReason: "chain_not_configured" }`.
+
+Required env (see [`.env.example`](../.env.example)):
+
+```bash
+SUI_DELEGATE_PRIVATE_KEY=   # ed25519 hex; never commit
+SUI_NETWORK=mainnet
+MARKETPLACE_OBJECT_ID=0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548
+WAL_TREASURY_CAP_ID=0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e
+# Optional v2 (after upgrade + bootstrap):
+CONFIG_OBJECT_ID=0x0
+MARKETPLACE_V2_OBJECT_ID=0x0
+```
 
 ## Troubleshooting
 

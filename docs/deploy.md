@@ -27,6 +27,11 @@ MARKETPLACE_PACKAGE_ID=0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29
 NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID=0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050
 MARKETPLACE_OBJECT_ID=0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548
 WAL_TREASURY_CAP_ID=0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e
+SUI_DELEGATE_PRIVATE_KEY=   # MCP / agent-swarm chain PTBs (delegate only)
+SUI_NETWORK=mainnet
+# v2 objects — fill after upgrade + bootstrap (see below)
+CONFIG_OBJECT_ID=0x0
+MARKETPLACE_V2_OBJECT_ID=0x0
 ```
 
 Never commit private keys. Use **delegate** keys for MemWal only (ADR-002).
@@ -83,7 +88,17 @@ const target = moveTarget("bounty", "post_bounty");
 const marketId = MAINNET_DEPLOYED_OBJECTS.marketplace;
 ```
 
-Compose with `@mysten/sui` `Transaction` in `apps/dashboard` or custom scripts.
+Compose with `@mysten/sui` `Transaction` in `apps/dashboard` or via `@memwalpp/memwal-client` chain helpers:
+
+```ts
+import { tryCreateChainClientFromEnv, buildPostBountyTx } from "@memwalpp/memwal-client";
+
+const chain = tryCreateChainClientFromEnv();
+if (chain) {
+  const tx = buildPostBountyTx(chain.config, { amountMist: 1_000_000n, description: "…" });
+  await chain.signAndExecute(tx);
+}
+```
 
 ---
 
@@ -119,6 +134,23 @@ Compose with `@mysten/sui` `Transaction` in `apps/dashboard` or custom scripts.
 - **UpgradeCap** id in manifest — use `sui client upgrade` with same `Published.toml` workflow.  
 - Bump `version` in `Published.toml` after upgrade.  
 - Update `deploy-manifest.json` if shared objects change (Marketplace id is stable from first publish).
+
+### Move v2 (S4 operator steps)
+
+After pulling v2 modules into the repo:
+
+1. **Upgrade bytecode** (package id unchanged):
+   ```bash
+   cd packages/sui-contracts
+   sui client upgrade --upgrade-capability 0xada975edf109c28a8b74f3789312b90acef29aa7fa28a5e936dc489055e0fd66
+   ```
+2. **Bootstrap shared objects** (one-time, from operator wallet):
+   - `admin::bootstrap` → shared `Config` + `AdminCap`
+   - `marketplace_v2::bootstrap` → shared `MarketplaceV2`
+3. **Record object ids** in `.env`, `deploy-manifest.json`, and `@memwalpp/shared` `MAINNET_V2_OBJECTS`.
+4. Re-run `pnpm contracts:info` — v2 targets activate when `CONFIG_OBJECT_ID` and `MARKETPLACE_V2_OBJECT_ID` are non-zero.
+
+Until bootstrap, MCP, agent-swarm, and dashboard use **v1** PTB targets (`bounty::post_bounty`, `marketplace::list_pack`, …).
 
 ---
 
