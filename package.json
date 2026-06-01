@@ -26,6 +26,7 @@
     "demo:voiceover:all": "python scripts/demo-video/generate-voiceover.py --locale en --locale vi",
     "demo:export": "node scripts/demo-video/export-demo.mjs",
     "demo:export:vi": "node scripts/demo-video/export-demo.mjs --locale vi",
+    "demo:export:fast": "node scripts/demo-video/export-demo.mjs --skip-broll",
     "demo:publish": "pnpm demo:voiceover && pnpm demo:export"
   },
   "devDependencies": {

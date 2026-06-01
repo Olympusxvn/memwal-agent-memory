@@ -76,9 +76,10 @@ Re-run `generate-voiceover.py` after editing `voiceover.json`.
 ```bash
 pnpm demo:voiceover        # English TTS
 pnpm demo:voiceover:vi     # Vietnamese TTS
-pnpm demo:export           # slides + audio → memwalpp-demo.mp4 (English)
-pnpm demo:export:vi        # Vietnamese video
-pnpm demo:publish          # voiceover + export (English, one command)
+pnpm demo:export           # slides + B-roll PiP + audio → memwalpp-demo.mp4
+pnpm demo:export:vi
+pnpm demo:export:fast      # slides only (no B-roll)
+pnpm demo:publish          # voiceover + full export (English)
 ```
 
 **Published file:** `docs/demo-video-output/en/memwalpp-demo.mp4` (~2.5 MB, ~2:26)  

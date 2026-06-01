@@ -329,4 +329,6 @@ pnpm demo:voiceover:all    # both
 
 Output: `docs/demo-video-output/<locale>/` — see [`scripts/demo-video/README.md`](../scripts/demo-video/README.md) for CapCut assembly and B-roll trim times.
 
-**One-command export:** `pnpm demo:publish` → `docs/demo-video-output/en/memwalpp-demo.mp4` (copied to `docs/memwalpp-demo.mp4` for Devpost).
+**One-command export:** `pnpm demo:publish` → `docs/memwalpp-demo.mp4` (~7 MB, B-roll PiP + Ken Burns).
+
+**Auto B-roll:** terminal demos (`agent:demo`, `bounty-hunt`, `mcp:e2e`), live dashboard scroll, architecture SVG zoom, Suiscan bootstrap tx — composited bottom-right with Walrus cyan/purple border.

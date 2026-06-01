@@ -76,7 +76,8 @@
       "id": "08-walrus",
       "slide": 8,
       "durationTargetSec": 14,
-      "broll": null,
+      "broll": "https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW",
+      "brollTrim": { "inSec": 0, "outSec": 8, "keep": "Config + MarketplaceV2 success" },
       "en": "Built for Walrus: durable blobs, verifiable blob ids, programmable access through Move, and privacy enforced before upload. Not wallpaper — it's the product story.",
       "vi": "Làm cho Walrus: blob bền, id xác minh được, truy cập lập trình qua Move, riêng tư trước khi upload. Đây là cốt lõy sản phẩm."
     },

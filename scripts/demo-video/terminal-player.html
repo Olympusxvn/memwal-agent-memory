@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MemWal++ Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(97,61,255,0.12), transparent 70%),
+                radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0,245,255,0.08), transparent),
+                #05050a;
+    font-family: 'JetBrains Mono', monospace;
+    overflow: hidden;
+  }
+  .frame {
+    position: absolute; inset: 24px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,245,255,0.22);
+    box-shadow: 0 0 40px rgba(97,61,255,0.15), 0 24px 80px rgba(0,0,0,0.6);
+    background: rgba(15,15,26,0.92);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.35);
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot-r { background: #f87171; }
+  .dot-y { background: #fbbf24; }
+  .dot-g { background: #4ade80; }
+  .title { margin-left: 8px; font-size: 12px; color: #6b678a; letter-spacing: .04em; }
+  .cmdline {
+    padding: 10px 18px 0;
+    font-size: 13px; color: #00f5ff;
+  }
+  .body {
+    flex: 1; padding: 8px 18px 18px;
+    overflow: hidden;
+    font-size: 12.5px; line-height: 1.55;
+  }
+  .line { white-space: pre-wrap; word-break: break-word; min-height: 1.55em; opacity: 0; transform: translateY(4px); transition: opacity .25s, transform .25s; }
+  .line.show { opacity: 1; transform: translateY(0); }
+  .line.head { color: #a78bfa; font-weight: 600; }
+  .line.cmd { color: #00f5ff; }
+  .line.hook { color: #98efe4; }
+  .line.ok { color: #4ade80; }
+  .line.warn { color: #fbbf24; }
+  .line.err { color: #f87171; }
+  .line.result { color: #00f5ff; font-weight: 600; margin-top: 6px; }
+  .line.dim { color: #6b678a; }
+  .line.text { color: #c4c0d8; }
+  .cursor {
+    display: inline-block; width: 8px; height: 14px;
+    background: #00f5ff; margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="bar">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <span class="title" id="title">memwal-agent-memory</span>
+  </div>
+  <div class="cmdline" id="cmd"></div>
+  <div class="body" id="body"></div>
+</div>
+<script>
+window.playTerminal = async function ({ title, command, lines, lineDelayMs = 90 }) {
+  document.getElementById('title').textContent = title || 'memwal-agent-memory';
+  document.getElementById('cmd').textContent = command ? '$ ' + command : '';
+  const body = document.getElementById('body');
+  body.innerHTML = '';
+
+  for (const raw of lines) {
+    const div = document.createElement('div');
+    div.className = 'line ' + (raw.class || 'text');
+    div.textContent = raw.text ?? raw;
+    body.appendChild(div);
+    await new Promise(r => requestAnimationFrame(r));
+    div.classList.add('show');
+    body.scrollTop = body.scrollHeight;
+    await new Promise(r => setTimeout(r, lineDelayMs));
+  }
+
+  const cur = document.createElement('div');
+  cur.className = 'line show dim';
+  cur.innerHTML = '<span class="cursor"></span>';
+  body.appendChild(cur);
+  await new Promise(r => setTimeout(r, 600));
+  window.__terminalDone = true;
+};
+</script>
+</body>
+</html>
