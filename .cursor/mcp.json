@@ -1,10 +1,10 @@
 {
   "mcpServers": {
     "memwal-agent-memory": {
-      "command": "pnpm",
-      "args": ["mcp:start", "--", "--transport", "stdio"],
+      "command": "node",
+      "args": ["packages/mcp/dist/cli.js", "--transport", "stdio"],
       "env": {
-        "MEMWAL_NAMESPACE": "default"
+        "MEMWAL_NAMESPACE": "cursor"
       }
     }
   }

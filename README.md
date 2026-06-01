@@ -131,7 +131,7 @@ memwal-agent-memory/
 ├── packages/core/
 ├── packages/local-memory/
 ├── packages/memwal-client/
-├── packages/mcp/         # MCP Server (planned)
+├── packages/mcp/         # MCP Server (@memwalpp/mcp) — stdio + HTTP
 ├── packages/shared/      # Cross-cutting types (no I/O) — foundation package
 ├── packages/sui-contracts/
 ├── packages/ui/
@@ -268,6 +268,9 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | `pnpm agent:demo` | Offline-safe hybrid memory hook demo (`apps/agent-swarm`) |
 | `pnpm agent:bounty-hunt` | Two-agent bounty flow (poster → hunter → sync) |
 | `pnpm contracts:info` | Deployed Move package IDs + PTB targets |
+| `pnpm mcp:build` | Build MCP server (`packages/mcp`) |
+| `pnpm mcp:start` | Run MCP stdio server (builds first) |
+| `pnpm mcp:e2e` | E2E test: stdio client → remember/recall |
 
 ---
 
@@ -279,6 +282,7 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | [`ROADMAP.md`](ROADMAP.md) | Phased milestones + current status |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | **Canonical** layered architecture + flows + repo map |
 | [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) | **Master project OpenSpec** |
+| [`docs/mcp-setup.md`](docs/mcp-setup.md) | **MCP E2E setup** (Cursor / Claude Desktop) |
 | [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md) | MCP Server OpenSpec |
 | [`docs/specs/openspec-move-contracts-refactor.md`](docs/specs/openspec-move-contracts-refactor.md) | Move v2 refactor OpenSpec |
 | [`docs/decisions/`](docs/decisions/) | ADR-001 through **ADR-013** (monorepo boundaries) |

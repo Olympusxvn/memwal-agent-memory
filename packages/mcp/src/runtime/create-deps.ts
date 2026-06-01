@@ -26,12 +26,20 @@ function sqliteNativeAvailable(): boolean {
 }
 
 function createLocalStore(namespace: string): LocalMemoryStore {
+  if (process.env.MEMWAL_MCP_USE_MEMORY?.trim() === "1") {
+    return new InMemoryLocalMemoryStore();
+  }
+
   if (!sqliteNativeAvailable()) {
     return new InMemoryLocalMemoryStore();
   }
-  const dir = path.join(os.tmpdir(), "memwalpp-mcp");
-  fs.mkdirSync(dir, { recursive: true });
-  const dbPath = path.join(dir, `${namespace.replace(/[^a-z0-9-_]/gi, "_")}.db`);
+
+  const baseDir =
+    process.env.MEMWAL_MCP_DATA_DIR?.trim() ||
+    path.join(os.homedir(), ".memwal-agent-memory", "mcp");
+  fs.mkdirSync(baseDir, { recursive: true });
+  const dbPath = path.join(baseDir, `${namespace.replace(/[^a-z0-9-_]/gi, "_")}.db`);
+
   try {
     return new SqliteLocalStore(dbPath);
   } catch {

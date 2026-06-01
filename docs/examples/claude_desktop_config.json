@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "memwal-agent-memory": {
+      "command": "pnpm",
+      "args": ["--dir", "/ABSOLUTE/PATH/TO/memwal-agent-memory", "mcp:start", "--", "--transport", "stdio"],
+      "env": {
+        "MEMWAL_NAMESPACE": "claude-desktop",
+        "MEMWAL_MCP_DATA_DIR": "${HOME}/.memwal-agent-memory/mcp"
+      }
+    }
+  }
+}
