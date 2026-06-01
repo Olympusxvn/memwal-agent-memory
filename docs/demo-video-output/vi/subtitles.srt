@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:14,000
+MemWal plus plus — bộ nhớ lai có thể xác minh cho agent tự động. Dự án Sui Overflow, track Walrus. Nhanh ở local, bền vững trên Walrus, kinh tế trên Sui.
+
+2
+00:00:14,000 --> 00:00:28,000
+Agent quên giữa các phiên làm việc. Cơ sở dữ liệu mờ không chứng minh được agent nhớ gì. Thị trường memory cần dữ liệu mang đi được — không phải ảnh chụp màn hình.
+
+3
+00:00:28,000 --> 00:00:43,000
+Ba lớp: SQLite local-first, MemWal đẩy lên Walrus, Sui Move cho pack, marketplace và bounty WAL. Lọc PII và chấm điểm chất lượng trước khi upload.
+
+4
+00:00:43,000 --> 00:00:59,000
+Luồng rõ ràng: local store, redact, quality gate, rồi remember lên Walrus. Mỗi dòng được promote có blob id — cùng id mà bounty Sui dùng khi fulfill.
+
+5
+00:00:59,000 --> 00:01:15,000
+Demo một: clone repo, cài đặt, chạy agent demo. Không cần API key. Thấy đủ vòng đời hook — exit code zero là đủ chứng minh kiến trúc.
+
+6
+00:01:15,000 --> 00:01:31,000
+Demo hai: bounty hunt — agent poster và hunter cùng sync service. Offline chứng minh phối hợp đa agent. Bật MemWal env thì thấy blob id thật trên luồng fulfill.
+
+7
+00:01:31,000 --> 00:01:43,000
+Dashboard live trên Vercel. Giao diện Walrus, kết nối ví, lệnh cho judge, và kiosk chain actions trên mainnet.
+
+8
+00:01:43,000 --> 00:01:57,000
+Làm cho Walrus: blob bền, id xác minh được, truy cập lập trình qua Move, riêng tư trước khi upload. Đây là cốt lõy sản phẩm.
+
+9
+00:01:57,000 --> 00:02:13,000
+End-to-end trong code: hook → blob id → fulfill Move. Chạy được trong ba phút không cần key. Move v2 đã bootstrap mainnet. MCP server và dashboard — một monorepo.
+
+10
+00:02:13,000 --> 00:02:26,000
+Thử ngay — star repo, mở demo live, chạy hai CLI agent. Judge guide ở thư mục gốc. Cảm ơn đã xem MemWal plus plus.

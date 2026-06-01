@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:14,000
+MemWal plus plus — hybrid verifiable memory for autonomous agents. Built for Sui Overflow and the Walrus track. Local speed, Walrus truth, on-chain economy.
+
+2
+00:00:14,000 --> 00:00:28,000
+Agents forget between sessions. Opaque databases can't prove what was remembered. Marketplaces need portable memory — not screenshots. And inference can't wait on the network every token.
+
+3
+00:00:28,000 --> 00:00:43,000
+MemWal plus plus is three layers: SQLite local-first, MemWal to Walrus for durable blobs, and Sui Move for packs, marketplace, and WAL bounties. Redact and score before anything leaves the machine.
+
+4
+00:00:43,000 --> 00:00:59,000
+The path is explicit: local store, redaction, quality gate, then remember to Walrus. Every promoted row gets a walrus blob id — the same id Sui bounties reference on fulfillment.
+
+5
+00:00:59,000 --> 00:01:15,000
+Demo one: clone the repo, pnpm install, pnpm agent demo. No API keys. You'll see beforeRemember, afterThink, and onTaskComplete — exit code zero proves the architecture.
+
+6
+00:01:15,000 --> 00:01:31,000
+Demo two: bounty hunt — poster and hunter agents on the same sync service. Offline proves coordination. With MemWal env vars, watch a real blob id land on mainnet-ready fulfillment.
+
+7
+00:01:31,000 --> 00:01:43,000
+Live dashboard at memwalpp dash dashboard dot vercel dot app. Walrus-grade UI, wallet connect, judge commands, and kiosk chain actions on mainnet.
+
+8
+00:01:43,000 --> 00:01:57,000
+Built for Walrus: durable blobs, verifiable blob ids, programmable access through Move, and privacy enforced before upload. Not wallpaper — it's the product story.
+
+9
+00:01:57,000 --> 00:02:13,000
+End to end in code: hooks to blob id to Move fulfillment. Runnable in three minutes without keys. Move v2 bootstrapped on mainnet. MCP server and dashboard wallet PTBs — all in one monorepo.
+
+10
+00:02:13,000 --> 00:02:26,000
+Try it now — star the repo, open the live demo, run both agent CLIs. Judge guide in the repo root. MemWal plus plus. Thanks for watching.

@@ -20,7 +20,10 @@
     "contracts:test": "cd packages/sui-contracts && sui move test",
     "contracts:info": "tsx scripts/move-package-info.ts",
     "contracts:upgrade-v2": "bash scripts/upgrade-contracts-v2.sh",
-    "contracts:bootstrap-v2": "tsx scripts/bootstrap-v2.ts"
+    "contracts:bootstrap-v2": "tsx scripts/bootstrap-v2.ts",
+    "demo:voiceover": "python scripts/demo-video/generate-voiceover.py --locale en",
+    "demo:voiceover:vi": "python scripts/demo-video/generate-voiceover.py --locale vi",
+    "demo:voiceover:all": "python scripts/demo-video/generate-voiceover.py --locale en --locale vi"
   },
   "devDependencies": {
     "@memwalpp/shared": "workspace:*",

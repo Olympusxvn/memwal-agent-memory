@@ -1,0 +1,208 @@
+{
+  "locale": "vi",
+  "voice": "vi-VN-HoaiMyNeural",
+  "totalDurationSec": 146.0,
+  "targetRuntimeSec": 150,
+  "segments": [
+    {
+      "id": "01-title",
+      "slide": 1,
+      "file": "01-title.mp3",
+      "durationSec": 14,
+      "timelineStartSec": 0.0,
+      "timelineEndSec": 14.0,
+      "targetSec": 14,
+      "broll": null,
+      "brollTrim": null,
+      "text": "MemWal plus plus — bộ nhớ lai có thể xác minh cho agent tự động. Dự án Sui Overflow, track Walrus. Nhanh ở local, bền vững trên Walrus, kinh tế trên Sui."
+    },
+    {
+      "id": "02-problem",
+      "slide": 2,
+      "file": "02-problem.mp3",
+      "durationSec": 14,
+      "timelineStartSec": 14.0,
+      "timelineEndSec": 28.0,
+      "targetSec": 14,
+      "broll": null,
+      "brollTrim": null,
+      "text": "Agent quên giữa các phiên làm việc. Cơ sở dữ liệu mờ không chứng minh được agent nhớ gì. Thị trường memory cần dữ liệu mang đi được — không phải ảnh chụp màn hình."
+    },
+    {
+      "id": "03-solution",
+      "slide": 3,
+      "file": "03-solution.mp3",
+      "durationSec": 15,
+      "timelineStartSec": 28.0,
+      "timelineEndSec": 43.0,
+      "targetSec": 15,
+      "broll": null,
+      "brollTrim": null,
+      "text": "Ba lớp: SQLite local-first, MemWal đẩy lên Walrus, Sui Move cho pack, marketplace và bounty WAL. Lọc PII và chấm điểm chất lượng trước khi upload."
+    },
+    {
+      "id": "04-flow",
+      "slide": 4,
+      "file": "04-flow.mp3",
+      "durationSec": 16,
+      "timelineStartSec": 43.0,
+      "timelineEndSec": 59.0,
+      "targetSec": 16,
+      "broll": "docs/diagrams/memwalpp-merged-architecture.svg",
+      "brollTrim": null,
+      "text": "Luồng rõ ràng: local store, redact, quality gate, rồi remember lên Walrus. Mỗi dòng được promote có blob id — cùng id mà bounty Sui dùng khi fulfill."
+    },
+    {
+      "id": "05-demo-offline",
+      "slide": 5,
+      "file": "05-demo-offline.mp3",
+      "durationSec": 16,
+      "timelineStartSec": 59.0,
+      "timelineEndSec": 75.0,
+      "targetSec": 16,
+      "broll": "terminal:pnpm agent:demo",
+      "brollTrim": {
+        "inSec": 3,
+        "outSec": 28,
+        "keep": "hook lifecycle + RESULT exit 0"
+      },
+      "text": "Demo một: clone repo, cài đặt, chạy agent demo. Không cần API key. Thấy đủ vòng đời hook — exit code zero là đủ chứng minh kiến trúc."
+    },
+    {
+      "id": "06-bounty-hunt",
+      "slide": 6,
+      "file": "06-bounty-hunt.mp3",
+      "durationSec": 16,
+      "timelineStartSec": 75.0,
+      "timelineEndSec": 91.0,
+      "targetSec": 16,
+      "broll": "terminal:pnpm agent:bounty-hunt",
+      "brollTrim": {
+        "inSec": 5,
+        "outSec": 30,
+        "keep": "poster + hunter + blob id line"
+      },
+      "text": "Demo hai: bounty hunt — agent poster và hunter cùng sync service. Offline chứng minh phối hợp đa agent. Bật MemWal env thì thấy blob id thật trên luồng fulfill."
+    },
+    {
+      "id": "07-dashboard",
+      "slide": 7,
+      "file": "07-dashboard.mp3",
+      "durationSec": 12,
+      "timelineStartSec": 91.0,
+      "timelineEndSec": 103.0,
+      "targetSec": 12,
+      "broll": "https://memwalpp-dashboard.vercel.app/",
+      "brollTrim": {
+        "inSec": 0,
+        "outSec": 10,
+        "keep": "hero → wallet → kiosk chain actions"
+      },
+      "text": "Dashboard live trên Vercel. Giao diện Walrus, kết nối ví, lệnh cho judge, và kiosk chain actions trên mainnet."
+    },
+    {
+      "id": "08-walrus",
+      "slide": 8,
+      "file": "08-walrus.mp3",
+      "durationSec": 14,
+      "timelineStartSec": 103.0,
+      "timelineEndSec": 117.0,
+      "targetSec": 14,
+      "broll": null,
+      "brollTrim": null,
+      "text": "Làm cho Walrus: blob bền, id xác minh được, truy cập lập trình qua Move, riêng tư trước khi upload. Đây là cốt lõy sản phẩm."
+    },
+    {
+      "id": "09-why-win",
+      "slide": 9,
+      "file": "09-why-win.mp3",
+      "durationSec": 16,
+      "timelineStartSec": 117.0,
+      "timelineEndSec": 133.0,
+      "targetSec": 16,
+      "broll": "terminal:pnpm mcp:e2e",
+      "brollTrim": {
+        "inSec": 0,
+        "outSec": 12,
+        "keep": "stdio E2E pass"
+      },
+      "text": "End-to-end trong code: hook → blob id → fulfill Move. Chạy được trong ba phút không cần key. Move v2 đã bootstrap mainnet. MCP server và dashboard — một monorepo."
+    },
+    {
+      "id": "10-cta",
+      "slide": 10,
+      "file": "10-cta.mp3",
+      "durationSec": 13,
+      "timelineStartSec": 133.0,
+      "timelineEndSec": 146.0,
+      "targetSec": 13,
+      "broll": null,
+      "brollTrim": null,
+      "text": "Thử ngay — star repo, mở demo live, chạy hai CLI agent. Judge guide ở thư mục gốc. Cảm ơn đã xem MemWal plus plus."
+    }
+  ],
+  "brollLibrary": [
+    {
+      "id": "agent-demo",
+      "command": "pnpm agent:demo",
+      "recordSec": 35,
+      "trimIn": 3,
+      "trimOut": 28,
+      "mustShow": [
+        "beforeRemember",
+        "afterThink",
+        "onTaskComplete",
+        "RESULT",
+        "exit 0"
+      ]
+    },
+    {
+      "id": "bounty-hunt",
+      "command": "pnpm agent:bounty-hunt",
+      "recordSec": 35,
+      "trimIn": 5,
+      "trimOut": 30,
+      "mustShow": [
+        "poster",
+        "hunter",
+        "blob",
+        "fulfillment"
+      ]
+    },
+    {
+      "id": "mcp-e2e",
+      "command": "pnpm mcp:e2e",
+      "recordSec": 20,
+      "trimIn": 0,
+      "trimOut": 15,
+      "mustShow": [
+        "PASS",
+        "stdio"
+      ]
+    },
+    {
+      "id": "dashboard-dark",
+      "url": "https://memwalpp-dashboard.vercel.app/",
+      "recordSec": 15,
+      "trimIn": 0,
+      "trimOut": 10,
+      "mustShow": [
+        "hero",
+        "judge commands",
+        "package id"
+      ]
+    },
+    {
+      "id": "suiscan-bootstrap",
+      "url": "https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW",
+      "recordSec": 12,
+      "trimIn": 0,
+      "trimOut": 8,
+      "mustShow": [
+        "Config",
+        "MarketplaceV2",
+        "Success"
+      ]
+    }
+  ]
+}

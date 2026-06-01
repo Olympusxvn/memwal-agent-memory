@@ -313,3 +313,18 @@ MemWal++ · Hybrid Verifiable Memory for Agents
 3. Light alternate: background `#FAF8F5`, text `#222222`, same purple CTAs.
 4. Master slide: gradient title + footer badge strip (`Walrus Track` · `Sui Overflow 2026`).
 5. Export MP4 1080p or use as speaker notes with terminal B-roll.
+
+---
+
+## AI voiceover (TTS tool)
+
+Generate narration MP3 + SRT subtitles (English and/or Vietnamese):
+
+```bash
+pip install edge-tts
+pnpm demo:voiceover        # English — judges / Devpost
+pnpm demo:voiceover:vi     # Tiếng Việt — giới thiệu
+pnpm demo:voiceover:all    # both
+```
+
+Output: `docs/demo-video-output/<locale>/` — see [`scripts/demo-video/README.md`](../scripts/demo-video/README.md) for CapCut assembly and B-roll trim times.

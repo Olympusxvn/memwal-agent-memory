@@ -1,0 +1,208 @@
+{
+  "locale": "en",
+  "voice": "en-US-GuyNeural",
+  "totalDurationSec": 146.0,
+  "targetRuntimeSec": 150,
+  "segments": [
+    {
+      "id": "01-title",
+      "slide": 1,
+      "file": "01-title.mp3",
+      "durationSec": 14,
+      "timelineStartSec": 0.0,
+      "timelineEndSec": 14.0,
+      "targetSec": 14,
+      "broll": null,
+      "brollTrim": null,
+      "text": "MemWal plus plus — hybrid verifiable memory for autonomous agents. Built for Sui Overflow and the Walrus track. Local speed, Walrus truth, on-chain economy."
+    },
+    {
+      "id": "02-problem",
+      "slide": 2,
+      "file": "02-problem.mp3",
+      "durationSec": 14,
+      "timelineStartSec": 14.0,
+      "timelineEndSec": 28.0,
+      "targetSec": 14,
+      "broll": null,
+      "brollTrim": null,
+      "text": "Agents forget between sessions. Opaque databases can't prove what was remembered. Marketplaces need portable memory — not screenshots. And inference can't wait on the network every token."
+    },
+    {
+      "id": "03-solution",
+      "slide": 3,
+      "file": "03-solution.mp3",
+      "durationSec": 15,
+      "timelineStartSec": 28.0,
+      "timelineEndSec": 43.0,
+      "targetSec": 15,
+      "broll": null,
+      "brollTrim": null,
+      "text": "MemWal plus plus is three layers: SQLite local-first, MemWal to Walrus for durable blobs, and Sui Move for packs, marketplace, and WAL bounties. Redact and score before anything leaves the machine."
+    },
+    {
+      "id": "04-flow",
+      "slide": 4,
+      "file": "04-flow.mp3",
+      "durationSec": 16,
+      "timelineStartSec": 43.0,
+      "timelineEndSec": 59.0,
+      "targetSec": 16,
+      "broll": "docs/diagrams/memwalpp-merged-architecture.svg",
+      "brollTrim": null,
+      "text": "The path is explicit: local store, redaction, quality gate, then remember to Walrus. Every promoted row gets a walrus blob id — the same id Sui bounties reference on fulfillment."
+    },
+    {
+      "id": "05-demo-offline",
+      "slide": 5,
+      "file": "05-demo-offline.mp3",
+      "durationSec": 16,
+      "timelineStartSec": 59.0,
+      "timelineEndSec": 75.0,
+      "targetSec": 16,
+      "broll": "terminal:pnpm agent:demo",
+      "brollTrim": {
+        "inSec": 3,
+        "outSec": 28,
+        "keep": "hook lifecycle + RESULT exit 0"
+      },
+      "text": "Demo one: clone the repo, pnpm install, pnpm agent demo. No API keys. You'll see beforeRemember, afterThink, and onTaskComplete — exit code zero proves the architecture."
+    },
+    {
+      "id": "06-bounty-hunt",
+      "slide": 6,
+      "file": "06-bounty-hunt.mp3",
+      "durationSec": 16,
+      "timelineStartSec": 75.0,
+      "timelineEndSec": 91.0,
+      "targetSec": 16,
+      "broll": "terminal:pnpm agent:bounty-hunt",
+      "brollTrim": {
+        "inSec": 5,
+        "outSec": 30,
+        "keep": "poster + hunter + blob id line"
+      },
+      "text": "Demo two: bounty hunt — poster and hunter agents on the same sync service. Offline proves coordination. With MemWal env vars, watch a real blob id land on mainnet-ready fulfillment."
+    },
+    {
+      "id": "07-dashboard",
+      "slide": 7,
+      "file": "07-dashboard.mp3",
+      "durationSec": 12,
+      "timelineStartSec": 91.0,
+      "timelineEndSec": 103.0,
+      "targetSec": 12,
+      "broll": "https://memwalpp-dashboard.vercel.app/",
+      "brollTrim": {
+        "inSec": 0,
+        "outSec": 10,
+        "keep": "hero → wallet → kiosk chain actions"
+      },
+      "text": "Live dashboard at memwalpp dash dashboard dot vercel dot app. Walrus-grade UI, wallet connect, judge commands, and kiosk chain actions on mainnet."
+    },
+    {
+      "id": "08-walrus",
+      "slide": 8,
+      "file": "08-walrus.mp3",
+      "durationSec": 14,
+      "timelineStartSec": 103.0,
+      "timelineEndSec": 117.0,
+      "targetSec": 14,
+      "broll": null,
+      "brollTrim": null,
+      "text": "Built for Walrus: durable blobs, verifiable blob ids, programmable access through Move, and privacy enforced before upload. Not wallpaper — it's the product story."
+    },
+    {
+      "id": "09-why-win",
+      "slide": 9,
+      "file": "09-why-win.mp3",
+      "durationSec": 16,
+      "timelineStartSec": 117.0,
+      "timelineEndSec": 133.0,
+      "targetSec": 16,
+      "broll": "terminal:pnpm mcp:e2e",
+      "brollTrim": {
+        "inSec": 0,
+        "outSec": 12,
+        "keep": "stdio E2E pass"
+      },
+      "text": "End to end in code: hooks to blob id to Move fulfillment. Runnable in three minutes without keys. Move v2 bootstrapped on mainnet. MCP server and dashboard wallet PTBs — all in one monorepo."
+    },
+    {
+      "id": "10-cta",
+      "slide": 10,
+      "file": "10-cta.mp3",
+      "durationSec": 13,
+      "timelineStartSec": 133.0,
+      "timelineEndSec": 146.0,
+      "targetSec": 13,
+      "broll": null,
+      "brollTrim": null,
+      "text": "Try it now — star the repo, open the live demo, run both agent CLIs. Judge guide in the repo root. MemWal plus plus. Thanks for watching."
+    }
+  ],
+  "brollLibrary": [
+    {
+      "id": "agent-demo",
+      "command": "pnpm agent:demo",
+      "recordSec": 35,
+      "trimIn": 3,
+      "trimOut": 28,
+      "mustShow": [
+        "beforeRemember",
+        "afterThink",
+        "onTaskComplete",
+        "RESULT",
+        "exit 0"
+      ]
+    },
+    {
+      "id": "bounty-hunt",
+      "command": "pnpm agent:bounty-hunt",
+      "recordSec": 35,
+      "trimIn": 5,
+      "trimOut": 30,
+      "mustShow": [
+        "poster",
+        "hunter",
+        "blob",
+        "fulfillment"
+      ]
+    },
+    {
+      "id": "mcp-e2e",
+      "command": "pnpm mcp:e2e",
+      "recordSec": 20,
+      "trimIn": 0,
+      "trimOut": 15,
+      "mustShow": [
+        "PASS",
+        "stdio"
+      ]
+    },
+    {
+      "id": "dashboard-dark",
+      "url": "https://memwalpp-dashboard.vercel.app/",
+      "recordSec": 15,
+      "trimIn": 0,
+      "trimOut": 10,
+      "mustShow": [
+        "hero",
+        "judge commands",
+        "package id"
+      ]
+    },
+    {
+      "id": "suiscan-bootstrap",
+      "url": "https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW",
+      "recordSec": 12,
+      "trimIn": 0,
+      "trimOut": 8,
+      "mustShow": [
+        "Config",
+        "MarketplaceV2",
+        "Success"
+      ]
+    }
+  ]
+}
