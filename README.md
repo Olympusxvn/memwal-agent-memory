@@ -30,9 +30,22 @@ pnpm install && pnpm agent:demo && pnpm agent:bounty-hunt
 
 No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PASS`. Optional live Walrus: [`.env.example`](.env.example) + `MEMWAL_AUTO_PUSH=1`.
 
+### Product — Cursor & Claude (post-hackathon)
+
+**Project memory via MCP** — local-first, optional Walrus sync. Not the judge path.
+
+| | |
+|---|---|
+| **Live intro (MCP product)** | https://memwalpp-dashboard.vercel.app/product |
+| **Product guide** | [`docs/product/README.md`](docs/product/README.md) |
+| **Landing (repo copy)** | [`docs/product/landing.html`](docs/product/landing.html) |
+| **MVP spec** | [`docs/specs/openspec-product-mvp-cursor-claude.md`](docs/specs/openspec-product-mvp-cursor-claude.md) |
+| **Claude instructions** | [`docs/product/claude-instructions.md`](docs/product/claude-instructions.md) |
+
 ## Contents
 
 - [For judges](#for-judges-5–10-min)
+- [Product — Cursor & Claude](#product--cursor--claude-post-hackathon)
 - [Overview](#overview)
 - [Quick start](#quick-start)
 - [Architecture](#architecture-at-a-glance)

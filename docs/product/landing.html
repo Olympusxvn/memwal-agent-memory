@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MemWal MCP — Project memory for Cursor & Claude</title>
+  <meta name="description" content="Local-first MCP memory for Cursor and Claude Desktop. Install, test, recall — optional Walrus sync." />
+  <link rel="canonical" href="https://memwalpp-dashboard.vercel.app/product" />
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --surface: #141a24;
+      --text: #e8ecf4;
+      --muted: #8b95a8;
+      --accent: #6ee7a0;
+      --accent-dim: #3d9a6a;
+      --walrus: #a78bfa;
+      --border: #252d3d;
+      --mono: "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
+      --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    header { margin-bottom: 2.5rem; }
+    h1 {
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .tagline { color: var(--muted); font-size: 1.05rem; }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    section h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--walrus);
+      margin-bottom: 1rem;
+    }
+    ol.steps { list-style: none; counter-reset: step; }
+    ol.steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 2.5rem;
+      margin-bottom: 1.25rem;
+    }
+    ol.steps li:last-child { margin-bottom: 0; }
+    ol.steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1.75rem;
+      height: 1.75rem;
+      background: var(--border);
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
+    pre {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 0.75rem 0 0;
+    }
+    code { font-family: var(--mono); font-size: 0.88em; color: var(--accent); }
+    .phrase {
+      border-left: 3px solid var(--accent);
+      padding: 0.75rem 1rem;
+      background: rgba(110, 231, 160, 0.06);
+      border-radius: 0 8px 8px 0;
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+    }
+    .tiers {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: 560px) { .tiers { grid-template-columns: 1fr; } }
+    .tier {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .tier h3 { font-size: 1rem; margin-bottom: 0.35rem; }
+    .tier p { font-size: 0.88rem; color: var(--muted); }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--walrus); }
+    .live-url {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .live-url a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="live-url">Live: <a href="https://memwalpp-dashboard.vercel.app/product">memwalpp-dashboard.vercel.app/product</a></p>
+      <span class="badge">MCP · Cursor · Claude</span>
+      <h1>Project memory for your AI assistant</h1>
+      <p class="tagline">Local-first. Optional Walrus backup via MemWal. No dashboard required.</p>
+    </header>
+
+    <section>
+      <h2>Tiers</h2>
+      <div class="tiers">
+        <div class="tier">
+          <h3>Pro Local</h3>
+          <p>Node 20+ only. SQLite on your machine. <code>remember</code> / <code>recall</code> / <code>search</code>.</p>
+        </div>
+        <div class="tier">
+          <h3>+ Walrus Sync</h3>
+          <p>Add MemWal delegate + relayer. Encrypted durable blobs when you promote.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Install → Test → Recall</h2>
+      <ol class="steps">
+        <li>
+          <strong>Clone & build</strong>
+          <pre>git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
+pnpm install && pnpm mcp:build</pre>
+        </li>
+        <li>
+          <strong>Cursor</strong> — open repo folder → Settings → MCP → enable <code>memwal-agent-memory</code>.
+          <br /><strong>Claude Desktop</strong> — add MCP config + <a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/docs/product/claude-instructions.md">project instructions</a>.
+        </li>
+        <li>
+          <strong>Verify CLI</strong>
+          <pre>pnpm mcp:e2e</pre>
+        </li>
+        <li>
+          <strong>Test phrase</strong> (in chat)
+          <div class="phrase">Remember: "Product smoke test 2026 — hybrid memory OK."<br />Then recall: "Product smoke test 2026"</div>
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Coming soon</h2>
+      <pre>npx -y @memwalpp/mcp --transport stdio</pre>
+      <p style="margin-top:0.75rem;font-size:0.88rem;color:var(--muted)">Single-command install — see <a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/docs/product/npm-publish.md">npm publish plan</a>.</p>
+    </section>
+
+    <footer>
+      <p>
+        <a href="https://memwalpp-dashboard.vercel.app/product">Live intro</a> ·
+        <a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/docs/product/README.md">Full product guide</a> ·
+        <a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/docs/mcp-setup.md">MCP setup</a> ·
+        <a href="https://github.com/Olympusxvn/memwal-agent-memory">GitHub</a> ·
+        <a href="https://docs.memwal.ai/">MemWal docs</a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

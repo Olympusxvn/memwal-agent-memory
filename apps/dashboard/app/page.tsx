@@ -36,6 +36,9 @@ export default function HomePage() {
             <Link className="btn btn--secondary" href="/kiosk">
               Memory Kiosk
             </Link>
+            <Link className="btn btn--primary" href="/product">
+              MCP for Cursor & Claude
+            </Link>
             <a
               className="btn btn--ghost"
               href={`${REPO}/blob/main/JUDGE_GUIDE.md`}

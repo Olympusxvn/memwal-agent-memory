@@ -138,6 +138,7 @@ tradable memory economy.
 - **Master OpenSpec**: [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md)
 - **Architecture**: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - **MCP Server**: [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md)
+- **Product MVP (Cursor + Claude)**: [`docs/specs/openspec-product-mvp-cursor-claude.md`](docs/specs/openspec-product-mvp-cursor-claude.md) · [`docs/product/README.md`](docs/product/README.md)
 - **Move v2 Refactor**: [`docs/specs/openspec-move-contracts-refactor.md`](docs/specs/openspec-move-contracts-refactor.md)
 - **Roadmap**: [`ROADMAP.md`](ROADMAP.md)
 - **Decisions (ADRs)**: [`docs/decisions/`](docs/decisions/)

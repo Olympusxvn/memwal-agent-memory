@@ -2,6 +2,8 @@
 
 Connect **Cursor**, **Claude Desktop**, or any MCP client to the hybrid memory layer without importing `@memwalpp/*` packages.
 
+**Product users (Cursor / Claude):** start at [`product/README.md`](product/README.md) — Pro Local vs + Walrus Sync, smoke test, deeplink.
+
 ## Prerequisites
 
 ```bash

@@ -1,0 +1,44 @@
+---
+description: Use memwal-agent-memory MCP for project memory (remember/recall). Enable when MCP server is connected.
+alwaysApply: false
+---
+
+# MemWal MCP — project memory (product)
+
+When the **memwal-agent-memory** MCP server is available, use it for **persistent project context** across chat sessions.
+
+## Call `remember` when
+
+- User says "remember this", "save for later", or states a **decision** (architecture, conventions, trade-offs)
+- You fix a non-obvious bug — store **symptom → cause → fix** briefly
+- User defines API contracts, env vars, or package IDs that must stay stable
+
+## Call `recall` or `search` when
+
+- User continues work from a prior session or asks "what did we decide…"
+- Before large refactors — check for stored decisions
+- User mentions MemWal, Walrus, MCP namespace, or project-specific terms
+
+## Do not `remember`
+
+- Secrets, keys, tokens, passwords, PII
+- Entire file contents — summarize + path
+- Ephemeral chitchat
+
+## Namespace
+
+Respect `MEMWAL_NAMESPACE` from MCP env (often `cursor` or project name). Same namespace for remember and recall.
+
+## Walrus promote
+
+Use `promote: true` or `sync` only when user configured MemWal env and wants durable backup. **Pro Local** (default) needs no promote.
+
+## Smoke test
+
+On user request "test memwal": remember `Cursor smoke test — hybrid memory OK`, then recall `Cursor smoke test`.
+
+## Chain tools
+
+Do not call `createBounty`, `buyMemoryPack`, etc. unless user explicitly requests on-chain marketplace actions.
+
+Setup: [docs/product/README.md](../../docs/product/README.md)
