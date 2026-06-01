@@ -3,8 +3,9 @@
   "network": "mainnet",
   "packageId": "0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050",
   "originalId": "0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050",
-  "version": 1,
-  "toolchainVersion": "1.70.2",
+  "publishedAt": "0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711",
+  "version": 3,
+  "toolchainVersion": "1.72.2",
   "modules": [
     "wal",
     "memory_nft",
@@ -12,19 +13,34 @@
     "marketplace",
     "bounty",
     "delegate_bridge",
-    "access_policy"
+    "access_policy",
+    "constants",
+    "events",
+    "admin",
+    "memory_ext",
+    "marketplace_v2",
+    "bounty_v2"
   ],
   "objects": {
     "upgradeCap": "0xada975edf109c28a8b74f3789312b90acef29aa7fa28a5e936dc489055e0fd66",
     "walTreasuryCap": "0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e",
-    "marketplace": "0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548"
+    "marketplace": "0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548",
+    "config": "0x52ea5aa40b38de760c3faa08bd83cd047e4d63023091f14774a8a87609f0ecd1",
+    "marketplaceV2": "0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4268566c488f",
+    "adminCap": "0x1b84002646e5f879f1aed6419e214054ee4b7098ff1ad76d1ffadab780efc038",
+    "bootstrapRegistry": "0xa4d5a71e1f8faef77717162fda2682a604055c9446bbd174bd33d7b94f2f9170"
+  },
+  "transactions": {
+    "bootstrapV2": "BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW"
   },
   "explorer": {
-    "package": "https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050"
+    "package": "https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050",
+    "publishedAt": "https://suiscan.xyz/mainnet/object/0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711",
+    "bootstrapV2": "https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW"
   },
   "notes": {
-    "walCoin": "Package-local WAL (OTW at publish). Not ecosystem WAL unless bridged.",
-    "marketplace": "Shared object created in marketplace::init at publish.",
-    "memwalDelegate": "Rotated via delegate_bridge; MemWal SDK calls composed off-chain."
+    "walCoin": "Package-local WAL (OTW at publish). Type uses original package id; PTB moveTarget uses published-at after upgrade.",
+    "marketplace": "v1 shared object from first publish; v2 uses marketplaceV2 after bootstrap.",
+    "ptbPackageId": "Use publishedAt for move calls; originalId for WAL coin type and judge-facing package identity."
   }
 }

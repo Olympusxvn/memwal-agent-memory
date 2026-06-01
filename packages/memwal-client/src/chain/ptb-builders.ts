@@ -163,12 +163,12 @@ export function buildBuyPackTx(
 
 export function buildBootstrapV2Tx(
   config: Pick<ChainClientConfig, "packageId">,
-  params: { bootstrapRegistryId: ObjectId; sender: string },
+  params: { upgradeCapId: ObjectId; sender: string },
 ): Transaction {
   const tx = new Transaction();
   const [adminCap] = tx.moveCall({
-    target: moveTarget("admin", "bootstrap", config.packageId),
-    arguments: [tx.object(params.bootstrapRegistryId)],
+    target: moveTarget("admin", "bootstrap_v2_state", config.packageId),
+    arguments: [tx.object(params.upgradeCapId)],
   });
   tx.moveCall({
     target: moveTarget("marketplace_v2", "bootstrap", config.packageId),

@@ -20,11 +20,11 @@ describe("chain ptb builders", () => {
     expect(json.commands.length).toBeGreaterThanOrEqual(2);
   });
 
-  it("builds v2 bootstrap PTB (admin + marketplace_v2)", () => {
+  it("builds v2 bootstrap PTB (bootstrap_v2_state + marketplace_v2)", () => {
     const tx = buildBootstrapV2Tx(
-      { packageId: "0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050" },
+      { packageId: "0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711" },
       {
-        bootstrapRegistryId: "0x123",
+        upgradeCapId: "0xada975edf109c28a8b74f3789312b90acef29aa7fa28a5e936dc489055e0fd66",
         sender: "0xabc",
       },
     );

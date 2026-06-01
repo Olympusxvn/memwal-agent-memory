@@ -124,7 +124,7 @@ Aligned with Walrus brand: premium dark-first, purple + electric cyan accents, g
 
 ### Voiceover (~20 s)
 
-> MemWal++ is a hybrid memory economy: write locally first, promote only redacted, quality-scored rows to MemWal and Walrus, and anchor packs and bounties on Sui Move — with OpenClaw-style hooks and a universal MCP Server on the roadmap.
+> MemWal++ is a hybrid memory economy: write locally first, promote only redacted, quality-scored rows to MemWal and Walrus, and anchor packs and bounties on Sui Move — with OpenClaw-style hooks and a **universal MCP Server** (`pnpm mcp:e2e`).
 
 ---
 
@@ -192,8 +192,8 @@ pnpm agent:demo
 
 - `pnpm agent:bounty-hunt` — **two agents** (poster + hunter)
 - Same hybrid sync path as Demo 1
-- Stub ties fulfillment to **`walrus_blob_id`**
-- Optional live: `MEMWAL_AUTO_PUSH=1` → see blob in logs
+- Fulfillment ties to **`walrus_blob_id`** (v1 + v2 Move on mainnet)
+- Optional live: `MEMWAL_AUTO_PUSH=1` + delegate key → blob + chain PTB
 
 ### Visual / diagram
 
@@ -216,8 +216,8 @@ pnpm agent:demo
 
 - **https://memwalpp-dashboard.vercel.app/**
 - Walrus-inspired UI — dark + **light mode**
-- Wallet connect · judge commands · mainnet package ID
-- Memory Kiosk (placeholder until indexer)
+- Wallet connect · judge commands · mainnet package IDs
+- Memory Kiosk — **chain actions** (post bounty, buy pack) when wallet connected
 
 ### Visual / diagram
 
@@ -263,13 +263,13 @@ pnpm agent:demo
 
 - **End-to-end** — agent hook → blob id → Move `submit_fulfillment`
 - **Runnable in 3 minutes** — judges need zero keys for core path
-- **Mainnet package** — `0x48db…3050` (real IDs)
-- **Product surface** — live dashboard + CLI + monorepo SDK
-- **Roadmap** — MCP Server + Move v2 lineage (package ID preserved)
+- **Mainnet v2 live** — original `0x48db…3050` · published-at `0x9de4…b711`
+- **MCP + dashboard** — `pnpm mcp:e2e` · kiosk wallet PTBs
+- **Bootstrap verified** — tx `BjV2Q8m…UnkW` · Config + MarketplaceV2 on-chain
 
 ### Voiceover (~22 s)
 
-> We connect the full Walrus narrative in code you can run today — plus a live dashboard and a clear roadmap for MCP universal access and Move v2 lineage royalties.
+> We connect the full Walrus narrative in code you can run today — MCP universal access, Move v2 bootstrapped on mainnet with real Config and MarketplaceV2 object ids, and a live dashboard with wallet PTBs.
 
 ---
 
@@ -300,6 +300,8 @@ MemWal++ · Hybrid Verifiable Memory for Agents
 | Dashboard dark mode | 10 s | Live URL |
 | Dashboard light mode toggle | 10 s | Live URL |
 | Suiscan package (optional) | 10 s | Mainnet |
+| Suiscan v2 bootstrap tx | 10 s | BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW |
+| `pnpm mcp:e2e` terminal | 15 s | Local |
 | Architecture SVG | 10 s | `docs/diagrams/memwalpp-merged-architecture.svg` |
 
 ---

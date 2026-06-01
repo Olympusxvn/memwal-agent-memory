@@ -4,6 +4,7 @@ module memwalpp_contracts::admin;
 use memwalpp_contracts::constants;
 use memwalpp_contracts::events;
 use sui::object::{Self, UID};
+use sui::package::UpgradeCap;
 use sui::transfer;
 use sui::tx_context::{Self, TxContext};
 
@@ -19,17 +20,21 @@ public struct Config has key {
     version: u16,
 }
 
-/// One-shot bootstrap guard (created in init on first publish / module add on upgrade).
+/// One-shot bootstrap guard (created via `bootstrap_v2_state` after upgrade — no `init`).
 public struct BootstrapRegistry has key {
     id: UID,
     done: bool,
 }
 
-fun init(ctx: &mut TxContext) {
-    transfer::share_object(BootstrapRegistry {
+/// Post-upgrade entry: share registry + Config in one tx (UpgradeCap-gated). No `init` — Sui upgrades forbid new `init`.
+public entry fun bootstrap_v2_state(_cap: &UpgradeCap, ctx: &mut TxContext): AdminCap {
+    let mut registry = BootstrapRegistry {
         id: object::new(ctx),
         done: false,
-    });
+    };
+    let admin_cap = bootstrap(&mut registry, ctx);
+    transfer::share_object(registry);
+    admin_cap
 }
 
 public fun bootstrap(
@@ -95,5 +100,8 @@ public fun set_paused(_cap: &AdminCap, config: &mut Config, paused: bool) {
 
 #[test_only]
 public fun init_for_test(ctx: &mut TxContext) {
-    init(ctx);
+    transfer::share_object(BootstrapRegistry {
+        id: object::new(ctx),
+        done: false,
+    });
 }

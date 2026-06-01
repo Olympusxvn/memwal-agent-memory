@@ -1,6 +1,7 @@
 # Deploy & interact — `memwalpp_contracts` (Sui Mainnet)
 
-**Package ID:** `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`  
+**Package ID (original):** `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`  
+**Published-at (v3 bytecode):** `0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711`  
 **Explorer:** [Suiscan package](https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050)
 
 Machine-readable manifest: [`packages/sui-contracts/deploy-manifest.json`](../packages/sui-contracts/deploy-manifest.json)
@@ -11,7 +12,8 @@ Machine-readable manifest: [`packages/sui-contracts/deploy-manifest.json`](../pa
 
 | Object | ID | Role |
 |--------|-----|------|
-| **Package** | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` | All module bytecode |
+| **Package (original)** | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` | Stable identity · WAL coin type |
+| **Package (published-at v3)** | `0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711` | PTB `moveTarget` after upgrade |
 | **Marketplace** (shared) | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` | `list_pack` / `buy_pack` |
 | **UpgradeCap** | `0xada975edf109c28a8b74f3789312b90acef29aa7fa28a5e936dc489055e0fd66` | Package upgrades (operator only) |
 | **WAL TreasuryCap** | `0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e` | Mint demo `WAL` for tests |
@@ -24,14 +26,17 @@ Copy [`.env.example`](../.env.example):
 
 ```bash
 MARKETPLACE_PACKAGE_ID=0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050
+MARKETPLACE_PACKAGE_PUBLISHED_AT=0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711
 NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID=0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050
+NEXT_PUBLIC_MARKETPLACE_PACKAGE_PUBLISHED_AT=0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711
 MARKETPLACE_OBJECT_ID=0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548
 WAL_TREASURY_CAP_ID=0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e
 SUI_DELEGATE_PRIVATE_KEY=   # MCP / agent-swarm chain PTBs (delegate only)
 SUI_NETWORK=mainnet
-# v2 objects — fill after upgrade + bootstrap (see below)
-CONFIG_OBJECT_ID=0x0
-MARKETPLACE_V2_OBJECT_ID=0x0
+# v2 objects — bootstrapped mainnet 2026-06-01
+CONFIG_OBJECT_ID=0x52ea5aa40b38de760c3faa08bd83cd047e4d63023091f14774a8a87609f0ecd1
+MARKETPLACE_V2_OBJECT_ID=0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4268566c488f
+BOOTSTRAP_TX_DIGEST=BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW
 ```
 
 Never commit private keys. Use **delegate** keys for MemWal only (ADR-002).
@@ -76,16 +81,22 @@ Full event list: [`docs/specs/openspec-move-contracts.md`](specs/openspec-move-c
 
 ```ts
 import {
-  MARKETPLACE_PACKAGE_ID,
+  MARKETPLACE_PACKAGE_ORIGINAL_ID,
+  MARKETPLACE_PACKAGE_PUBLISHED_AT,
   MAINNET_DEPLOYED_OBJECTS,
+  MAINNET_V2_OBJECTS,
   moveTarget,
+  walCoinType,
 } from "@memwalpp/shared";
 
-// Example: bounty::post_bounty
-const target = moveTarget("bounty", "post_bounty");
-// => "0x48db...::bounty::post_bounty"
+// PTB targets use published-at (defaults in moveTarget)
+const target = moveTarget("bounty_v2", "post_bounty_v2");
+// => "0x9de4…::bounty_v2::post_bounty_v2"
 
-const marketId = MAINNET_DEPLOYED_OBJECTS.marketplace;
+// WAL coin type uses original id
+const wal = walCoinType(); // 0x48db…::wal::WAL
+
+const marketV2 = MAINNET_V2_OBJECTS.marketplaceV2;
 ```
 
 Compose with `@mysten/sui` `Transaction` in `apps/dashboard` or via `@memwalpp/memwal-client` chain helpers:
@@ -135,33 +146,39 @@ if (chain) {
 - Bump `version` in `Published.toml` after upgrade.  
 - Update `deploy-manifest.json` if shared objects change (Marketplace id is stable from first publish).
 
-### Move v2 (S4 operator steps)
+### Move v2 (mainnet — complete)
 
-After pulling v2 modules into the repo:
+**Status:** Upgrade v3 + bootstrap executed 2026-06-01.  
+**Bootstrap tx:** [BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW](https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW)
 
-1. **Upgrade bytecode** (package id unchanged):
+| v2 object | ID |
+|-----------|-----|
+| **Config** (shared) | `0x52ea5aa40b38de760c3faa08bd83cd047e4d63023091f14774a8a87609f0ecd1` |
+| **MarketplaceV2** (shared) | `0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4268566c488f` |
+| **AdminCap** | `0x1b84002646e5f879f1aed6419e214054ee4b7098ff1ad76d1ffadab780efc038` |
+| **BootstrapRegistry** | `0xa4d5a71e1f8faef77717162fda2682a604055c9446bbd174bd33d7b94f2f9170` (done=true) |
+
+**Dual package-id rule:** PTB `moveTarget` → **published-at** (`0x9de4…`). WAL coin type + judge copy → **original** (`0x48db…`).
+
+Operator scripts (for future upgrades):
+
+1. **Upgrade bytecode** (requires Sui CLI ≥ mainnet-v1.72.2):
    ```bash
    pnpm contracts:upgrade-v2
-   # or: ./scripts/upgrade-contracts-v2.sh
    ```
-2. **Discover bootstrap registry** (shared object created by `admin::init` on upgrade):
-   ```bash
-   pnpm contracts:bootstrap-v2 --discover --upgrade-digest=<upgrade-tx-digest>
-   # or set BOOTSTRAP_REGISTRY_ID=0x... after reading Suiscan object changes
-   ```
-3. **Bootstrap shared objects** (one-time PTB from operator wallet):
+2. **Bootstrap shared objects** (one-time; already done on mainnet):
    ```bash
    SUI_OPERATOR_PRIVATE_KEY=... pnpm contracts:bootstrap-v2 --write-manifest
    ```
-   Creates shared `Config` + `MarketplaceV2`; transfers `AdminCap` to operator.
-4. **Record object ids** in `.env`, `deploy-manifest.json`, and `@memwalpp/shared` `MAINNET_V2_OBJECTS`.
-5. Re-run `pnpm contracts:info` — v2 targets activate when `CONFIG_OBJECT_ID` and `MARKETPLACE_V2_OBJECT_ID` are non-zero.
+   Entry: `admin::bootstrap_v2_state(&UpgradeCap)` — no `--discover` needed.
 
-Until bootstrap, MCP, agent-swarm, and dashboard use **v1** PTB targets (`bounty::post_bounty`, `marketplace::list_pack`, …).
+3. **Verify:** `pnpm contracts:info` prints original + published-at ids and v2 objects.
+
+MCP, agent-swarm, and dashboard chain helpers auto-select **v2** PTBs when `CONFIG_OBJECT_ID` / `MARKETPLACE_V2_OBJECT_ID` are set (defaults in `@memwalpp/shared`).
 
 **Dry-run PTB (no gas):**
 ```bash
-pnpm contracts:bootstrap-v2 --dry-run --registry 0xYOUR_REGISTRY_ID
+pnpm contracts:bootstrap-v2 --dry-run
 ```
 
 ---

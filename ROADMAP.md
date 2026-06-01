@@ -20,7 +20,7 @@
 | Agent demos + hooks | **Mostly complete** | `pnpm agent:demo`, `pnpm agent:bounty-hunt`; optional live `postBounty` when chain env set |
 | Project docs + OpenSpecs | **Complete** | Master + MCP + Move refactor specs; `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
 | MCP Server (`packages/mcp`) | **Complete** | stdio E2E; chain tools wired (`createBounty`, …) when delegate key + marketplace env set |
-| Move v2 refactor (upgrade-in-place) | **Complete (repo)** | v2 modules + tests; mainnet upgrade + bootstrap → operator (S4) |
+| Move v2 refactor (upgrade-in-place) | **Complete (mainnet)** | v2 modules + tests; upgrade v3 + bootstrap done |
 | Dashboard live PTBs | **Partial** | Kiosk: post bounty, submit fulfillment, buy pack (v1 wallet PTBs) |
 
 **Demo north star (all phases):** bounty → acquire → improve → fork → payout — every claim traceable to a **Walrus blob id** or **on-chain event**.
@@ -166,8 +166,8 @@
 | `MemoryPack` layout unchanged; `PackExt` via dynamic field | §4 ✓ |
 | `fork_pack`, `buy_pack_v2`, `fulfill_bounty_v2`, multi-submission bounty | §5 ✓ |
 | Upgrade via existing `UpgradeCap`; package id unchanged | §7 — **operator step (S4)** |
-| Post-upgrade bootstrap (`Config`, `MarketplaceV2`, `AdminCap`) | §7.2 — **operator step (S4)** |
-| `@memwalpp/shared` updated with new object ids + `moveTarget` entries | §8 ✓ (v2 object ids placeholder until bootstrap) |
+| Post-upgrade bootstrap (`Config`, `MarketplaceV2`, `AdminCap`) | §7.2 ✓ mainnet (tx BjV2Q8m…) |
+| `@memwalpp/shared` updated with new object ids + `moveTarget` entries | §8 ✓ |
 | ≥ 8 new Move tests + all v1 tests still pass | §9 ✓ (7 v2 + 1 v1) |
 
 **Depends on:** Phase 3 (v1 published), Phase 5 (spec locked).
@@ -226,8 +226,8 @@ Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 spe
 | **S1** ✓ | Docs + OpenSpecs | Master spec, MCP spec, Move refactor spec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
 | **S2** | MCP scaffold + E2E | `packages/mcp` — stdio, memory tools, `pnpm mcp:e2e` ✓ |
 | **S3** ✓ | Move v2 implementation | `memory_ext`, `bounty_v2`, `marketplace_v2`; `sui move test` green — **mainnet upgrade + bootstrap → S4** |
-| **S4** ✓ | Live chain wiring | Chain PTB client, MCP + agent-swarm + kiosk wallet PTBs — **v2 mainnet bootstrap → operator scripts** |
-| **S5** ◐ | Submission | Judge guide, demo polish, video |
+| **S4** ✓ | Live chain wiring | Chain PTB client, MCP + agent-swarm + kiosk wallet PTBs; v2 mainnet bootstrap complete |
+| **S5** ✓ | Submission | Judge guide, demo slides, mainnet ids synced |
 
 ---
 

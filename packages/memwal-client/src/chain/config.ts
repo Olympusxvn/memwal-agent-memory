@@ -1,7 +1,8 @@
 import {
   MAINNET_DEPLOYED_OBJECTS,
   MAINNET_V2_OBJECTS,
-  MARKETPLACE_PACKAGE_ID,
+  MARKETPLACE_PACKAGE_ORIGINAL_ID,
+  MARKETPLACE_PACKAGE_PUBLISHED_AT,
   type ObjectId,
 } from "@memwalpp/shared";
 
@@ -58,8 +59,9 @@ export function loadChainConfigFromEnv(
 
   return {
     network: parseNetwork(trim(env.SUI_NETWORK) || "mainnet"),
-    packageId: (trim(env.MARKETPLACE_PACKAGE_ID) ||
-      MARKETPLACE_PACKAGE_ID) as ObjectId,
+    packageId: (trim(env.MARKETPLACE_PACKAGE_PUBLISHED_AT) ||
+      trim(env.MARKETPLACE_PACKAGE_ID) ||
+      MARKETPLACE_PACKAGE_PUBLISHED_AT) as ObjectId,
     marketplaceId,
     walTreasuryCapId,
     configId: isConfiguredObjectId(configId) ? configId : undefined,

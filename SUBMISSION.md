@@ -93,7 +93,7 @@ Look for `✓ Promoted — blob …` in poster step 3.
 3. **Hybrid architecture done right** — ADR-010 durable-wins on sealed content; not “sync everything.”  
 4. **Economy + storage** — mainnet Move package (marketplace, escrow bounty, NFT pack) **plus** Walrus durability.  
 5. **Engineering depth** — OpenSpecs, ADRs, Vitest, `sui move test`, CI — not a slide deck repo.  
-6. **Clear roadmap forward** — MCP universal access ✓, Move v2 in repo ✓, live chain PTBs wired (v1 mainnet + v2 after operator bootstrap).
+6. **Clear roadmap forward** — MCP universal access ✓, Move v2 **bootstrapped on mainnet** ✓, live chain PTBs (v1 + v2).
 
 ---
 
@@ -107,9 +107,9 @@ Look for `✓ Promoted — blob …` in poster step 3.
 | **4** | `MemWalAgentBridge`, agent demos, optional live bounty PTB | ✓ |
 | **5** | Master OpenSpec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` | ✓ |
 | **6** | MCP Server — memory + chain tools, stdio E2E | ✓ |
-| **7** | Move v2 refactor (upgrade-in-place, tests) | ✓ repo |
-| **8** | Dashboard kiosk PTBs, chain client | ◐ partial |
-| **9** | Submission polish (this doc, judge guide) | ◐ |
+| **7** | Move v2 refactor (upgrade-in-place, tests) | ✓ mainnet |
+| **8** | Dashboard kiosk PTBs, chain client | ✓ |
+| **9** | Submission polish (this doc, judge guide, demo slides) | ✓ |
 
 See [`ROADMAP.md`](ROADMAP.md) for full phase breakdown.
 
@@ -119,12 +119,16 @@ See [`ROADMAP.md`](ROADMAP.md) for full phase breakdown.
 
 | | |
 |---|---|
-| **Package ID** | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
+| **Package ID (original)** | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
+| **Published-at (v3)** | `0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711` |
 | **Suiscan** | https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050 |
-| **Marketplace** | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
+| **Marketplace (v1)** | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
+| **Config (v2)** | `0x52ea5aa40b38de760c3faa08bd83cd047e4d63023091f14774a8a87609f0ecd1` |
+| **MarketplaceV2** | `0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4268566c488f` |
+| **Bootstrap tx** | https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW |
 | **Interact** | [`docs/deploy.md`](docs/deploy.md) · `pnpm contracts:info` |
 
-Move v2 refactor (versioning, lineage, bounty v2) upgrades **in-place** via existing UpgradeCap — package ID unchanged. Operator scripts: `pnpm contracts:upgrade-v2` then `pnpm contracts:bootstrap-v2`. See [`docs/deploy.md`](docs/deploy.md).
+Move v2 upgraded **in-place** via UpgradeCap — original package id unchanged for WAL type and explorer. PTB targets use **published-at** id after upgrade v3.
 
 ---
 
@@ -146,7 +150,7 @@ pnpm contracts:test    # Sui CLI — 8 Move tests (v2 + v1)
 
 ## 10. Future work
 
-Indexer + live Kiosk listings · mainnet v2 bootstrap (operator) · Seal PTB composition · published OpenClaw plugin npm package.
+Indexer + live Kiosk listings · Seal PTB composition · published OpenClaw plugin npm package.
 
 ---
 

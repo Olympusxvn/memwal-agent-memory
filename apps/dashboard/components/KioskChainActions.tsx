@@ -4,14 +4,18 @@ import { useCurrentAccount, useSignAndExecuteTransaction } from "@mysten/dapp-ki
 import { Transaction } from "@mysten/sui/transactions";
 import {
   MAINNET_DEPLOYED_OBJECTS,
-  MARKETPLACE_PACKAGE_ID,
+  MARKETPLACE_PACKAGE_ORIGINAL_ID,
+  MARKETPLACE_PACKAGE_PUBLISHED_AT,
   moveTarget,
   walCoinType,
 } from "@memwalpp/shared";
 import { useCallback, useState } from "react";
 
-const PACKAGE_ID =
-  process.env.NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID ?? MARKETPLACE_PACKAGE_ID;
+const PUBLISHED_PACKAGE_ID =
+  process.env.NEXT_PUBLIC_MARKETPLACE_PACKAGE_PUBLISHED_AT ??
+  MARKETPLACE_PACKAGE_PUBLISHED_AT;
+const WAL_PACKAGE_ID =
+  process.env.NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID ?? MARKETPLACE_PACKAGE_ORIGINAL_ID;
 const MARKETPLACE_ID =
   process.env.NEXT_PUBLIC_MARKETPLACE_OBJECT_ID ?? MAINNET_DEPLOYED_OBJECTS.marketplace;
 const TREASURY_CAP_ID =
@@ -79,7 +83,7 @@ export function KioskChainActions() {
   const postDemoBounty = useCallback(async () => {
     await runTx("post_bounty", async () => {
       const tx = new Transaction();
-      const walType = walCoinType(PACKAGE_ID as typeof MARKETPLACE_PACKAGE_ID);
+      const walType = walCoinType(WAL_PACKAGE_ID as typeof MARKETPLACE_PACKAGE_ORIGINAL_ID);
       const [payment] = tx.moveCall({
         target: "0x2::coin::mint",
         typeArguments: [walType],
@@ -87,7 +91,7 @@ export function KioskChainActions() {
       });
       const hash = await descriptionHashBytes("MemWal++ kiosk demo bounty");
       tx.moveCall({
-        target: moveTarget("bounty", "post_bounty", PACKAGE_ID as typeof MARKETPLACE_PACKAGE_ID),
+        target: moveTarget("bounty", "post_bounty", PUBLISHED_PACKAGE_ID as typeof MARKETPLACE_PACKAGE_PUBLISHED_AT),
         arguments: [
           payment,
           tx.pure.u64(BigInt(Date.now() + 86_400_000)),
@@ -111,7 +115,7 @@ export function KioskChainActions() {
         target: moveTarget(
           "bounty",
           "submit_fulfillment",
-          PACKAGE_ID as typeof MARKETPLACE_PACKAGE_ID,
+          PUBLISHED_PACKAGE_ID as typeof MARKETPLACE_PACKAGE_PUBLISHED_AT,
         ),
         arguments: [
           tx.object(bountyId.trim()),
@@ -135,14 +139,14 @@ export function KioskChainActions() {
     }
     await runTx("buy_pack", async () => {
       const tx = new Transaction();
-      const walType = walCoinType(PACKAGE_ID as typeof MARKETPLACE_PACKAGE_ID);
+      const walType = walCoinType(WAL_PACKAGE_ID as typeof MARKETPLACE_PACKAGE_ORIGINAL_ID);
       const [payment] = tx.moveCall({
         target: "0x2::coin::mint",
         typeArguments: [walType],
         arguments: [tx.object(TREASURY_CAP_ID), tx.pure.u64(price)],
       });
       const bought = tx.moveCall({
-        target: moveTarget("marketplace", "buy_pack", PACKAGE_ID as typeof MARKETPLACE_PACKAGE_ID),
+        target: moveTarget("marketplace", "buy_pack", PUBLISHED_PACKAGE_ID as typeof MARKETPLACE_PACKAGE_PUBLISHED_AT),
         arguments: [tx.object(MARKETPLACE_ID), tx.pure.id(packId.trim()), payment],
       });
       tx.transferObjects([bought], account!.address);
