@@ -328,3 +328,5 @@ pnpm demo:voiceover:all    # both
 ```
 
 Output: `docs/demo-video-output/<locale>/` — see [`scripts/demo-video/README.md`](../scripts/demo-video/README.md) for CapCut assembly and B-roll trim times.
+
+**One-command export:** `pnpm demo:publish` → `docs/demo-video-output/en/memwalpp-demo.mp4` (copied to `docs/memwalpp-demo.mp4` for Devpost).

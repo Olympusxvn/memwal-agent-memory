@@ -14,3 +14,4 @@ Thumbs.db
 *.pem
 docs/demo-video-output/**/*.mp3
 docs/demo-video-output/**/concat-list.txt
+docs/demo-video-output/**/export-work/**

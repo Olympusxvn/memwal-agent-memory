@@ -23,19 +23,26 @@
     "contracts:bootstrap-v2": "tsx scripts/bootstrap-v2.ts",
     "demo:voiceover": "python scripts/demo-video/generate-voiceover.py --locale en",
     "demo:voiceover:vi": "python scripts/demo-video/generate-voiceover.py --locale vi",
-    "demo:voiceover:all": "python scripts/demo-video/generate-voiceover.py --locale en --locale vi"
+    "demo:voiceover:all": "python scripts/demo-video/generate-voiceover.py --locale en --locale vi",
+    "demo:export": "node scripts/demo-video/export-demo.mjs",
+    "demo:export:vi": "node scripts/demo-video/export-demo.mjs --locale vi",
+    "demo:publish": "pnpm demo:voiceover && pnpm demo:export"
   },
   "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@memwalpp/shared": "workspace:*",
     "@mysten/sui": "^2.16.2",
     "@types/node": "^22.10.1",
+    "playwright": "^1.60.0",
     "tsx": "^4.19.2",
     "turbo": "^2.3.3",
     "typescript": "^5.7.2"
   },
   "packageManager": "pnpm@10.18.2",
   "pnpm": {
-    "onlyBuiltDependencies": ["better-sqlite3"]
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   },
   "engines": {
     "node": ">=20"

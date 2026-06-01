@@ -71,9 +71,15 @@ ffmpeg -i slides.mp4 -i docs/demo-video-output/en/full-voiceover.mp3 \
 
 Re-run `generate-voiceover.py` after editing `voiceover.json`.
 
-## npm shortcut
+## npm shortcuts
 
 ```bash
-pnpm demo:voiceover        # English
-pnpm demo:voiceover:vi     # Vietnamese
+pnpm demo:voiceover        # English TTS
+pnpm demo:voiceover:vi     # Vietnamese TTS
+pnpm demo:export           # slides + audio → memwalpp-demo.mp4 (English)
+pnpm demo:export:vi        # Vietnamese video
+pnpm demo:publish          # voiceover + export (English, one command)
 ```
+
+**Published file:** `docs/demo-video-output/en/memwalpp-demo.mp4` (~2.5 MB, ~2:26)  
+Copy for Devpost: `docs/memwalpp-demo.mp4`

@@ -10,6 +10,7 @@
 |---|---|
 | **Repository** | https://github.com/Olympusxvn/memwal-agent-memory |
 | **Live demo (dashboard)** | https://memwalpp-dashboard.vercel.app/ |
+| **Demo video (~2:26)** | [`docs/memwalpp-demo.mp4`](docs/memwalpp-demo.mp4) · regenerate: `pnpm demo:publish` |
 | **Judge runbook (start here)** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) — **5–10 minutes**, no API keys required |
 | **Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [SVG diagram](docs/diagrams/memwalpp-merged-architecture.svg) |
 | **Master OpenSpec** | [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) |

@@ -37,8 +37,12 @@ def find_ffmpeg() -> str | None:
     exe = shutil.which("ffmpeg")
     if exe:
         return exe
-    # common Windows installs
+    # bundled via pnpm @ffmpeg-installer/ffmpeg
+    node_ffmpeg = ROOT / "node_modules" / "@ffmpeg-installer" / "win32-x64" / "ffmpeg.exe"
+    if node_ffmpeg.exists():
+        return str(node_ffmpeg)
     for candidate in [
+        ROOT / "node_modules" / "@ffmpeg-installer" / "ffmpeg" / "node_modules" / "@ffmpeg-installer" / "win32-x64" / "ffmpeg.exe",
         Path("/c/ffmpeg/bin/ffmpeg.exe"),
         Path.home() / "scoop" / "shims" / "ffmpeg.exe",
         Path("C:/ProgramData/chocolatey/bin/ffmpeg.exe"),
