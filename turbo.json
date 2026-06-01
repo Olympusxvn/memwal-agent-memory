@@ -42,6 +42,10 @@
       "dependsOn": ["^check"],
       "outputs": []
     },
+    "@memwalpp/dashboard#check": {
+      "dependsOn": ["@memwalpp/dashboard#build"],
+      "outputs": []
+    },
     "lint": {
       "dependsOn": ["^lint"],
       "outputs": [],
