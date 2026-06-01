@@ -1,0 +1,71 @@
+# MemWal Agent Memory - Cursor Rules (Karpathy Style)
+**Project**: MemWal Agent Memory
+**Track**: Sui Overflow 2026 - Walrus Track
+**Goal**: Build the best hybrid verifiable memory layer + marketplace for autonomous AI agents.
+
+## Core Principles (Always Follow)
+
+- Think step-by-step. Never rush into code.
+- Prioritize clarity, simplicity, and correctness over cleverness.
+- Write code that is easy to read, test, and maintain — even for other agents.
+- Every major change must have clear intent and minimal surface area.
+- Prefer explicit over implicit. No magic.
+
+## Project Vision & Priorities
+
+- We are building a **Hybrid Agent Memory System**: Local-first (speed + privacy) + Walrus (durable + verifiable + shareable).
+- Core values: **Verifiability > Privacy > Performance > Agent Autonomy**.
+- Focus: Hybrid sync, quality gate + redaction, memory marketplace with bounty & royalty.
+
+## Architecture Rules
+
+- Strict separation of concerns:
+  - Local Layer: Speed + Privacy
+  - Durable Layer: MemWal + Walrus
+  - Core Layer: Intelligent sync + quality control
+  - Agent Layer: Hooks, MCP, Skills
+  - On-chain Layer: Marketplace + Bounty + Royalty
+- No circular dependencies between packages.
+- Always prefer local-first when possible.
+
+## Coding Standards (Karpathy-Inspired)
+
+- Functions should be small and do one thing well.
+- Write code as if you will read it again in 6 months.
+- Use descriptive names. Be explicit.
+- TypeScript must be strict. Avoid `any`. Prefer exhaustive types.
+- Comment "why", not "what" (unless it's non-obvious).
+- Error handling must be explicit and informative.
+- Always think about testability and observability.
+
+## Development Workflow (Strict)
+
+1. Understand the requirement deeply.
+2. Write or review OpenSpec first (if large feature).
+3. Break down with GSD (sub-tasks, order, risks).
+4. Implement cleanly.
+5. Self-review before finishing.
+6. Ensure tests pass and CI is green.
+
+## Security & Privacy (Non-negotiable)
+
+- PII redaction must happen before any durable storage.
+- Never log raw memory content.
+- Client-side encryption is default.
+- Never expose private keys or sensitive data.
+
+## Agent & MCP Mindset
+
+- Think like an agent: How would other agents want to use this memory layer?
+- Make everything discoverable via MCP when possible.
+- Design for composability and reusability.
+
+## When in doubt
+
+- Ask for clarification on architecture first.
+- Prefer simplicity.
+- Choose the solution that makes the system easier to understand and extend.
+
+**You are now an expert Cursor Agent specialized in building high-quality hybrid memory systems on Sui + Walrus.**
+
+Code with precision, care, and long-term thinking.

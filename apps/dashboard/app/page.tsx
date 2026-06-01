@@ -6,7 +6,8 @@ const PACKAGE_ID =
   process.env.NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID ??
   "0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050";
 
-const REPO = "https://github.com/Olympusxvn/memwalpp";
+const REPO = "https://github.com/Olympusxvn/memwal-agent-memory";
+const LIVE_DEMO = "https://memwalpp-dashboard.vercel.app/";
 
 export default function HomePage() {
   return (
@@ -17,16 +18,19 @@ export default function HomePage() {
           <div className="hero__badges">
             <span className="badge badge--walrus">Walrus Track</span>
             <span className="badge badge--sui">Sui Overflow 2026</span>
-            <span className="badge">Hybrid agent memory</span>
+            <span className="badge badge--live">Live demo</span>
           </div>
           <h1>Local speed. Walrus truth. On-chain economy.</h1>
           <p className="hero__lead">
-            MemWal++ is a hybrid memory stack for autonomous agents: recall from SQLite locally, promote redacted rows to
-            MemWal and Walrus, and anchor memory packs and bounties on Sui Move with verifiable{" "}
-            <code>walrus_blob_id</code> fulfillment.
+            <strong>MemWal++</strong> (<code>memwal-agent-memory</code>) is a hybrid verifiable memory layer for
+            autonomous agents: recall from SQLite locally, promote redacted rows to MemWal and Walrus, and anchor memory
+            packs and bounties on Sui Move with verifiable <code>walrus_blob_id</code> fulfillment.
           </p>
           <div className="hero__cta">
-            <a className="btn btn--primary" href="#demo">
+            <a className="btn btn--primary" href={LIVE_DEMO} target="_blank" rel="noopener noreferrer">
+              Open live demo
+            </a>
+            <a className="btn btn--secondary" href="#demo">
               Run judge demo
             </a>
             <Link className="btn btn--secondary" href="/kiosk">
@@ -39,6 +43,15 @@ export default function HomePage() {
               rel="noopener noreferrer"
             >
               JUDGE_GUIDE.md
+            </a>
+          </div>
+          <div className="live-demo">
+            <p className="live-demo__copy">
+              Production dashboard — wallet connect, Walrus track narrative, judge commands. UI follows{" "}
+              <code>walrus.xyz-DESIGN.md</code> with dark + light mode.
+            </p>
+            <a className="live-demo__url" href={LIVE_DEMO} target="_blank" rel="noopener noreferrer">
+              {LIVE_DEMO}
             </a>
           </div>
         </section>
@@ -122,7 +135,7 @@ export default function HomePage() {
           <p>
             Network: <code>{process.env.NEXT_PUBLIC_SUI_NETWORK ?? "mainnet"}</code> ·{" "}
             <a href={REPO} target="_blank" rel="noopener noreferrer">
-              github.com/Olympusxvn/memwalpp
+              github.com/Olympusxvn/memwal-agent-memory
             </a>
           </p>
         </footer>

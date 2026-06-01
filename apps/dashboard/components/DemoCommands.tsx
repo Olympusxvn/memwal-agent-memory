@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 
-const DEMO_SCRIPT = `git clone https://github.com/Olympusxvn/memwalpp.git && cd memwalpp
+const DEMO_SCRIPT = `git clone https://github.com/Olympusxvn/memwal-agent-memory.git && cd memwal-agent-memory
 pnpm install
 pnpm agent:demo
 pnpm agent:bounty-hunt`;

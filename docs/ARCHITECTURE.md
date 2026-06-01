@@ -1,23 +1,35 @@
-# MemWal++ — system architecture
+# MemWal Agent Memory — system architecture
 
+**Project:** `memwal-agent-memory` · **Track:** Sui Overflow 2026 — Walrus Track  
+**Mainnet package (judges):** `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`  
 **Status:** canonical reference for implementation and reviews (ưu tiên đọc cho **Cursor / AI agents** trước khi sửa code).  
 **Diagram:** [`diagrams/memwalpp-merged-architecture.svg`](diagrams/memwalpp-merged-architecture.svg) (`memwalpp_merged_architecture.svg`).  
 **Decisions:** [`decisions/`](decisions/) (ADR-001 … ADR-013). **Monorepo boundaries:** [ADR-013 — Monorepo layout](decisions/ADR-013.md).
+
+**OpenSpec (read first):**
+- [`specs/openspec-memwal-agent-memory.md`](specs/openspec-memwal-agent-memory.md) — **master project spec** (vision, objectives, non-goals)
+- [`specs/openspec-mcp-server.md`](specs/openspec-mcp-server.md) — universal MCP Server (tool surface, privacy)
+- [`specs/openspec-move-contracts-refactor.md`](specs/openspec-move-contracts-refactor.md) — Move v2 refactor (package-ID preserved)
 
 ---
 
 ## 1. Purpose
 
-MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifiable memory economy** where agents can **capture**, **score**, **persist**, **trade**, and **prove** memories—combining **local-first** speed and privacy with **Walrus + MemWal** durability and **Sui Move** for ownership, marketplace, bounties, and royalties.
+MemWal Agent Memory is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifiable memory economy** where agents can **capture**, **score**, **persist**, **trade**, and **prove** memories—combining **local-first** speed and privacy with **Walrus + MemWal** durability and **Sui Move** for ownership, marketplace, bounties, and royalties.
 
 ### 1.1 Text diagram (dependency direction, top → bottom)
 
 ```
+ external agents (Claude / Cursor / OpenClaw / custom)
+        |  MCP (stdio | Streamable HTTP)
+        v
+[ packages/mcp ]   universal access front door (privacy-enforcing)
+        |
 [ apps/dashboard ]     [ apps/agent-swarm ]     [ apps/cli ]
         |                       |                      |
         +-----------+-----------+----------------------+
                     v
-            [ packages/core ]
+            [ packages/core ]   MemorySyncService · QualityGate · Redaction · Lineage
                     |
         +-----------+-----------+
         v                       v
@@ -33,9 +45,10 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 [ packages/ui ]      <── may use shared only
 
 [ packages/sui-contracts ]  Move only; TS apps depend for PTB IDs / ABIs
+            (v2 refactor: see openspec-move-contracts-refactor.md — package ID preserved)
 ```
 
-**Rule of thumb:** apps never imported by `packages/*`. `shared` has no workspace deps. See **ADR-013** for the full responsibility matrix.
+**Rule of thumb:** apps never imported by `packages/*`. `shared` has no workspace deps. `packages/mcp` is an app-like leaf (composes `core`/`local-memory`/`memwal-client`; never imported by other `packages/*`). See **ADR-013** for the full responsibility matrix.
 
 ---
 
@@ -52,15 +65,16 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 | Browse / buy / list | Next.js routes; PTB composition against `packages/sui-contracts` package ID |
 | Kiosk | UI + indexer-backed data (ADR-009); schema [`specs/indexer-schema.sql`](specs/indexer-schema.sql) |
 
-### Layer B — Orchestration (NemoClaw / OpenClaw)
+### Layer B — Orchestration & universal access (MCP / NemoClaw / OpenClaw)
 
-**Role:** policy-bound agent swarm; MemWal plugin (`oc-memwal`); custom skills; bounty skill.
+**Role:** policy-bound agent swarm; MemWal plugin (`oc-memwal`); custom skills; bounty skill; **universal MCP Server** so any agent can use the memory layer without importing our packages.
 
 | Concern | Implementation |
 |---------|----------------|
 | Hooks | `@memwalpp/core` **`MemWalAgentBridge`** — `beforeRemember` / `afterThink` / `onTaskComplete` (ADR-011); delegates **`MemorySyncService`** (redact + gate + push) |
 | Skills & demos | `apps/agent-swarm` — OpenClaw plugin manifest, skills, **`pnpm agent:demo`**, **`pnpm agent:bounty-hunt`** |
 | Agent contract | `IMemWalAgent` in `memwal-client`; implementation in **`core/agent/MemWalAgentBridge.ts`** |
+| **MCP Server** | `@memwalpp/mcp` — stdio + Streamable HTTP; tools `remember`/`recall`/`sync`/`forkMemory`/`createBounty`/`fulfillBounty` …; redaction enforced server-side; delegate keys server-only. Spec: [`specs/openspec-mcp-server.md`](specs/openspec-mcp-server.md) |
 
 ### Layer C — Hybrid memory system
 
@@ -161,11 +175,11 @@ MemWal++ is a **Walrus-track** submission for **Sui Overflow 2026**: a **verifia
 
 ## 8. Walrus Track highlights (judge narrative)
 
-MemWal++ satisfies the Walrus track by placing **durable agent memory on Walrus** via the official MemWal path, while keeping day-to-day agent work **local-first**.
+MemWal Agent Memory satisfies the Walrus track by placing **durable agent memory on Walrus** via the official MemWal path, while keeping day-to-day agent work **local-first**.
 
 **Judge commands:** `pnpm agent:demo` · `pnpm agent:bounty-hunt` · [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md)
 
-| Track criterion | MemWal++ evidence |
+| Track criterion | MemWal Agent Memory evidence |
 |-----------------|-------------------|
 | Durable storage on Walrus | MemWal `remember` → blob id on `MemoryRecord.walrusBlobId` |
 | Verifiable / recallable | `pullQuery`, MemWal semantic recall, hybrid hydrate |
@@ -195,7 +209,7 @@ flowchart LR
   B -.->|walrusBlobId| S
 ```
 
-| Walrus requirement | How MemWal++ addresses it |
+| Walrus requirement | How MemWal Agent Memory addresses it |
 |--------------------|---------------------------|
 | Durable blob storage | MemWal `remember` → Walrus blob id on `MemoryRecord.walrusBlobId` |
 | Verifiable recall | `pullQuery` / MemWal semantic recall hydrates local cache |
@@ -211,6 +225,9 @@ flowchart LR
 
 | Document | Use |
 |----------|-----|
+| [`specs/openspec-memwal-agent-memory.md`](specs/openspec-memwal-agent-memory.md) | **Master project OpenSpec** — vision, objectives, non-goals, success criteria |
+| [`specs/openspec-mcp-server.md`](specs/openspec-mcp-server.md) | MCP Server OpenSpec — universal access, tool surface, privacy/security |
+| [`specs/openspec-move-contracts-refactor.md`](specs/openspec-move-contracts-refactor.md) | Move v2 refactor OpenSpec — dynamic fields, bounty/royalty v2, upgrade-in-place |
 | [`../PROJECT.md`](../PROJECT.md) | Vision, goals, non-goals |
 | [`../ROADMAP.md`](../ROADMAP.md) | Phased milestones + exit criteria |
 | [`README.md`](../README.md) | Contributor entry, scripts, package ID |

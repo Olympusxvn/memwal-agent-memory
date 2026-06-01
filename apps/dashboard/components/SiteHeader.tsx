@@ -2,8 +2,10 @@
 
 import { ConnectButton } from "@mysten/dapp-kit";
 import Link from "next/link";
+import { ThemeToggle } from "./ThemeToggle";
 
-const REPO = "https://github.com/Olympusxvn/memwalpp";
+const REPO = "https://github.com/Olympusxvn/memwal-agent-memory";
+const LIVE_DEMO = "https://memwalpp-dashboard.vercel.app/";
 
 export function SiteHeader() {
   return (
@@ -13,9 +15,15 @@ export function SiteHeader() {
           <span className="site-header__mark" aria-hidden>
             M+
           </span>
-          MemWal++
+          <span>
+            MemWal++
+            <span className="site-header__brand-sub">memwal-agent-memory</span>
+          </span>
         </Link>
         <nav className="site-header__nav" aria-label="Main">
+          <a href={LIVE_DEMO} target="_blank" rel="noopener noreferrer">
+            Live demo
+          </a>
           <Link href="/kiosk">Memory Kiosk</Link>
           <a href={`${REPO}/blob/main/JUDGE_GUIDE.md`} target="_blank" rel="noopener noreferrer">
             Judge guide
@@ -25,6 +33,7 @@ export function SiteHeader() {
           </a>
         </nav>
         <div className="site-header__actions">
+          <ThemeToggle />
           <ConnectButton />
         </div>
       </div>

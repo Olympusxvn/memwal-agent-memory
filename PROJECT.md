@@ -1,42 +1,143 @@
-# MemWal++ — PROJECT
+# PROJECT.md — MemWal Agent Memory
 
-**Track:** Sui Overflow 2026 — Walrus Specialized + Agentic Web  
-**Codename:** MemWal++ (Memory Marketplace + bounty agents)
+**Project**: `memwal-agent-memory`
+**Repository**: https://github.com/Olympusxvn/memwal-agent-memory
+**Track**: Sui Overflow 2026 — Walrus Track
+**Mainnet package**: `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`
+
+> Canonical references: [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) (master OpenSpec) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (system architecture)
+
+---
 
 ## Vision
 
-Build a **decentralized, verifiable memory marketplace** where autonomous agents can **capture, score, persist, trade, and prove** memories — combining **local-first** speed and privacy with **MemWal + Walrus** durability and **Sui Move** for ownership, marketplace mechanics, bounties, and royalties.
+**MemWal Agent Memory** is a **hybrid verifiable memory layer** for autonomous AI agents. It
+combines the **speed and privacy of local storage** with the **durability, verifiability, and
+shareability of Walrus** — letting agents evolve beyond stateless, single-turn interactions.
 
-## Goals
+Today's agents forget. Memory is locked inside one vendor's stack, and there is no trustworthy
+way to prove *what* an agent learned, *when*, or to *share and monetize* that knowledge. We turn
+memory into a **first-class, verifiable, ownable asset** and build a decentralized **Memory
+Economy** on Sui & Walrus where agents can remember, recall, prove, trade, fork, and improve
+knowledge.
 
-- **Verifiable scoring:** UI-facing quality metrics trace to **on-chain / indexed** evidence (ADR-005), not self-signed SQLite only.
-- **Hybrid memory:** `local-memory` for fast path + policy; `memwal-client` for MemWal/Walrus promotion when gates pass (ADR-010).
-- **Agent-ready:** NemoClaw / OpenClaw hooks and skills in `apps/agent-swarm` using stable TS contracts (`IMemWalAgent`, package facades).
-- **Hackathon-grade repo:** `pnpm` + Turbo, CI green on PR, ADRs for anything judges or collaborators would question.
+**Value priority order**: **Verifiability › Privacy › Performance › Agent Autonomy.**
 
-## Non-goals (v1 hackathon scope)
+---
 
-- Replacing Mysten MemWal or forking the relayer protocol implementation.
-- Full production indexer + multi-region Walrus operations (schema and paths exist; scale-out deferred).
-- Custodial wallet or centralized custody of user **owner** keys (delegate / demo keys only in env).
+## Mission
 
-## Stack (authoritative)
+Build the **best hybrid memory layer** for autonomous AI agents on the Sui & Walrus ecosystem —
+making persistent, verifiable, and economically valuable memory accessible to **any
+MCP-compatible agent** (Claude, Cursor, OpenClaw, custom).
 
-- **Monorepo:** pnpm workspaces + Turborepo (`ADR-013`).
-- **Chain / storage:** Sui Move (`packages/sui-contracts`), Walrus via MemWal narrative, Seal where specified in ADRs.
-- **Agents:** OpenClaw / NemoClaw (install out-of-repo); this repo supplies hooks, skills, and demo flows.
+---
 
-## Where to read next
+## Core Focus
 
-| Artifact | Purpose |
-|----------|---------|
-| [`ROADMAP.md`](ROADMAP.md) | Phased milestones + exit criteria |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Layers, data flow, diagram links |
-| [`docs/decisions/`](docs/decisions/) | ADR-001 … ADR-013 |
-| [`docs/CLAUDE.md`](docs/CLAUDE.md) | Commands + constraints for AI assistants |
-| [`docs/GIT-AND-VERSIONING.md`](docs/GIT-AND-VERSIONING.md) | Branches + tags + package versions |
+- **Hybrid Memory Architecture** — local-first (SQLite + vectors) for speed/privacy; durable
+  promotion to **MemWal + Walrus** for verifiability and sharing.
+- **Intelligent Sync** — `MemorySyncService` with a **Quality Gate + PII redaction** before any
+  durable write, plus versioning, lineage, and predictable conflict resolution.
+- **Memory Marketplace + Bounty + Royalty** — Sui Move contracts where agents discover,
+  purchase, fork, improve, and monetize high-quality memories, with verifiable on-chain proof.
+- **Universal Accessibility** — a **MCP Server** (stdio + Streamable HTTP) so any agent can use
+  the memory layer without importing our packages.
 
-## Secrets policy
+---
 
-- **Never** commit private keys, MemWal delegate keys, or “hackathon key” markdown from local machines.
-- Use **`.env`** (gitignored) and **`.env.example`** (placeholders only). See ADR-002.
+## How It Works (at a glance)
+
+```
+external agents ──MCP──▶ packages/mcp ──▶ packages/core (sync · quality gate · redaction · lineage)
+                                              │
+                         packages/local-memory (fast, private)   packages/memwal-client ──▶ Walrus (durable, verifiable)
+                                              │
+                                   packages/sui-contracts (marketplace · bounty · royalty)
+```
+
+Demo north star: **bounty → acquire → improve → fork → payout**, where every claim traces to a
+**Walrus blob id** or an **on-chain event**.
+
+---
+
+## Key Differentiators (vs. official MemWal)
+
+Official MemWal gives you durable storage. MemWal Agent Memory gives agents a **living,
+evolving, monetizable memory system**.
+
+| Dimension | Official MemWal | MemWal Agent Memory |
+|-----------|-----------------|---------------------|
+| Storage model | Walrus-only (durable) | **Hybrid** (local SQLite + Walrus) |
+| Privacy | Encryption | **Built-in Quality Gate + PII redaction** before upload |
+| Memory evolution | Store / recall | **Versioning + lineage + forking** |
+| Economy | None | **Marketplace + Bounty + Royalty** (incl. lineage royalty) |
+| Accessibility | Library / OpenClaw | **Universal MCP Server** |
+| Offline support | Limited | **Offline-first** with graceful, deferred sync |
+
+We **wrap** the official MemWal SDK (never fork it) and extend it into a private-by-default,
+tradable memory economy.
+
+---
+
+## Walrus Track Alignment
+
+- **Durable storage on Walrus** — memories promoted via the official MemWal path land as Walrus
+  blobs (`MemoryRecord.walrusBlobId`, `MemoryPack.blob_ids`).
+- **Verifiable & recallable** — Proof-of-Availability + on-chain references; UI/scores trace to
+  on-chain events, never pure self-report.
+- **Privacy before upload** — redaction + quality gate enforced in the sync layer **and** at the
+  MCP server boundary (cannot be bypassed by a client).
+- **On-chain economy** — Move package (marketplace, bounty, royalty) with indexer-friendly
+  events on **mainnet**.
+- **Agentic web** — runnable hooks and an autonomous bounty-hunter flow demonstrate real
+  agent-to-agent collaboration, not dead SDK imports.
+
+---
+
+## Success Metrics
+
+- Working **hybrid sync** between local and Walrus (online + offline).
+- Working **Memory Marketplace** with end-to-end bounty + royalty flow.
+- **MCP Server** that external agents can discover and connect to.
+- High-quality, judge-friendly **demo** (CLI + dashboard) with verifiable proofs.
+- Clean, maintainable architecture with strong documentation.
+
+---
+
+## Non-Goals (current milestone)
+
+- Forking the official MemWal SDK.
+- A full decentralized indexer.
+- AI training directly on memories.
+- Mobile / embedded agent runtimes.
+- Production multi-tenant hosting, full governance/DAO, or gas sponsorship.
+- Bridged token economics (`WAL` here is a package-minted **demo coin**).
+
+---
+
+## Repository Map
+
+| Path | Role |
+|------|------|
+| `packages/shared` | Pure types & constants (no I/O) |
+| `packages/local-memory` | Local-first SQLite + vectors + quality scoring |
+| `packages/memwal-client` | MemWal SDK facade + hooks (delegate signing) |
+| `packages/core` | `MemorySyncService`, orchestration, lineage |
+| `packages/mcp` | Universal MCP Server (stdio + HTTP) |
+| `packages/sui-contracts` | Sui Move: marketplace, bounty, royalty |
+| `apps/dashboard` | Marketplace UI + judge demo |
+| `apps/agent-swarm` | Agent hooks + bounty-hunter demos |
+| `apps/cli` | Operator / demo scripts |
+| `docs/` | OpenSpecs, ADRs, architecture |
+
+---
+
+## Learn More
+
+- **Master OpenSpec**: [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md)
+- **Architecture**: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- **MCP Server**: [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md)
+- **Move v2 Refactor**: [`docs/specs/openspec-move-contracts-refactor.md`](docs/specs/openspec-move-contracts-refactor.md)
+- **Roadmap**: [`ROADMAP.md`](ROADMAP.md)
+- **Decisions (ADRs)**: [`docs/decisions/`](docs/decisions/)

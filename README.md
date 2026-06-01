@@ -1,10 +1,10 @@
-# MemWal++
+# MemWal Agent Memory
 
 [![Sui Overflow 2026](https://img.shields.io/badge/Sui_Overflow-2026-6fbcff)](https://overflow.sui.io)
 [![Walrus Track](https://img.shields.io/badge/Walrus-Track-4ade80)](https://mystenlabs.notion.site/walrus-track-problem-statement)
 [![Sui](https://img.shields.io/badge/Sui-Chain-4DA2FF)](https://sui.io)
 [![Walrus](https://img.shields.io/badge/Walrus-Storage-7C3AED)](https://www.walrus.xyz)
-[![GitHub](https://img.shields.io/badge/GitHub-Olympusxvn%2Fmemwalpp-181717?logo=github)](https://github.com/Olympusxvn/memwalpp)
+[![GitHub](https://img.shields.io/badge/GitHub-memwal--agent--memory-181717?logo=github)](https://github.com/Olympusxvn/memwal-agent-memory)
 [![pnpm](https://img.shields.io/badge/pnpm-10.18-f69220?logo=pnpm&logoColor=white)](https://pnpm.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
@@ -44,7 +44,7 @@ No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PAS
 
 ## Overview
 
-MemWal++ combines **Walrus + [MemWal](https://docs.memwal.ai)** (durable, encrypted, verifiable recall) with **Sui Move** (MemoryPack-style NFTs, marketplace, bounties, royalties, delegate bridge) and **NemoClaw / OpenClaw** orchestration (hooks, skills, bounty agents). A **hybrid memory plane** keeps work **local-first** (fast recall, quality gates, PII redaction) and syncs upward only when memories meet policy — then **Walrus** holds the cryptographic truth judges can verify.
+MemWal Agent Memory combines **Walrus + [MemWal](https://docs.memwal.ai)** (durable, encrypted, verifiable recall) with **Sui Move** (MemoryPack-style NFTs, marketplace, bounties, royalties, delegate bridge) and **NemoClaw / OpenClaw** orchestration (hooks, skills, bounty agents). A **hybrid memory plane** keeps work **local-first** (fast recall, quality gates, PII redaction) and syncs upward only when memories meet policy — then **Walrus** holds the cryptographic truth judges can verify.
 
 **Canonical architecture (merged, final):** [`docs/diagrams/memwalpp-merged-architecture.svg`](docs/diagrams/memwalpp-merged-architecture.svg)
 
@@ -52,7 +52,7 @@ MemWal++ combines **Walrus + [MemWal](https://docs.memwal.ai)** (durable, encryp
 
 Supplementary notes (original brief, mixed language): [`docs/SOURCE-memwalpp.md`](docs/SOURCE-memwalpp.md).
 
-Cursor rules (always-on): [`.cursor/rules/memory-marketplace-rules.mdc`](.cursor/rules/memory-marketplace-rules.mdc) · Karpathy guidelines: [`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)
+Cursor rules (always-on): [`.cursor/rules/memory-marketplace-rules.mdc`](.cursor/rules/memory-marketplace-rules.mdc) · [`.cursor/rules/memwal-agent-memory.mdc`](.cursor/rules/memwal-agent-memory.mdc)
 
 ---
 
@@ -63,7 +63,7 @@ The merged diagram defines **four vertical layers** (top to bottom):
 | Layer | Responsibility |
 |-------|----------------|
 | **Experience** | Sui wallet, marketplace UI, dashboard — what users, developers, and judges touch. |
-| **Orchestration** | **NemoClaw / OpenClaw** — sandboxed agent swarm, **MemWal plugin** (`oc-memwal`), **custom skills** (browse, bid, evaluate, integrate), **before/after hooks** (auto-capture, quality score, PII redaction, sync trigger), **bounty skill** (post, browse, bid, fulfill, claim WAL). |
+| **Orchestration** | **NemoClaw / OpenClaw** + **MCP Server** (planned) — sandboxed agent swarm, **MemWal plugin** (`oc-memwal`), **custom skills**, **before/after hooks**, **bounty skill**. |
 | **Hybrid memory** | **Local:** SQLite + vectors, [agentmemory](https://github.com/rohitg00/agentmemory)-style curation, sub-5 ms recall, offline cache. **Durable:** MemWal SDK, **Seal**, PoA, namespaces, lineage — **bidirectional sync** when quality thresholds pass. |
 | **Sui + Walrus** | **Move:** `memory_nft`, `marketplace`, `access_policy`, **Kiosk + royalties**, **WAL** settlement, **delegate bridge**; **bounty** module (escrow, on-chain requirements). **Walrus:** encrypted blobs, erasure coding, PoA, Seal key gating — persistence under MemWal. |
 
@@ -124,13 +124,14 @@ Move listing patterns draw from community curriculum (e.g. [sui-move-intro-cours
 ## Monorepo layout
 
 ```
-memwalpp/
+memwal-agent-memory/
 ├── apps/dashboard/       # Next.js + dApp Kit
 ├── apps/agent-swarm/     # NemoClaw / OpenClaw runner
 ├── apps/cli/             # Optional PTB helpers
 ├── packages/core/
 ├── packages/local-memory/
 ├── packages/memwal-client/
+├── packages/mcp/         # MCP Server (planned)
 ├── packages/shared/      # Cross-cutting types (no I/O) — foundation package
 ├── packages/sui-contracts/
 ├── packages/ui/
@@ -138,7 +139,7 @@ memwalpp/
 ├── docs/                 # ARCHITECTURE.md, ADRs, specs, diagrams
 ├── openspec/
 ├── scripts/
-└── .cursor/rules/        # memory-marketplace-rules.mdc, karpathy-guidelines.mdc
+└── .cursor/rules/        # memory-marketplace-rules.mdc, memwal-agent-memory.mdc
 ```
 
 ### Current structure (confirmed)
@@ -275,19 +276,22 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | Path | Content |
 |------|---------|
 | [`PROJECT.md`](PROJECT.md) | Vision, goals, non-goals |
-| [`ROADMAP.md`](ROADMAP.md) | Phased milestones + exit criteria |
+| [`ROADMAP.md`](ROADMAP.md) | Phased milestones + current status |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | **Canonical** layered architecture + flows + repo map |
+| [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) | **Master project OpenSpec** |
+| [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md) | MCP Server OpenSpec |
+| [`docs/specs/openspec-move-contracts-refactor.md`](docs/specs/openspec-move-contracts-refactor.md) | Move v2 refactor OpenSpec |
 | [`docs/decisions/`](docs/decisions/) | ADR-001 through **ADR-013** (monorepo boundaries) |
 | [`docs/GIT-AND-VERSIONING.md`](docs/GIT-AND-VERSIONING.md) | Branch + tag + version policy |
 | [`docs/CLAUDE.md`](docs/CLAUDE.md) | Commands and guardrails for AI assistants |
 | [`docs/diagrams/memwalpp-merged-architecture.svg`](docs/diagrams/memwalpp-merged-architecture.svg) | Merged architecture diagram |
-| [`docs/SOURCE-memwalpp.md`](docs/SOURCE-memwalpp.md) | Original planning notes |
+| [`docs/SOURCE-memwalpp.md`](docs/SOURCE-memwalpp.md) | Original planning notes (legacy name) |
 | [`docs/specs/indexer-schema.sql`](docs/specs/indexer-schema.sql) | Kiosk / marketplace indexer DDL |
 | [`.cursor/rules/memory-marketplace-rules.mdc`](.cursor/rules/memory-marketplace-rules.mdc) | Primary Cursor project rules |
-| [`openspec/README.md`](openspec/README.md) | Pointer: specs live under `docs/specs/` until split |
+| [`openspec/README.md`](openspec/README.md) | Pointer: specs live under `docs/specs/` |
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | **5–10 min judge runbook** |
 | [`SUBMISSION.md`](SUBMISSION.md) | **Final submission brief** (Walrus value + why win) |
-| [`ROADMAP.md`](ROADMAP.md) | Phases 0–4 complete ✓ |
+| [`CHANGELOG.md`](CHANGELOG.md) | Notable changes and operational notes |
 
 ---
 
@@ -318,4 +322,4 @@ Mysten Labs (Sui, Walrus, MemWal, Seal), Sui Overflow, and the open-source proje
 
 ---
 
-<p align="center"><strong>MemWal++</strong> — Portable, verifiable memory for autonomous agents on Sui and Walrus</p>
+<p align="center"><strong>MemWal Agent Memory</strong> — Hybrid verifiable memory for autonomous agents on Sui and Walrus</p>

@@ -1,27 +1,57 @@
 # MemWal++ — Demo Video Slides (2–3 min)
 
-**Style reference:** [walrus.xyz](https://walrus.xyz/) — premium dark, cyan→violet gradient, minimal copy.  
-**Total runtime target:** ~2:30 (10 slides × ~15–25 s voiceover)  
-**Production URL:** https://memwalpp-dashboard.vercel.app/  
-**Repository:** https://github.com/Olympusxvn/memwalpp
+**Project:** `memwal-agent-memory` · **Display name:** **MemWal++** (short form)
+**Style reference:** [walrus.xyz](https://walrus.xyz/) · design tokens in [`walrus.xyz-DESIGN.md`](../walrus.xyz-DESIGN.md)
+**Total runtime target:** ~2:30 (10 slides × ~15–25 s voiceover)
+**Live demo (dashboard):** https://memwalpp-dashboard.vercel.app/
+**Repository:** https://github.com/Olympusxvn/memwal-agent-memory
 
 ---
 
-## Design system (copy into Canva / Slides / Keynote)
+## Design system (Canva / Slides / Keynote)
+
+Aligned with Walrus brand: premium dark-first, purple + electric cyan accents, generous whitespace, minimal borders.
+
+### Dark mode (default — match walrus.xyz)
 
 | Token | Value | Usage |
 |--------|--------|--------|
-| Background | `#05050a` or `#0a0a0a` | Full-bleed slide fill |
-| Surface | `#12121f` @ 60% opacity | Cards, code blocks |
-| Text primary | `#f4f2ff` | Headlines |
-| Text secondary | `#9b97b8` | Bullets, captions |
-| Gradient accent | `#00f5ff` → `#a78bfa` (135°) | Titles, icons, dividers, CTA buttons |
-| Walrus green (optional) | `#4ade80` | Track badge only |
-| Sui blue (optional) | `#4da2ff` | Sui / chain callouts |
-| Font | **Inter** or **Satoshi** | Headings 48–72 pt, body 22–28 pt |
-| Layout | Max 5 bullets; 40%+ whitespace | One idea per slide |
+| Background | `#000000` | Full-bleed slide fill |
+| Surface / elevated | `#1C2228`, `#2B2D31` | Cards, code blocks |
+| Text primary | `#FAF8F5` | Headlines, body on dark |
+| Text muted | `#8E9294` | Bullets, captions |
+| Brand purple | `#613DFF` | Primary accent, CTAs |
+| Electric cyan | `#98EFE4` | Highlights, hover, Walrus tie-in |
+| Light purple | `#CAB1FF` | Secondary accent |
+| Soft blue | `#A1C8FF` | Sui / chain callouts |
+| Border | `rgba(250, 248, 245, 0.1)` or `#F3F2F2` @ 35% | Card outlines |
+| Font display | **Syne** or **Ratch** (if licensed) | Headings 56–96 pt |
+| Font body | System / Ratch stack | Body 18–22 pt |
+| Mono | JetBrains Mono / SF Mono | Commands |
 
-**Visual motifs:** soft radial glow (cyan top-center, violet bottom-right), thin 1px gradient borders on cards, monospace for commands (`JetBrains Mono` / `SF Mono`).
+**Visual motifs:** radial glow (purple top-center, cyan bottom-right), 1px light borders on transparent cards, pill buttons (`border-radius: 26px`), zero-radius section cards per Walrus layout rules.
+
+### Light mode (alternate deck / accessibility)
+
+| Token | Value | Usage |
+|--------|--------|--------|
+| Background | `#FAF8F5` | Warm off-white fill |
+| Surface | `#FFFFFF` @ 72% | Cards |
+| Text primary | `#222222` | Headlines |
+| Text muted | `#53575A` | Bullets |
+| Brand purple | `#613DFF` | CTAs, links |
+| Electric cyan | `#2D6A5F` or `#613DFF` | Accents (ensure contrast) |
+| Border | `#DADAD6`, `#F3F2F2` | Dividers |
+| Separator | `#B0B4B6` | Subtle lines |
+
+**Dashboard:** live demo supports **Dark / Light** toggle — record B-roll in both if time allows.
+
+### Layout rules (from Walrus)
+
+- Max **5 bullets** per slide; **40%+ whitespace**
+- Section padding: **64px** desktop, **24px** mobile
+- Primary buttons: transparent bg, **2px** off-white border @ 10% opacity (dark) or dark border @ 12% (light)
+- One idea per slide
 
 ---
 
@@ -32,7 +62,7 @@
 **MemWal++**  
 *Hybrid Verifiable Memory for Agents*
 
-Sui Overflow 2026 · Walrus Track
+`memwal-agent-memory` · Sui Overflow 2026 · Walrus Track
 
 ### Bullets (optional footer)
 
@@ -40,13 +70,13 @@ Sui Overflow 2026 · Walrus Track
 
 ### Visual / diagram
 
-- Center: wordmark **MemWal++** with gradient underline.
-- Subtle dual icon: stylized **walrus** silhouette + **neural network / brain** node graph (line art, 20% opacity behind title).
-- Bottom corner: small badges `Walrus` · `Sui` · `MemWal`.
+- Center: wordmark **MemWal++** with purple → cyan gradient underline
+- Subtitle line: `memwal-agent-memory` in muted caps
+- Bottom: badges `Walrus` · `Sui` · `MemWal`
 
 ### Voiceover (~20 s)
 
-> MemWal++ is hybrid verifiable memory for autonomous agents — built for Sui Overflow and the Walrus track. Local recall when you need speed, Walrus when you need proof, and Sui when money or reputation is on the line.
+> MemWal++ — MemWal Agent Memory — is hybrid verifiable memory for autonomous agents, built for Sui Overflow and the Walrus track. Local recall when you need speed, Walrus when you need proof, and Sui when money or reputation is on the line.
 
 ---
 
@@ -59,18 +89,18 @@ Sui Overflow 2026 · Walrus Track
 ### Bullets
 
 - Chat logs vanish between sessions — no durable truth
-- Opaque DBs can’t prove what an agent “remembered”
+- Opaque DBs can't prove what an agent "remembered"
 - Marketplaces need **portable, verifiable** memory — not screenshots
-- Every token shouldn’t wait on a network round-trip
+- Every token shouldn't wait on a network round-trip
 
 ### Visual / diagram
 
-- Split screen: left = fading chat bubbles dissolving; right = empty agent head icon with “?”  
-- Red accent on “no blob id · no escrow · no proof”.
+- Split screen: fading chat bubbles vs empty agent head with "?"
+- Accent: "no blob id · no escrow · no proof"
 
 ### Voiceover (~22 s)
 
-> Autonomous agents need memory that’s fast during inference, safe before sharing, and verifiable when stakes are real. Chat history and opaque stores don’t give you a Walrus blob id, an on-chain fulfillment ref, or a memory pack someone can buy and audit.
+> Autonomous agents need memory that's fast during inference, safe before sharing, and verifiable when stakes are real. Chat history and opaque stores don't give you a Walrus blob id, an on-chain fulfillment ref, or a memory pack someone can buy and audit.
 
 ---
 
@@ -89,12 +119,12 @@ Sui Overflow 2026 · Walrus Track
 
 ### Visual / diagram
 
-- Three-layer stack (bottom → top): `Local` | `MemWal / Walrus` | `Sui Move`  
-- Use gradient connectors between layers.
+- Three-layer stack: `Local` | `MemWal / Walrus` | `Sui Move`
+- Purple/cyan gradient connectors
 
 ### Voiceover (~20 s)
 
-> MemWal++ is a hybrid memory economy: write locally first, promote only redacted, quality-scored rows to MemWal and Walrus, and anchor packs and bounties on Sui Move — with OpenClaw-style hooks wiring the full story in runnable code.
+> MemWal++ is a hybrid memory economy: write locally first, promote only redacted, quality-scored rows to MemWal and Walrus, and anchor packs and bounties on Sui Move — with OpenClaw-style hooks and a universal MCP Server on the roadmap.
 
 ---
 
@@ -113,19 +143,15 @@ Sui Overflow 2026 · Walrus Track
 
 ### Visual / diagram
 
-**Horizontal flow (gradient arrows):**
-
 ```
 LocalMemoryStore → redactForUpstream → quality gate → MemWal remember → Walrus blob
                                                               ↓
                                                     walrusBlobId + bounty fulfillment
 ```
 
-- Film terminal snippet: `packages/core/src/memory/memory-sync-service.ts` (optional B-roll).
-
 ### Voiceover (~25 s)
 
-> The critical path is explicit: local store, redaction, quality gate, then MemWal remember to Walrus. Every promoted row can carry a walrus blob id — and bounty fulfillment on Sui references that same id. This isn’t marketing copy; it’s the code path judges can run in three minutes.
+> The critical path is explicit: local store, redaction, quality gate, then MemWal remember to Walrus. Every promoted row can carry a walrus blob id — and bounty fulfillment on Sui references that same id. Judges can run this in three minutes.
 
 ---
 
@@ -144,19 +170,15 @@ LocalMemoryStore → redactForUpstream → quality gate → MemWal remember → 
 
 ### Visual / diagram
 
-- Terminal mockup (dark card) with commands:
-
 ```bash
-git clone https://github.com/Olympusxvn/memwalpp.git && cd memwalpp
+git clone https://github.com/Olympusxvn/memwal-agent-memory.git && cd memwal-agent-memory
 pnpm install
 pnpm agent:demo
 ```
 
-- Highlight green `PASS` / exit code 0.
-
 ### Voiceover (~20 s)
 
-> Clone the repo, install, run agent demo. You’ll see the hook lifecycle end to end — memory context injection, capture after think, sync on task complete — all without wallets or MemWal keys. Exit code zero is the bar; live Walrus is optional icing.
+> Clone memwal-agent-memory, install, run agent demo. You'll see the hook lifecycle end to end — memory context injection, capture after think, sync on task complete — all without wallets or MemWal keys.
 
 ---
 
@@ -175,17 +197,40 @@ pnpm agent:demo
 
 ### Visual / diagram
 
-- Two agent avatars labeled **Poster** and **Hunter**, arrow through shared Walrus cloud.
-- Command line: `pnpm agent:bounty-hunt`
-- Optional caption: `✓ Promoted — blob …` when live keys set.
+- Poster + Hunter avatars → shared Walrus cloud
+- Command: `pnpm agent:bounty-hunt`
 
 ### Voiceover (~22 s)
 
-> Bounty hunt runs poster and hunter agents on the same sync service. Offline, it proves multi-agent coordination and the fulfillment story. Turn on MemWal env vars and you can watch a real blob id land — the same surface Sui bounties reference on mainnet.
+> Bounty hunt runs poster and hunter agents on the same sync service. Offline, it proves multi-agent coordination. With MemWal env vars, watch a real blob id land — the same surface Sui bounties reference on mainnet.
 
 ---
 
-## Slide 7 — Walrus track highlights
+## Slide 7 — Live dashboard
+
+### Title
+
+**Live demo**
+
+### Bullets
+
+- **https://memwalpp-dashboard.vercel.app/**
+- Walrus-inspired UI — dark + **light mode**
+- Wallet connect · judge commands · mainnet package ID
+- Memory Kiosk (placeholder until indexer)
+
+### Visual / diagram
+
+- Screen recording: hero → Walrus flow → demo block → theme toggle
+- QR code to live URL
+
+### Voiceover (~18 s)
+
+> Open the live dashboard — Walrus-grade UI with light and dark themes. Connect on mainnet, copy judge commands, and skim the on-chain package id without cloning the repo.
+
+---
+
+## Slide 8 — Walrus track highlights
 
 ### Title
 
@@ -193,23 +238,22 @@ pnpm agent:demo
 
 ### Bullets
 
-- **Durable** — blobs via MemWal relayer, not ephemeral logs
+- **Durable** — blobs via MemWal relayer
 - **Verifiable** — `walrusBlobId` + on-chain fulfillment
-- **Programmable** — Move modules: pack, market, bounty
+- **Programmable** — Move: pack, market, bounty
 - **Private-by-design** — redact before upload
 
 ### Visual / diagram
 
-- Four gradient-outlined tiles in a 2×2 grid (icons: shield, link, code, lock).
-- Subtle Walrus wordmark watermark at 8% opacity.
+- 2×2 grid with purple/cyan outlined tiles
 
 ### Voiceover (~18 s)
 
-> Walrus isn’t wallpaper here. Storage is durable, recall is verifiable, access is programmable through Move, and privacy is enforced before bits hit the network — exactly what the Walrus track asks for.
+> Walrus isn't wallpaper here. Storage is durable, recall is verifiable, access is programmable through Move, and privacy is enforced before bits hit the network.
 
 ---
 
-## Slide 8 — Why we win
+## Slide 9 — Why we win
 
 ### Title
 
@@ -219,104 +263,51 @@ pnpm agent:demo
 
 - **End-to-end** — agent hook → blob id → Move `submit_fulfillment`
 - **Runnable in 3 minutes** — judges need zero keys for core path
-- **Mainnet package** published — real IDs, not vaporware
-- **Product surface** — dashboard + CLI + monorepo SDK
-- **Honest scope** — indexer/UI PTBs on roadmap, core path ships today
-
-### Visual / diagram
-
-- Checklist with gradient checkmarks; small Suiscan / package id footer (optional blur last 8 chars).
+- **Mainnet package** — `0x48db…3050` (real IDs)
+- **Product surface** — live dashboard + CLI + monorepo SDK
+- **Roadmap** — MCP Server + Move v2 lineage (package ID preserved)
 
 ### Voiceover (~22 s)
 
-> We connect the full Walrus narrative in code you can run today: hooks, sync service, durable store, and mainnet Move. Judges get a five-minute runbook, exit-zero demos, and a live dashboard — while we’re clear about what’s next versus what already works.
+> We connect the full Walrus narrative in code you can run today — plus a live dashboard and a clear roadmap for MCP universal access and Move v2 lineage royalties.
 
 ---
 
-## Slide 9 — Conclusion & CTA
-
-### Title
-
-**Try it now**
-
-### Bullets
-
-- **Live demo:** https://memwalpp-dashboard.vercel.app/
-- **GitHub:** https://github.com/Olympusxvn/memwalpp
-- **Judge guide:** `JUDGE_GUIDE.md` in repo
-- Sui Overflow 2026 · Walrus Track
-
-### Visual / diagram
-
-- Large QR codes (optional): repo URL + dashboard URL side by side.
-- Screenshot of dashboard hero (wallet connect + demo commands section).
-
-### Voiceover (~18 s)
-
-> Open the dashboard, connect on mainnet, read the judge guide, or clone and run both demos. Everything links from one repo — built for Walrus, shipped for Sui Overflow.
-
----
-
-## Slide 10 — Thank you
-
-### Title
-
-**Thank you**
+## Slide 10 — CTA & Thank you
 
 ### On-slide copy
 
+**Try it now**
+
+- **Live demo:** https://memwalpp-dashboard.vercel.app/
+- **GitHub:** https://github.com/Olympusxvn/memwal-agent-memory
+- **Judge guide:** `JUDGE_GUIDE.md`
+
 MemWal++ · Hybrid Verifiable Memory for Agents
 
-### Bullets
+### Voiceover (~18 s)
 
-- github.com/Olympusxvn/memwalpp
-- memwalpp-dashboard.vercel.app
-- Questions welcome
-
-### Visual / diagram
-
-- Center: QR code → `https://github.com/Olympusxvn/memwalpp`
-- Gradient MemWal++ logotype; minimal confetti particles (cyan/violet, very subtle).
-
-### Voiceover (~15 s)
-
-> Thanks for watching. MemWal++ — local speed, Walrus truth, on-chain economy. Star the repo, run the demos, and we’ll see you on the Walrus track leaderboard.
+> Thanks for watching. MemWal++ — local speed, Walrus truth, on-chain economy. Star the repo, open the live demo, run both agent CLIs, and we'll see you on the Walrus track leaderboard.
 
 ---
 
-## B-roll checklist (while recording)
+## B-roll checklist
 
 | Clip | Duration | Source |
 |------|----------|--------|
-| Terminal `pnpm agent:demo` | 25–40 s | Local screen capture |
-| Terminal `pnpm agent:bounty-hunt` | 25–40 s | Local screen capture |
-| Dashboard scroll (hero → demo block) | 15 s | https://memwalpp-dashboard.vercel.app/ |
-| Suiscan package (optional) | 10 s | Mainnet package page |
+| Terminal `pnpm agent:demo` | 25–40 s | Local |
+| Terminal `pnpm agent:bounty-hunt` | 25–40 s | Local |
+| Dashboard dark mode | 10 s | Live URL |
+| Dashboard light mode toggle | 10 s | Live URL |
+| Suiscan package (optional) | 10 s | Mainnet |
 | Architecture SVG | 10 s | `docs/diagrams/memwalpp-merged-architecture.svg` |
-
----
-
-## Timing sheet (edit guide)
-
-| Slide | Target | Cumulative |
-|-------|--------|------------|
-| 1 Title | 0:20 | 0:20 |
-| 2 Problem | 0:22 | 0:42 |
-| 3 Solution | 0:20 | 1:02 |
-| 4 Flow | 0:25 | 1:27 |
-| 5 Demo 1 | 0:20 | 1:47 |
-| 6 Demo 2 | 0:22 | 2:09 |
-| 7 Walrus | 0:18 | 2:27 |
-| 8 Why win | 0:22 | 2:49 |
-| 9 CTA | 0:18 | 3:07 |
-| 10 Thanks | 0:15 | **~3:22** (trim 5–7 on slides 7–8 for strict 3:00) |
 
 ---
 
 ## Canva quick setup
 
-1. Custom size **1920×1080**, background `#05050a`.
-2. Create brand kit: gradient `#00f5ff` → `#a78bfa`, fonts Inter/Satoshi.
-3. Master slide: title gradient text + footer badge strip.
-4. Paste each slide section above into one page per slide.
-5. Export **MP4 1080p** or use as speaker notes while recording terminal B-roll.
+1. Custom **1920×1080**; create **two brand kits** (dark + light) from tables above.
+2. Dark default: background `#000000`, accents `#613DFF` + `#98EFE4`, font Syne.
+3. Light alternate: background `#FAF8F5`, text `#222222`, same purple CTAs.
+4. Master slide: gradient title + footer badge strip (`Walrus Track` · `Sui Overflow 2026`).
+5. Export MP4 1080p or use as speaker notes with terminal B-roll.

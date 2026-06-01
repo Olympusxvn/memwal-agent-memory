@@ -1,17 +1,18 @@
-# MemWal++ — Sui Overflow 2026 · Walrus Track
+# MemWal Agent Memory — Sui Overflow 2026 · Walrus Track
 
 [![Sui Overflow 2026](https://img.shields.io/badge/Sui_Overflow-2026-6fbcff)](https://overflow.sui.io)
 [![Walrus Track](https://img.shields.io/badge/Walrus-Track-4ade80)](https://mystenlabs.notion.site/walrus-track-problem-statement)
 [![Sui](https://img.shields.io/badge/Sui-Mainnet-4DA2FF)](https://sui.io)
 [![Walrus](https://img.shields.io/badge/Walrus-Durable_Memory-7C3AED)](https://www.walrus.xyz)
-[![GitHub](https://img.shields.io/badge/repo-memwalpp-181717?logo=github)](https://github.com/Olympusxvn/memwalpp)
+[![GitHub](https://img.shields.io/badge/repo-memwal--agent--memory-181717?logo=github)](https://github.com/Olympusxvn/memwal-agent-memory)
 
 | | |
 |---|---|
-| **Repository** | https://github.com/Olympusxvn/memwalpp |
+| **Repository** | https://github.com/Olympusxvn/memwal-agent-memory |
 | **Live demo (dashboard)** | https://memwalpp-dashboard.vercel.app/ |
 | **Judge runbook (start here)** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) — **5–10 minutes**, no API keys required |
 | **Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [SVG diagram](docs/diagrams/memwalpp-merged-architecture.svg) |
+| **Master OpenSpec** | [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) |
 
 ---
 
@@ -29,7 +30,7 @@ Chat logs and opaque databases fail judges and marketplaces: there is no durable
 
 ## 2. Solution (one paragraph)
 
-**MemWal++** is a **hybrid memory economy**: agents read/write **SQLite-local** memory first, promote only redacted, quality-scored rows to **MemWal → Walrus**, and anchor packs and bounties on **Sui Move** (MemoryPack NFT, marketplace, WAL escrow bounties with `walrus_blob_id` fulfillment). OpenClaw-style hooks (`beforeRemember`, `afterThink`, `onTaskComplete`) wire the story end-to-end in runnable demos.
+**MemWal Agent Memory** is a **hybrid verifiable memory layer** and **memory economy**: agents read/write **SQLite-local** memory first, promote only redacted, quality-scored rows to **MemWal → Walrus**, and anchor packs and bounties on **Sui Move** (MemoryPack NFT, marketplace, WAL escrow bounties with `walrus_blob_id` fulfillment). OpenClaw-style hooks (`beforeRemember`, `afterThink`, `onTaskComplete`) wire the story end-to-end in runnable demos; a **universal MCP Server** (planned) will let any agent use the layer without importing our packages.
 
 ---
 
@@ -37,8 +38,8 @@ Chat logs and opaque databases fail judges and marketplaces: there is no durable
 
 Walrus is on the **critical path**, not marketing copy:
 
-| Walrus track ask | MemWal++ delivery |
-|------------------|-------------------|
+| Walrus track ask | MemWal Agent Memory delivery |
+|------------------|------------------------------|
 | Durable blob storage | `DurableMemoryStore.remember()` → MemWal relayer → **Walrus** |
 | Verifiable recall | `pullQuery` / MemWal semantic search → hydrate local cache |
 | Agent integration | `pnpm agent:demo`, `pnpm agent:bounty-hunt` (exit 0 offline) |
@@ -58,7 +59,7 @@ LocalMemoryStore → redactForUpstream → quality gate → MemWal remember → 
 ## 4. Demo flow (judge — ~3 min)
 
 ```bash
-git clone https://github.com/Olympusxvn/memwalpp.git && cd memwalpp
+git clone https://github.com/Olympusxvn/memwal-agent-memory.git && cd memwal-agent-memory
 pnpm install
 pnpm agent:demo
 pnpm agent:bounty-hunt
@@ -91,18 +92,23 @@ Look for `✓ Promoted — blob …` in poster step 3.
 2. **Judge-first UX** — strongest demos run **without secrets**; live blob ids are one env block away.  
 3. **Hybrid architecture done right** — ADR-010 durable-wins on sealed content; not “sync everything.”  
 4. **Economy + storage** — mainnet Move package (marketplace, escrow bounty, NFT pack) **plus** Walrus durability.  
-5. **Engineering depth** — OpenSpecs, ADRs, Vitest, `sui move test`, CI — not a slide deck repo.
+5. **Engineering depth** — OpenSpecs, ADRs, Vitest, `sui move test`, CI — not a slide deck repo.  
+6. **Clear roadmap forward** — MCP universal access + Move v2 (lineage, lineage royalty) specced and upgrade-safe on existing package ID.
 
 ---
 
 ## 6. Key features (by phase)
 
-| Phase | Deliverable |
-|-------|-------------|
-| **0–1** | Monorepo, `shared`, `local-memory`, SQLite + redact/score |
-| **2** | `MemWalClient`, `DurableMemoryStore`, `MemorySyncService` |
-| **3** | Move: `memory_nft`, `marketplace`, `bounty`, `royalty`, `delegate_bridge`, `access_policy` |
-| **4** | `MemWalAgentBridge`, agent demos, `JUDGE_GUIDE.md`, submission polish |
+| Phase | Deliverable | Status |
+|-------|-------------|--------|
+| **0–1** | Monorepo, `shared`, `local-memory`, SQLite + redact/score | ✓ |
+| **2** | `MemWalClient`, `DurableMemoryStore`, `MemorySyncService` | ✓ |
+| **3** | Move v1: `memory_nft`, `marketplace`, `bounty`, `royalty`, `delegate_bridge`, `access_policy` | ✓ mainnet |
+| **4** | `MemWalAgentBridge`, agent demos | ◐ stub bounty PTB |
+| **5** | Master OpenSpec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` | ◐ |
+| **6–9** | MCP Server, Move v2 refactor, dashboard PTBs, submission polish | planned |
+
+See [`ROADMAP.md`](ROADMAP.md) for full phase breakdown.
 
 ---
 
@@ -115,11 +121,13 @@ Look for `✓ Promoted — blob …` in poster step 3.
 | **Marketplace** | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
 | **Interact** | [`docs/deploy.md`](docs/deploy.md) · `pnpm contracts:info` |
 
+Move v2 refactor (versioning, lineage, bounty v2) upgrades **in-place** via existing UpgradeCap — package ID unchanged. See [`docs/specs/openspec-move-contracts-refactor.md`](docs/specs/openspec-move-contracts-refactor.md).
+
 ---
 
 ## 8. Tech stack
 
-MemWal · Walrus · Sui Move · TypeScript monorepo (Turborepo) · OpenClaw/NemoClaw hooks · Next.js dashboard scaffold.
+MemWal · Walrus · Sui Move · TypeScript monorepo (Turborepo) · OpenClaw/NemoClaw hooks · MCP Server (planned) · Next.js dashboard.
 
 ---
 
@@ -134,7 +142,7 @@ pnpm contracts:test    # Sui CLI
 
 ## 10. Future work
 
-Indexer + Kiosk UI · live bounty PTBs in demos · Seal PTB composition · published OpenClaw plugin.
+MCP Server (`packages/mcp`) · Move v2 upgrade · indexer + Kiosk UI · live bounty PTBs in demos · Seal PTB composition · published OpenClaw plugin.
 
 ---
 
@@ -150,6 +158,8 @@ Built with AI assistants (Cursor, Claude) per **ADR-012**. All material decision
 |----------|-----|
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | Step-by-step judge path |
 | [`README.md`](README.md) | Contributor setup |
+| [`PROJECT.md`](PROJECT.md) | Vision and goals |
 | [`docs/deploy.md`](docs/deploy.md) | Move PTB + object IDs |
-| [`docs/specs/openspec-move-contracts.md`](docs/specs/openspec-move-contracts.md) | Move OpenSpec |
-| [`ROADMAP.md`](ROADMAP.md) | Phase completion |
+| [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) | Master OpenSpec |
+| [`docs/specs/openspec-move-contracts.md`](docs/specs/openspec-move-contracts.md) | Move v1 OpenSpec |
+| [`ROADMAP.md`](ROADMAP.md) | Phase status |

@@ -1,4 +1,4 @@
-# Judge guide — MemWal++ (5–10 minutes)
+# Judge guide — MemWal Agent Memory (5–10 minutes)
 
 **Walrus Track · Sui Overflow 2026**
 
@@ -6,10 +6,11 @@
 
 | Resource | Link |
 |----------|------|
-| Repository | https://github.com/Olympusxvn/memwalpp |
+| Repository | https://github.com/Olympusxvn/memwal-agent-memory |
 | Live demo (dashboard) | https://memwalpp-dashboard.vercel.app/ |
 | Submission brief | [`SUBMISSION.md`](SUBMISSION.md) |
 | Architecture | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| Master OpenSpec | [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) |
 | Diagram | [`docs/diagrams/memwalpp-merged-architecture.svg`](docs/diagrams/memwalpp-merged-architecture.svg) |
 
 ---
@@ -30,8 +31,8 @@
 ### Commands
 
 ```bash
-git clone https://github.com/Olympusxvn/memwalpp.git
-cd memwalpp
+git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
 pnpm install
 pnpm agent:demo
 pnpm agent:bounty-hunt
@@ -42,7 +43,7 @@ pnpm agent:bounty-hunt
 | Check | Expected |
 |-------|----------|
 | Exit code | `0` |
-| Banner | `MemWal++ · agent:demo` |
+| Banner | `MemWal Agent Memory · agent:demo` |
 | Steps | `[1/5]` … `[5/5]` in green |
 | Context | Step 4 shows `## Memory context` injected |
 | Offline | Step 3 may show `○ Not promoted (offline)` — **this is correct** |
@@ -116,4 +117,6 @@ pnpm check && pnpm test
 
 ## Why we built this (30 s)
 
-Agents need **local speed** and **Walrus truth**. MemWal++ connects them with quality gates, PII redaction, runnable demos, and mainnet Move marketplace/bounty — see [`SUBMISSION.md`](SUBMISSION.md) §5.
+Agents need **local speed** and **Walrus truth**. MemWal Agent Memory connects them with quality gates, PII redaction, runnable demos, and mainnet Move marketplace/bounty — see [`SUBMISSION.md`](SUBMISSION.md) §5.
+
+**Demo north star:** bounty → acquire → improve → fork → payout — every claim traceable to a Walrus blob id or on-chain event.

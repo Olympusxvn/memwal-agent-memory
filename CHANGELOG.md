@@ -6,6 +6,14 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed — project rebrand (2026-05-31)
+
+- **Renamed project:** **MemWal++** → **MemWal Agent Memory** (`memwal-agent-memory`).
+- **Why:** Clarify the product as a hybrid verifiable memory layer + marketplace for AI agents (not just an extension of MemWal). Align naming with Sui Overflow 2026 Walrus Track positioning and the master OpenSpec vision.
+- **Docs updated:** `PROJECT.md`, `ROADMAP.md`, `docs/ARCHITECTURE.md`, `README.md`, `SUBMISSION.md`, `JUDGE_GUIDE.md`.
+- **New OpenSpecs:** master spec, MCP Server spec, Move contracts v2 refactor spec.
+- **Unchanged on purpose:** npm workspace packages remain `@memwalpp/*`; Move package name `memwalpp_contracts`; **mainnet package ID** `0x48db…3050` and UpgradeCap preserved for judge continuity and in-place upgrades.
+
 ### Changed
 
 - **Vercel:** root `vercel.json` (no `rootDirectory` key — set **Root Directory = `apps/dashboard`** in Vercel UI), `outputDirectory: .next`, turbo `--filter=@memwalpp/dashboard`, `.env.production` / `.env.example`, `DEPLOY_VERCEL.md`.

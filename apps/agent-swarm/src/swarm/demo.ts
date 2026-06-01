@@ -19,7 +19,7 @@ export async function runAgentDemo(runtime: AgentRuntime): Promise<void> {
   const namespace = DEMO_BOUNTY.namespace;
 
   demoBanner(
-    "MemWal++ · agent:demo",
+    "MemWal Agent Memory · agent:demo",
     "Hybrid memory: local-first → redact → quality gate → MemWal/Walrus",
   );
 

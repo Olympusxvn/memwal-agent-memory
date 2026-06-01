@@ -18,7 +18,7 @@ export async function runBountyHunt(runtime: AgentRuntime): Promise<void> {
   const namespace = DEMO_BOUNTY.namespace;
 
   demoBanner(
-    "MemWal++ · agent:bounty-hunt",
+    "MemWal Agent Memory · agent:bounty-hunt",
     "Two-agent swarm: Poster seeds bounty → Hunter recalls & improves → sync",
   );
 
