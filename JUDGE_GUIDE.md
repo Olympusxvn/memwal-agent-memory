@@ -27,6 +27,48 @@
 
 ---
 
+## Judge MCP quickstart (~2 min)
+
+**No wallet, no MemWal keys, no Sui CLI** — verifies hybrid memory over MCP stdio.
+
+### One-liner verify
+
+```bash
+git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
+pnpm install && pnpm mcp:build && pnpm mcp:e2e
+```
+
+| Check | Expected |
+|-------|----------|
+| Exit code | `0` |
+| Tools listed | `remember`, `recall`, `search`, `sync`, `getStats`, chain tools |
+| Chain without keys | `createBounty` → `chain_not_configured` (**not a failure**) |
+
+### Cursor (recommended after clone)
+
+1. Open this repo folder in **Cursor** (uses [`.cursor/mcp.json`](.cursor/mcp.json)).
+2. **Settings → MCP** → server `memwal-agent-memory` green.
+3. In chat: *“Use memwal MCP: remember ‘judge test 2026’, then recall ‘judge test’.”*
+
+Full setup: [`docs/mcp-setup.md`](docs/mcp-setup.md)
+
+### Claude Desktop (optional)
+
+Copy [`docs/examples/claude_desktop_config.json`](docs/examples/claude_desktop_config.json) → Claude config; replace `/ABSOLUTE/PATH/TO/memwal-agent-memory` with your clone path. Restart Claude Desktop.
+
+### What this proves
+
+| Walrus lens | Evidence |
+|-------------|----------|
+| Real integration | Same `MemorySyncService` wiring as agent-swarm, exposed as MCP tools |
+| Low setup pain | `pnpm mcp:e2e` only |
+| On-chain optional | v2 mainnet IDs baked in; chain tools gated on delegate key |
+
+**Mainnet v2 (reference):** Config `0x52ea5aa4…`, MarketplaceV2 `0xfaddc1f4…`, bootstrap tx `BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW` — see [`docs/deploy.md`](docs/deploy.md).
+
+---
+
 ## Path A — Demos only (~3 min) ⭐ recommended
 
 ### Commands
@@ -89,19 +131,9 @@ MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt
 
 ---
 
-## Path E — MCP Server (~+2 min, optional)
+## Path E — MCP Server
 
-```bash
-pnpm mcp:e2e
-```
-
-| Check | Expected |
-|-------|----------|
-| Exit code | `0` |
-| Tools | `remember`, `recall`, `search`, `getStats`, `createBounty`, … |
-| Chain tools | `createBounty` returns `chain_not_configured` without delegate env — **expected offline** |
-
-Setup: [`docs/mcp-setup.md`](docs/mcp-setup.md)
+See **[Judge MCP quickstart](#judge-mcp-quickstart-2-min)** above.
 
 ---
 

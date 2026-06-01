@@ -79,18 +79,39 @@ Runs `packages/mcp/test/e2e-stdio.test.ts`: spawns stdio server, `tools/list`, `
 | `sync` | durable | Promotes all pending rows |
 | `getStats` | read | Row counts + `durableLive` |
 
-Chain tools (`createBounty`, `fulfillBounty`, `listMemoryPack`, `buyMemoryPack`, `forkMemory`) execute PTBs when `SUI_DELEGATE_PRIVATE_KEY` (or `MEMWAL_PRIVATE_KEY`) and marketplace object IDs are set; otherwise they return `{ skipReason: "chain_not_configured" }`.
+Chain tools (`createBounty`, `fulfillBounty`, `listMemoryPack`, `buyMemoryPack`, `forkMemory`) need a **delegate** key. Without it they return `{ skipReason: "chain_not_configured" }` — expected for judges.
 
-Required env (see [`.env.example`](../.env.example)):
+## Mainnet object IDs (v1 + v2)
+
+Canonical source: [`packages/shared/src/deployed-package.ts`](../packages/shared/src/deployed-package.ts) and [`.env.example`](../.env.example).
+
+| Field | Object ID | Use |
+|-------|-----------|-----|
+| Package (original, WAL type, explorer) | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` | Suiscan links, `wal::WAL` coin type |
+| Package (published-at v3, PTB targets) | `0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711` | `moveTarget()` / v2 entrypoints |
+| Marketplace v1 (shared) | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` | v1 list/buy PTBs |
+| WAL TreasuryCap | `0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e` | Demo WAL mint / escrow |
+| **Config v2** (shared) | `0x52ea5aa40b38de760c3faa08bd83cd047e4d63023091f14774a8a87609f0ecd1` | Fee bps, pause flag |
+| **MarketplaceV2** (shared) | `0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4268566c488f` | v2 list/buy, MemoryPack |
+| Bootstrap tx | `BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW` | v2 state on mainnet |
+
+**Dual package-id rule:** PTBs use **published-at**; WAL coin type uses **original** package id.
+
+MCP chain client **defaults** v1/v2 object IDs from `deployed-package.ts` when env vars are omitted. Override only for another network.
+
+## Chain tools (optional)
 
 ```bash
-SUI_DELEGATE_PRIVATE_KEY=   # ed25519 hex; never commit
+# .env or MCP server env — delegate only (ADR-002); never commit
+SUI_DELEGATE_PRIVATE_KEY=   # ed25519 hex
 SUI_NETWORK=mainnet
+
+# Optional overrides (defaults match mainnet bootstrap above)
+MARKETPLACE_PACKAGE_PUBLISHED_AT=0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711
 MARKETPLACE_OBJECT_ID=0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548
 WAL_TREASURY_CAP_ID=0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e
-# Optional v2 (after upgrade + bootstrap):
-CONFIG_OBJECT_ID=0x0
-MARKETPLACE_V2_OBJECT_ID=0x0
+CONFIG_OBJECT_ID=0x52ea5aa40b38de760c3faa08bd83cd047e4d63023091f14774a8a87609f0ecd1
+MARKETPLACE_V2_OBJECT_ID=0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4268566c488f
 ```
 
 ## Troubleshooting

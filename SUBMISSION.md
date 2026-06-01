@@ -77,6 +77,8 @@ pnpm agent:bounty-hunt
 
 **Expected console:** colored `[1/N]` steps → `── RESULT ──` → **exit code 0**.
 
+**MCP (no keys):** `pnpm mcp:build && pnpm mcp:e2e` — universal agent access via stdio; setup [`docs/mcp-setup.md`](docs/mcp-setup.md) · [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md#judge-mcp-quickstart-2-min).
+
 **Optional live Walrus (~2 min):** copy [`.env.example`](.env.example), set `MEMWAL_PRIVATE_KEY`, `MEMWAL_ACCOUNT_ID`, `MEMWAL_SERVER_URL`, then:
 
 ```bash
