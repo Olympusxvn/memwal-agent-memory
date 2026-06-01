@@ -141,16 +141,28 @@ After pulling v2 modules into the repo:
 
 1. **Upgrade bytecode** (package id unchanged):
    ```bash
-   cd packages/sui-contracts
-   sui client upgrade --upgrade-capability 0xada975edf109c28a8b74f3789312b90acef29aa7fa28a5e936dc489055e0fd66
+   pnpm contracts:upgrade-v2
+   # or: ./scripts/upgrade-contracts-v2.sh
    ```
-2. **Bootstrap shared objects** (one-time, from operator wallet):
-   - `admin::bootstrap` → shared `Config` + `AdminCap`
-   - `marketplace_v2::bootstrap` → shared `MarketplaceV2`
-3. **Record object ids** in `.env`, `deploy-manifest.json`, and `@memwalpp/shared` `MAINNET_V2_OBJECTS`.
-4. Re-run `pnpm contracts:info` — v2 targets activate when `CONFIG_OBJECT_ID` and `MARKETPLACE_V2_OBJECT_ID` are non-zero.
+2. **Discover bootstrap registry** (shared object created by `admin::init` on upgrade):
+   ```bash
+   pnpm contracts:bootstrap-v2 --discover --upgrade-digest=<upgrade-tx-digest>
+   # or set BOOTSTRAP_REGISTRY_ID=0x... after reading Suiscan object changes
+   ```
+3. **Bootstrap shared objects** (one-time PTB from operator wallet):
+   ```bash
+   SUI_OPERATOR_PRIVATE_KEY=... pnpm contracts:bootstrap-v2 --write-manifest
+   ```
+   Creates shared `Config` + `MarketplaceV2`; transfers `AdminCap` to operator.
+4. **Record object ids** in `.env`, `deploy-manifest.json`, and `@memwalpp/shared` `MAINNET_V2_OBJECTS`.
+5. Re-run `pnpm contracts:info` — v2 targets activate when `CONFIG_OBJECT_ID` and `MARKETPLACE_V2_OBJECT_ID` are non-zero.
 
 Until bootstrap, MCP, agent-swarm, and dashboard use **v1** PTB targets (`bounty::post_bounty`, `marketplace::list_pack`, …).
+
+**Dry-run PTB (no gas):**
+```bash
+pnpm contracts:bootstrap-v2 --dry-run --registry 0xYOUR_REGISTRY_ID
+```
 
 ---
 

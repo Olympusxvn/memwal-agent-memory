@@ -37,4 +37,7 @@ console.log(`  bounty: ${moveTarget("bounty", "post_bounty")}`);
 console.log(`  bounty_v2: ${moveTarget("bounty_v2", "post_bounty_v2")}`);
 console.log(`  buy_v2: ${moveTarget("marketplace_v2", "buy_pack_v2")}`);
 console.log(`  seal:   ${moveTarget("access_policy", "seal_approve_for_blob")}`);
+console.log("\nOperator v2:");
+console.log("  upgrade:    pnpm contracts:upgrade-v2");
+console.log("  bootstrap:  pnpm contracts:bootstrap-v2 --discover");
 console.log("\nDocs: docs/deploy.md · packages/sui-contracts/README.md\n");

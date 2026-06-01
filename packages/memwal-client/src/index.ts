@@ -46,6 +46,7 @@ export type {
   SuiNetwork,
 } from "./chain/index.js";
 export {
+  buildBootstrapV2Tx,
   buildBuyPackTx,
   buildForkPackTx,
   buildListPackTx,

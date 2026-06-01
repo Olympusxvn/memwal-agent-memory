@@ -18,10 +18,13 @@
     "agent:bounty-hunt": "pnpm --filter agent-swarm run bounty-hunt",
     "contracts:build": "cd packages/sui-contracts && sui move build",
     "contracts:test": "cd packages/sui-contracts && sui move test",
-    "contracts:info": "tsx scripts/move-package-info.ts"
+    "contracts:info": "tsx scripts/move-package-info.ts",
+    "contracts:upgrade-v2": "bash scripts/upgrade-contracts-v2.sh",
+    "contracts:bootstrap-v2": "tsx scripts/bootstrap-v2.ts"
   },
   "devDependencies": {
     "@memwalpp/shared": "workspace:*",
+    "@mysten/sui": "^2.16.2",
     "@types/node": "^22.10.1",
     "tsx": "^4.19.2",
     "turbo": "^2.3.3",

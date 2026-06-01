@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { loadChainConfigFromEnv } from "../src/chain/config.js";
-import { buildPostBountyTx } from "../src/chain/ptb-builders.js";
+import { buildBootstrapV2Tx, buildPostBountyTx } from "../src/chain/ptb-builders.js";
 
 describe("chain ptb builders", () => {
   it("builds v1 post_bounty with clock + treasury mint", () => {
@@ -18,5 +18,16 @@ describe("chain ptb builders", () => {
     });
     const json = tx.getData();
     expect(json.commands.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("builds v2 bootstrap PTB (admin + marketplace_v2)", () => {
+    const tx = buildBootstrapV2Tx(
+      { packageId: "0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050" },
+      {
+        bootstrapRegistryId: "0x123",
+        sender: "0xabc",
+      },
+    );
+    expect(tx.getData().commands.length).toBe(3);
   });
 });

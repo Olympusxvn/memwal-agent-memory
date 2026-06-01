@@ -40,9 +40,17 @@ pnpm contracts:info
 | `delegate_bridge` | Rotate `memwal_delegate` on pack |
 | `access_policy` | Delegate-only Seal approval event |
 
-## v2 refactor (planned)
+## v2 refactor (repo complete — operator bootstrap pending)
 
-Upgrade-in-place via existing **UpgradeCap** — no new package ID. Adds `memory_ext` (dynamic fields for version/lineage), `bounty_v2`, `marketplace_v2`, `admin`, `events`, `constants`. See refactor OpenSpec.
+Upgrade-in-place via existing **UpgradeCap** — no new package ID. Adds `memory_ext`, `bounty_v2`, `marketplace_v2`, `admin`, `events`, `constants`.
+
+```bash
+pnpm contracts:upgrade-v2          # sui client upgrade (operator)
+pnpm contracts:bootstrap-v2 --discover
+SUI_OPERATOR_PRIVATE_KEY=... pnpm contracts:bootstrap-v2 --write-manifest
+```
+
+See [`docs/deploy.md`](../../docs/deploy.md) § Move v2 and refactor OpenSpec.
 
 ## TypeScript
 

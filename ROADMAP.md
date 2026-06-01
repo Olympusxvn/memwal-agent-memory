@@ -40,7 +40,7 @@
 | **6** | MCP Server (universal access) | ✓ Complete | E2E: `pnpm mcp:e2e`; `.cursor/mcp.json` |
 | **7** | Move contracts v2 refactor | ✓ Complete (repo) | `openspec-move-contracts-refactor.md` |
 | **8** | Dashboard + live chain integration | ◐ In progress | PTBs, indexer, live bounty |
-| **9** | Submission polish & judge experience | ○ Planned | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
+| **9** | Submission polish & judge experience | ◐ In progress | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
 
 **Legend:** ✓ Complete · ◐ In progress / partial · ○ Planned
 
@@ -226,8 +226,8 @@ Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 spe
 | **S1** ✓ | Docs + OpenSpecs | Master spec, MCP spec, Move refactor spec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
 | **S2** | MCP scaffold + E2E | `packages/mcp` — stdio, memory tools, `pnpm mcp:e2e` ✓ |
 | **S3** ✓ | Move v2 implementation | `memory_ext`, `bounty_v2`, `marketplace_v2`; `sui move test` green — **mainnet upgrade + bootstrap → S4** |
-| **S4** ◐ | Live chain wiring | Chain PTB client (`memwal-client`), MCP + agent-swarm tools, kiosk `post_bounty` — **v2 mainnet upgrade pending** |
-| **S5** | Submission | Judge guide, demo polish, video |
+| **S4** ✓ | Live chain wiring | Chain PTB client, MCP + agent-swarm + kiosk wallet PTBs — **v2 mainnet bootstrap → operator scripts** |
+| **S5** ◐ | Submission | Judge guide, demo polish, video |
 
 ---
 
@@ -258,6 +258,9 @@ Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 spe
 ```bash
 pnpm agent:demo          # hybrid memory demo (offline-safe)
 pnpm agent:bounty-hunt   # 2-agent bounty swarm
+pnpm mcp:e2e             # MCP stdio integration
 pnpm contracts:info      # mainnet package + object IDs
+pnpm contracts:upgrade-v2   # operator: upgrade v2 bytecode
+pnpm contracts:bootstrap-v2 # operator: bootstrap v2 shared objects
 pnpm run check           # TypeScript across monorepo
 ```

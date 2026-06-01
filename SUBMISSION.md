@@ -30,7 +30,7 @@ Chat logs and opaque databases fail judges and marketplaces: there is no durable
 
 ## 2. Solution (one paragraph)
 
-**MemWal Agent Memory** is a **hybrid verifiable memory layer** and **memory economy**: agents read/write **SQLite-local** memory first, promote only redacted, quality-scored rows to **MemWal → Walrus**, and anchor packs and bounties on **Sui Move** (MemoryPack NFT, marketplace, WAL escrow bounties with `walrus_blob_id` fulfillment). OpenClaw-style hooks (`beforeRemember`, `afterThink`, `onTaskComplete`) wire the story end-to-end in runnable demos; a **universal MCP Server** (planned) will let any agent use the layer without importing our packages.
+**MemWal Agent Memory** is a **hybrid verifiable memory layer** and **memory economy**: agents read/write **SQLite-local** memory first, promote only redacted, quality-scored rows to **MemWal → Walrus**, and anchor packs and bounties on **Sui Move** (MemoryPack NFT, marketplace, WAL escrow bounties with `walrus_blob_id` fulfillment). OpenClaw-style hooks wire the story in runnable demos; a **universal MCP Server** (`@memwalpp/mcp`) exposes the same layer to any MCP-compatible agent without importing our packages.
 
 ---
 
@@ -93,7 +93,7 @@ Look for `✓ Promoted — blob …` in poster step 3.
 3. **Hybrid architecture done right** — ADR-010 durable-wins on sealed content; not “sync everything.”  
 4. **Economy + storage** — mainnet Move package (marketplace, escrow bounty, NFT pack) **plus** Walrus durability.  
 5. **Engineering depth** — OpenSpecs, ADRs, Vitest, `sui move test`, CI — not a slide deck repo.  
-6. **Clear roadmap forward** — MCP universal access + Move v2 (lineage, lineage royalty) specced and upgrade-safe on existing package ID.
+6. **Clear roadmap forward** — MCP universal access ✓, Move v2 in repo ✓, live chain PTBs wired (v1 mainnet + v2 after operator bootstrap).
 
 ---
 
@@ -104,9 +104,12 @@ Look for `✓ Promoted — blob …` in poster step 3.
 | **0–1** | Monorepo, `shared`, `local-memory`, SQLite + redact/score | ✓ |
 | **2** | `MemWalClient`, `DurableMemoryStore`, `MemorySyncService` | ✓ |
 | **3** | Move v1: `memory_nft`, `marketplace`, `bounty`, `royalty`, `delegate_bridge`, `access_policy` | ✓ mainnet |
-| **4** | `MemWalAgentBridge`, agent demos | ◐ stub bounty PTB |
-| **5** | Master OpenSpec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` | ◐ |
-| **6–9** | MCP Server, Move v2 refactor, dashboard PTBs, submission polish | planned |
+| **4** | `MemWalAgentBridge`, agent demos, optional live bounty PTB | ✓ |
+| **5** | Master OpenSpec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` | ✓ |
+| **6** | MCP Server — memory + chain tools, stdio E2E | ✓ |
+| **7** | Move v2 refactor (upgrade-in-place, tests) | ✓ repo |
+| **8** | Dashboard kiosk PTBs, chain client | ◐ partial |
+| **9** | Submission polish (this doc, judge guide) | ◐ |
 
 See [`ROADMAP.md`](ROADMAP.md) for full phase breakdown.
 
@@ -121,13 +124,13 @@ See [`ROADMAP.md`](ROADMAP.md) for full phase breakdown.
 | **Marketplace** | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
 | **Interact** | [`docs/deploy.md`](docs/deploy.md) · `pnpm contracts:info` |
 
-Move v2 refactor (versioning, lineage, bounty v2) upgrades **in-place** via existing UpgradeCap — package ID unchanged. See [`docs/specs/openspec-move-contracts-refactor.md`](docs/specs/openspec-move-contracts-refactor.md).
+Move v2 refactor (versioning, lineage, bounty v2) upgrades **in-place** via existing UpgradeCap — package ID unchanged. Operator scripts: `pnpm contracts:upgrade-v2` then `pnpm contracts:bootstrap-v2`. See [`docs/deploy.md`](docs/deploy.md).
 
 ---
 
 ## 8. Tech stack
 
-MemWal · Walrus · Sui Move · TypeScript monorepo (Turborepo) · OpenClaw/NemoClaw hooks · MCP Server (planned) · Next.js dashboard.
+MemWal · Walrus · Sui Move · TypeScript monorepo (Turborepo) · OpenClaw/NemoClaw hooks · **MCP Server** (`@memwalpp/mcp`) · Next.js dashboard.
 
 ---
 
@@ -135,14 +138,15 @@ MemWal · Walrus · Sui Move · TypeScript monorepo (Turborepo) · OpenClaw/Nemo
 
 ```bash
 pnpm check && pnpm build && pnpm test
-pnpm contracts:test    # Sui CLI
+pnpm mcp:e2e           # MCP stdio E2E
+pnpm contracts:test    # Sui CLI — 8 Move tests (v2 + v1)
 ```
 
 ---
 
 ## 10. Future work
 
-MCP Server (`packages/mcp`) · Move v2 upgrade · indexer + Kiosk UI · live bounty PTBs in demos · Seal PTB composition · published OpenClaw plugin.
+Indexer + live Kiosk listings · mainnet v2 bootstrap (operator) · Seal PTB composition · published OpenClaw plugin npm package.
 
 ---
 

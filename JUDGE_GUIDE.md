@@ -21,8 +21,9 @@
 |---|----------|-----------------|
 | 1 | Is Walrus on the **critical path**? | `pushOne` → `walrusBlobId`; bounty `submit_fulfillment(blob_id)` |
 | 2 | Can I run it **without setup pain**? | Commands below → exit 0 |
-| 3 | Is integration **real code**? | `memory-sync-service.ts`, `MemWalAgentBridge.ts` |
+| 3 | Is integration **real code**? | `memory-sync-service.ts`, `MemWalAgentBridge.ts`, `packages/mcp` |
 | 4 | Is there **on-chain** story? | Mainnet package + [`docs/deploy.md`](docs/deploy.md) |
+| 5 | Universal agent access? | `pnpm mcp:e2e` — stdio MCP memory + chain tools |
 
 ---
 
@@ -88,13 +89,32 @@ MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt
 
 ---
 
+## Path E — MCP Server (~+2 min, optional)
+
+```bash
+pnpm mcp:e2e
+```
+
+| Check | Expected |
+|-------|----------|
+| Exit code | `0` |
+| Tools | `remember`, `recall`, `search`, `getStats`, `createBounty`, … |
+| Chain tools | `createBounty` returns `chain_not_configured` without delegate env — **expected offline** |
+
+Setup: [`docs/mcp-setup.md`](docs/mcp-setup.md)
+
+---
+
 ## Path D — Contracts & CI (~+5 min, optional)
 
 ```bash
 pnpm contracts:info     # package + marketplace IDs
-pnpm contracts:test     # requires Sui CLI
+pnpm contracts:test     # requires Sui CLI (8 tests)
 pnpm check && pnpm test
+pnpm mcp:e2e            # MCP stdio integration
 ```
+
+**Operators only** (mainnet v2 bootstrap): `pnpm contracts:upgrade-v2` → `pnpm contracts:bootstrap-v2` — see [`docs/deploy.md`](docs/deploy.md).
 
 | Item | Value |
 |------|-------|

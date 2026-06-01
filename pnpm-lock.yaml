@@ -8,9 +8,15 @@ importers:
 
   .:
     devDependencies:
+      '@memwalpp/memwal-client':
+        specifier: workspace:*
+        version: link:packages/memwal-client
       '@memwalpp/shared':
         specifier: workspace:*
         version: link:packages/shared
+      '@mysten/sui':
+        specifier: ^2.16.2
+        version: 2.16.2(typescript@5.9.3)
       '@types/node':
         specifier: ^22.10.1
         version: 22.19.19

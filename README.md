@@ -63,7 +63,7 @@ The merged diagram defines **four vertical layers** (top to bottom):
 | Layer | Responsibility |
 |-------|----------------|
 | **Experience** | Sui wallet, marketplace UI, dashboard — what users, developers, and judges touch. |
-| **Orchestration** | **NemoClaw / OpenClaw** + **MCP Server** (planned) — sandboxed agent swarm, **MemWal plugin** (`oc-memwal`), **custom skills**, **before/after hooks**, **bounty skill**. |
+| **Orchestration** | **NemoClaw / OpenClaw** + **MCP Server** (`@memwalpp/mcp`) — sandboxed agent swarm, **MemWal plugin** (`oc-memwal`), **custom skills**, **before/after hooks**, **bounty skill**. |
 | **Hybrid memory** | **Local:** SQLite + vectors, [agentmemory](https://github.com/rohitg00/agentmemory)-style curation, sub-5 ms recall, offline cache. **Durable:** MemWal SDK, **Seal**, PoA, namespaces, lineage — **bidirectional sync** when quality thresholds pass. |
 | **Sui + Walrus** | **Move:** `memory_nft`, `marketplace`, `access_policy`, **Kiosk + royalties**, **WAL** settlement, **delegate bridge**; **bounty** module (escrow, on-chain requirements). **Walrus:** encrypted blobs, erasure coding, PoA, Seal key gating — persistence under MemWal. |
 

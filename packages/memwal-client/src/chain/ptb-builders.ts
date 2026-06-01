@@ -161,6 +161,23 @@ export function buildBuyPackTx(
   return tx;
 }
 
+export function buildBootstrapV2Tx(
+  config: Pick<ChainClientConfig, "packageId">,
+  params: { bootstrapRegistryId: ObjectId; sender: string },
+): Transaction {
+  const tx = new Transaction();
+  const [adminCap] = tx.moveCall({
+    target: moveTarget("admin", "bootstrap", config.packageId),
+    arguments: [tx.object(params.bootstrapRegistryId)],
+  });
+  tx.moveCall({
+    target: moveTarget("marketplace_v2", "bootstrap", config.packageId),
+    arguments: [adminCap],
+  });
+  tx.transferObjects([adminCap], params.sender);
+  return tx;
+}
+
 export function buildForkPackTx(
   config: ChainClientConfig,
   params: {

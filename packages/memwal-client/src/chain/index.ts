@@ -8,6 +8,7 @@ export {
 export type { ChainClient, ChainExecuteResult } from "./chain-client.js";
 export { createChainClient, tryCreateChainClientFromEnv } from "./chain-client.js";
 export {
+  buildBootstrapV2Tx,
   buildBuyPackTx,
   buildForkPackTx,
   buildListPackTx,
