@@ -27,6 +27,9 @@
     "@memwalpp/core#build": {
       "outputs": []
     },
+    "@memwalpp/mcp#build": {
+      "outputs": ["dist/**"]
+    },
     "memwalpp-cli#build": {
       "outputs": ["dist/**"]
     },

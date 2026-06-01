@@ -19,7 +19,7 @@
 | Move contracts v1 (mainnet) | **Complete** | Package published; `sui move test`; [`docs/deploy.md`](docs/deploy.md) |
 | Agent demos + hooks | **Mostly complete** | `pnpm agent:demo`, `pnpm agent:bounty-hunt`; stub bounty (no live PTB yet) |
 | Project docs + OpenSpecs | **Complete** | Master + MCP + Move refactor specs; `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
-| MCP Server (`packages/mcp`) | **Planned** | Spec only — [`openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md) |
+| MCP Server (`packages/mcp`) | **In progress** | stdio + HTTP scaffold; `remember`/`recall`/`search`/`sync` live |
 | Move v2 refactor (upgrade-in-place) | **Planned** | Spec only — [`openspec-move-contracts-refactor.md`](docs/specs/openspec-move-contracts-refactor.md) |
 | Dashboard live PTBs | **Planned** | UI exists; full wallet + chain flows not wired |
 
@@ -37,7 +37,7 @@
 | **3** | Sui Move contracts v1 | ✓ Complete | `openspec-move-contracts.md`, mainnet publish |
 | **4** | Autonomous agents + judge demos | ◐ Mostly complete | `openspec-agent-swarm-integration.md` |
 | **5** | Documentation & project branding | ✓ Complete | `openspec-memwal-agent-memory.md`, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md`, Walrus UI |
-| **6** | MCP Server (universal access) | ○ Planned | `openspec-mcp-server.md` |
+| **6** | MCP Server (universal access) | ◐ In progress | `packages/mcp` — stdio + core memory tools |
 | **7** | Move contracts v2 refactor | ○ Planned | `openspec-move-contracts-refactor.md` |
 | **8** | Dashboard + live chain integration | ○ Planned | PTBs, indexer, live bounty |
 | **9** | Submission polish & judge experience | ○ Planned | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
@@ -138,18 +138,19 @@
 
 ---
 
-### Phase 6 — MCP Server ○
+### Phase 6 — MCP Server ◐
 
 **Goal:** any MCP-compatible agent can use the hybrid memory layer without importing our packages.
 
-| Exit criterion | Target |
+| Exit criterion | Status |
 |----------------|--------|
-| `@memwalpp/mcp` package scaffolded | `packages/mcp/` |
-| stdio + Streamable HTTP transports | per `openspec-mcp-server.md` §3 |
-| Tool surface: `remember`, `recall`, `search`, `sync`, `getLineage`, `createBounty`, `fulfillBounty`, `forkMemory`, … | §5 |
-| Redaction enforced server-side (no bypass) | §6 |
-| Claude Desktop / Cursor config examples working | §11 |
-| `pnpm mcp:start` root script | §12 |
+| `@memwalpp/mcp` package scaffolded | ✓ |
+| stdio + HTTP transports | ✓ (stdio primary; HTTP via SSE) |
+| Tools: `remember`, `recall`, `search`, `sync`, `promote`, `softDelete`, `verify`, `getStats` | ✓ |
+| Chain tools (`createBounty`, `fulfillBounty`, …) | ○ stub → Sprint S4 |
+| Redaction enforced server-side (no bypass) | ✓ (tests) |
+| Claude Desktop / Cursor config examples | ○ |
+| `pnpm mcp:start` root script | ✓ |
 
 **Depends on:** Phase 2 (sync service), Phase 5 (spec locked).
 
@@ -223,7 +224,7 @@ Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 spe
 | Sprint | Focus | Deliverable |
 |--------|-------|-------------|
 | **S1** ✓ | Docs + OpenSpecs | Master spec, MCP spec, Move refactor spec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
-| **S2** | MCP scaffold | `packages/mcp` — stdio transport, `remember`/`recall`/`sync` tools |
+| **S2** | MCP scaffold | `packages/mcp` — stdio transport, `remember`/`recall`/`sync` tools ◐ |
 | **S3** | Move v2 implementation | `memory_ext`, `bounty_v2`, `marketplace_v2`; upgrade + bootstrap |
 | **S4** | Live chain wiring | Dashboard PTBs; live bounty in `agent:bounty-hunt` |
 | **S5** | Submission | Judge guide, demo polish, video |
