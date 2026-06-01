@@ -87,4 +87,13 @@ describe("MCP stdio E2E", () => {
     expect(stats.namespace).toBe("mcp-e2e");
     expect(Number(stats.localRows)).toBeGreaterThan(0);
   });
+
+  it("createBounty returns chain_not_configured without delegate env", async () => {
+    const result = await client.callTool({
+      name: "createBounty",
+      arguments: { description: "E2E chain skip test bounty description." },
+    });
+    const body = parseToolJson(result);
+    expect(body.skipReason).toBe("chain_not_configured");
+  });
 });

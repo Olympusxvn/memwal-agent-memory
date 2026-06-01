@@ -21,7 +21,7 @@
 | Project docs + OpenSpecs | **Complete** | Master + MCP + Move refactor specs; `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
 | MCP Server (`packages/mcp`) | **Complete** | stdio E2E; chain tools wired (`createBounty`, …) when delegate key + marketplace env set |
 | Move v2 refactor (upgrade-in-place) | **Complete (repo)** | v2 modules + tests; mainnet upgrade + bootstrap → operator (S4) |
-| Dashboard live PTBs | **Partial** | Kiosk wallet `post_bounty` (v1); list/buy + v2 PTBs after bootstrap |
+| Dashboard live PTBs | **Partial** | Kiosk: post bounty, submit fulfillment, buy pack (v1 wallet PTBs) |
 
 **Demo north star (all phases):** bounty → acquire → improve → fork → payout — every claim traceable to a **Walrus blob id** or **on-chain event**.
 
