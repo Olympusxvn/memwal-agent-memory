@@ -3,7 +3,7 @@
 module memwalpp_contracts::wal;
 
 use std::option;
-use sui::coin;
+use sui::coin::{Self, Coin, TreasuryCap};
 use sui::transfer;
 use sui::tx_context::{Self, TxContext};
 
@@ -22,4 +22,14 @@ fun init(otw: WAL, ctx: &mut TxContext) {
     );
     transfer::public_freeze_object(metadata);
     transfer::public_transfer(treasury_cap, tx_context::sender(ctx));
+}
+
+#[test_only]
+/// Mint demo WAL in unit tests (TreasuryCap from package init).
+public fun mint_for_test(
+    treasury: &mut TreasuryCap<WAL>,
+    amount: u64,
+    ctx: &mut TxContext,
+): Coin<WAL> {
+    coin::mint(treasury, amount, ctx)
 }

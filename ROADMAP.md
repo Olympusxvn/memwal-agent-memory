@@ -156,19 +156,19 @@
 
 ---
 
-### Phase 7 — Move contracts v2 refactor ○
+### Phase 7 — Move contracts v2 refactor ✓ (repo)
 
 **Goal:** upgrade-in-place on existing package ID — versioning + lineage via dynamic fields, stronger bounty + lineage royalty, indexer-friendly events.
 
 | Exit criterion | Target |
 |----------------|--------|
-| New modules: `constants`, `events`, `admin`, `memory_ext`, `marketplace_v2`, `bounty_v2` | per refactor spec §3 |
-| `MemoryPack` layout unchanged; `PackExt` via dynamic field | §4 |
-| `fork_pack`, `buy_pack_v2`, `fulfill_bounty_v2`, multi-submission bounty | §5 |
-| Upgrade via existing `UpgradeCap`; package id unchanged | §7 |
-| Post-upgrade bootstrap (`Config`, `MarketplaceV2`, `AdminCap`) | §7.2 |
-| `@memwalpp/shared` updated with new object ids + `moveTarget` entries | §8 |
-| ≥ 8 new Move tests + all v1 tests still pass | §9 |
+| New modules: `constants`, `events`, `admin`, `memory_ext`, `marketplace_v2`, `bounty_v2` | per refactor spec §3 ✓ |
+| `MemoryPack` layout unchanged; `PackExt` via dynamic field | §4 ✓ |
+| `fork_pack`, `buy_pack_v2`, `fulfill_bounty_v2`, multi-submission bounty | §5 ✓ |
+| Upgrade via existing `UpgradeCap`; package id unchanged | §7 — **operator step (S4)** |
+| Post-upgrade bootstrap (`Config`, `MarketplaceV2`, `AdminCap`) | §7.2 — **operator step (S4)** |
+| `@memwalpp/shared` updated with new object ids + `moveTarget` entries | §8 ✓ (v2 object ids placeholder until bootstrap) |
+| ≥ 8 new Move tests + all v1 tests still pass | §9 ✓ (7 v2 + 1 v1) |
 
 **Depends on:** Phase 3 (v1 published), Phase 5 (spec locked).
 
@@ -225,7 +225,7 @@ Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 spe
 |--------|-------|-------------|
 | **S1** ✓ | Docs + OpenSpecs | Master spec, MCP spec, Move refactor spec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` |
 | **S2** | MCP scaffold + E2E | `packages/mcp` — stdio, memory tools, `pnpm mcp:e2e` ✓ |
-| **S3** | Move v2 implementation | `memory_ext`, `bounty_v2`, `marketplace_v2`; upgrade + bootstrap |
+| **S3** ✓ | Move v2 implementation | `memory_ext`, `bounty_v2`, `marketplace_v2`; `sui move test` green — **mainnet upgrade + bootstrap → S4** |
 | **S4** | Live chain wiring | Dashboard PTBs; live bounty in `agent:bounty-hunt` |
 | **S5** | Submission | Judge guide, demo polish, video |
 

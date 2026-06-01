@@ -90,6 +90,38 @@ public fun memwal_delegate(pack: &MemoryPack): address {
     pack.memwal_delegate
 }
 
+public fun namespace(pack: &MemoryPack): String {
+    pack.namespace
+}
+
+public fun namespace_bytes(pack: &MemoryPack): vector<u8> {
+    *std::string::bytes(&pack.namespace)
+}
+
+public fun blob_ids(pack: &MemoryPack): vector<ID> {
+    pack.blob_ids
+}
+
+public fun pack_type(pack: &MemoryPack): u8 {
+    pack.pack_type
+}
+
+public fun performance_score(pack: &MemoryPack): u8 {
+    pack.performance_score
+}
+
+public fun poa_proofs(pack: &MemoryPack): vector<vector<u8>> {
+    pack.poa_proofs
+}
+
+public(package) fun uid(pack: &MemoryPack): &UID {
+    &pack.id
+}
+
+public(package) fun uid_mut(pack: &mut MemoryPack): &mut UID {
+    &mut pack.id
+}
+
 public(package) fun set_memwal_delegate(pack: &mut MemoryPack, new_delegate: address) {
     pack.memwal_delegate = new_delegate;
 }
