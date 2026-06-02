@@ -51,6 +51,7 @@ No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PAS
 - [Architecture](#architecture-at-a-glance)
 - [On-chain package](#published-move-package-sui-mainnet)
 - [Documentation](#documentation)
+- [References](#references)
 - [Walrus track checklist](#walrus-track-checklist)
 
 ---
@@ -312,6 +313,94 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 
 ---
 
+## References
+
+Tổng hợp link ngoài repo và tài liệu nội bộ quan trọng — dùng khi cite hackathon, product MCP, hoặc on-chain.
+
+### Hackathon & Walrus track
+
+| Resource | URL |
+|----------|-----|
+| Sui Overflow 2026 | https://overflow.sui.io |
+| Walrus track problem statement | https://mystenlabs.notion.site/walrus-track-problem-statement |
+| Walrus | https://www.walrus.xyz |
+| Sui | https://sui.io |
+
+### Live demos & product (Cursor / Claude)
+
+| Resource | URL |
+|----------|-----|
+| Dashboard (live demo) | https://memwalpp-dashboard.vercel.app/ |
+| **MCP product intro** | https://memwalpp-dashboard.vercel.app/product |
+| GitHub repository | https://github.com/Olympusxvn/memwal-agent-memory |
+| Demo video (repo) | [`docs/memwalpp-demo.mp4`](docs/memwalpp-demo.mp4) |
+
+### Repository — start here
+
+| Doc | Purpose |
+|-----|---------|
+| [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | 5–10 min judge runbook (no keys) |
+| [`SUBMISSION.md`](SUBMISSION.md) | Walrus track submission brief |
+| [`PROJECT.md`](PROJECT.md) | Vision, goals, non-goals |
+| [`ROADMAP.md`](ROADMAP.md) | Phase status |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Canonical architecture |
+| [`docs/deploy.md`](docs/deploy.md) | Mainnet deploy + PTB + v2 object IDs |
+| [`docs/product/README.md`](docs/product/README.md) | Product: Pro Local vs + Walrus Sync |
+| [`docs/specs/openspec-product-mvp-cursor-claude.md`](docs/specs/openspec-product-mvp-cursor-claude.md) | Post-hackathon MCP product spec |
+
+### MemWal & Walrus (official — wrapped via `@memwalpp/memwal-client`)
+
+| Resource | URL |
+|----------|-----|
+| MemWal docs | https://docs.memwal.ai/ |
+| What is MemWal? | https://docs.memwal.ai/getting-started/what-is-memwal |
+| MemWal LLM index | https://docs.memwal.ai/llms.txt |
+| MemWal GitHub | https://github.com/MystenLabs/MemWal |
+| npm SDK | `@mysten-incubation/memwal` |
+| OpenClaw plugin | `@mysten-incubation/oc-memwal` — [MemWal README](https://github.com/MystenLabs/MemWal#openclaw--nemoclaw-plugin) |
+
+### Agents, orchestration & MCP
+
+| Resource | URL |
+|----------|-----|
+| Model Context Protocol | https://modelcontextprotocol.io/ |
+| Cursor MCP docs | https://cursor.com/docs/mcp |
+| Cursor MCP install links | https://cursor.com/docs/mcp/install-links |
+| NVIDIA NemoClaw | https://github.com/NVIDIA/NemoClaw |
+| MCP setup (this repo) | [`docs/mcp-setup.md`](docs/mcp-setup.md) |
+| MCP OpenSpec | [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md) |
+| Claude project instructions | [`docs/product/claude-instructions.md`](docs/product/claude-instructions.md) |
+
+### Local memory & Move learning
+
+| Resource | URL |
+|----------|-----|
+| agentmemory | https://github.com/rohitg00/agentmemory |
+| memoirs | https://github.com/misaelzapata/memoirs |
+| Sui Move intro course | https://github.com/sui-foundation/sui-move-intro-course |
+
+### Sui mainnet (published package)
+
+| Item | Link |
+|------|------|
+| Package (original) | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
+| Suiscan | https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050 |
+| Published-at (v3 PTBs) | `0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711` |
+| Marketplace v1 | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
+| Config v2 | `0x52ea5aa40b38de760c3faa08bd83cd047e4d63023091f14774a8a87609f0ecd1` |
+| MarketplaceV2 | `0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4268566c488f` |
+| v2 bootstrap tx | https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW |
+
+### Tooling
+
+| Tool | URL |
+|------|-----|
+| Sui documentation | https://docs.sui.io/ |
+| Turborepo | https://turbo.build/repo/docs |
+| pnpm | https://pnpm.io/ |
+
+---
+
 ## Walrus track checklist
 
 - Walrus and MemWal on the **critical demo path** (blobs, PoA, recall).
@@ -335,7 +424,7 @@ Use **MemWal delegate keys** only. Never commit owner keys. Keep secrets in loca
 
 ## Acknowledgements
 
-Mysten Labs (Sui, Walrus, MemWal, Seal), Sui Overflow, and the open-source projects referenced above.
+Mysten Labs (Sui, Walrus, MemWal, Seal), Sui Overflow 2026, and the projects listed in [References](#references). We **wrap** the official MemWal SDK — we do not fork it.
 
 ---
 
