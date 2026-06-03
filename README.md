@@ -13,6 +13,8 @@
 
 [![Submission ready](https://img.shields.io/badge/submission-ready-brightgreen)](SUBMISSION.md)
 
+**New here?** Read **[`SUMMARY.md`](SUMMARY.md)** — role, benefits, and judge path in one page.
+
 Built for **[Sui Overflow 2026](https://overflow.sui.io)** — **[Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement)**.
 
 ### For judges (5–10 min) — start here
@@ -26,6 +28,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 | | |
 |---|---|
 | **Live demo (dashboard)** | https://memwalpp-dashboard.vercel.app/ |
+| **Summary (live)** | https://memwalpp-dashboard.vercel.app/summary |
 | **Runbook** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) |
 | **Workshop → this repo (3 min read)** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
 | **Brief** | [`SUBMISSION.md`](SUBMISSION.md) |
@@ -49,6 +52,7 @@ No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PAS
 
 ## Contents
 
+- [SUMMARY — role & benefits](SUMMARY.md)
 - [For judges](#for-judges-5–10-min)
 - [Product — Cursor & Claude](#product--cursor--claude-post-hackathon)
 - [Overview](#overview)
@@ -297,6 +301,7 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 
 | Path | Content |
 |------|---------|
+| [`SUMMARY.md`](SUMMARY.md) | Role, benefits, who it’s for |
 | [`PROJECT.md`](PROJECT.md) | Vision, goals, non-goals |
 | [`ROADMAP.md`](ROADMAP.md) | Phased milestones + current status |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | **Canonical** layered architecture + flows + repo map |
@@ -358,6 +363,7 @@ External links and key in-repo docs for hackathon citation, judges, product MCP,
 
 | Doc | Purpose |
 |-----|---------|
+| [`SUMMARY.md`](SUMMARY.md) | Role, benefits, one-page overview |
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | 5–10 min judge runbook (no keys) |
 | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Workshop curriculum → this submission |
 | [`SUBMISSION.md`](SUBMISSION.md) | Walrus track submission brief |

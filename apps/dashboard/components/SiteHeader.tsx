@@ -24,6 +24,7 @@ export function SiteHeader() {
           <a href={LIVE_DEMO} target="_blank" rel="noopener noreferrer">
             Live demo
           </a>
+          <Link href="/summary">Summary</Link>
           <Link href="/kiosk">Memory Kiosk</Link>
           <Link href="/product">MCP product</Link>
           <a href={`${REPO}/blob/main/JUDGE_GUIDE.md`} target="_blank" rel="noopener noreferrer">

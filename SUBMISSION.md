@@ -10,8 +10,10 @@
 |---|---|
 | **Repository** | https://github.com/Olympusxvn/memwal-agent-memory |
 | **Live demo (dashboard)** | https://memwalpp-dashboard.vercel.app/ |
+| **Summary (live)** | https://memwalpp-dashboard.vercel.app/summary |
 | **MCP product intro (Cursor / Claude)** | https://memwalpp-dashboard.vercel.app/product |
 | **Demo video (~2:26)** | [`docs/memwalpp-demo.mp4`](docs/memwalpp-demo.mp4) · regenerate: `pnpm demo:publish` |
+| **Summary (role & benefits)** | [`SUMMARY.md`](SUMMARY.md) — one-page overview for judges and readers |
 | **Judge runbook (start here)** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) — **5–10 minutes**, no API keys required |
 | **Workshop → submission map** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) — official MemWal workshop vs this repo |
 | **Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [SVG diagram](docs/diagrams/memwalpp-merged-architecture.svg) |
@@ -173,6 +175,7 @@ Built with AI assistants (Cursor, Claude) per **ADR-012**. All material decision
 
 | Document | Use |
 |----------|-----|
+| [`SUMMARY.md`](SUMMARY.md) | Role, benefits, one-page overview |
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | Step-by-step judge path |
 | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Workshop kit vs submission (judge map) |
 | [`README.md`](README.md) | Contributor setup |

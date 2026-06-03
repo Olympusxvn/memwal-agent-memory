@@ -7,6 +7,7 @@
 | Resource | Link |
 |----------|------|
 | Repository | https://github.com/Olympusxvn/memwal-agent-memory |
+| **Summary (what & why)** | https://memwalpp-dashboard.vercel.app/summary · [`SUMMARY.md`](SUMMARY.md) |
 | Live demo (dashboard) | https://memwalpp-dashboard.vercel.app/ |
 | **Workshop → submission map** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
 | **Final smoke log** | [`docs/judge-final-checklist.md`](docs/judge-final-checklist.md) |

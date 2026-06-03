@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MemWal Agent Memory — Summary for judges &amp; readers</title>
+  <meta name="description" content="Role, benefits, and Walrus track fit of MemWal Agent Memory — hybrid verifiable memory and memory economy on Sui and Walrus." />
+  <link rel="canonical" href="https://memwalpp-dashboard.vercel.app/summary" />
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --surface: #141a24;
+      --text: #e8ecf4;
+      --muted: #8b95a8;
+      --accent: #6ee7a0;
+      --accent-dim: #3d9a6a;
+      --walrus: #a78bfa;
+      --border: #252d3d;
+      --mono: "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
+      --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    .top-nav { margin-bottom: 1.5rem; font-size: 0.85rem; }
+    .top-nav a { color: var(--muted); text-decoration: none; margin-right: 1rem; }
+    .top-nav a:hover { color: var(--accent); }
+    header { margin-bottom: 2rem; }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .lead { color: var(--muted); font-size: 1.05rem; margin-bottom: 1rem; }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+    }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.15rem;
+    }
+    section h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--walrus);
+      margin-bottom: 0.85rem;
+    }
+    section h3 {
+      font-size: 1rem;
+      margin: 1rem 0 0.5rem;
+      color: var(--text);
+    }
+    section p, section li { font-size: 0.95rem; color: var(--text); }
+    section ul { margin: 0.5rem 0 0 1.25rem; }
+    section li { margin-bottom: 0.35rem; }
+    a { color: var(--walrus); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 0.75rem 0;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.6rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: var(--walrus); font-weight: 600; }
+    pre {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+      margin: 0.65rem 0;
+      line-height: 1.45;
+    }
+    .diagram {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 1.35;
+      white-space: pre;
+      overflow-x: auto;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin: 0.65rem 0;
+      color: var(--muted);
+    }
+    .cta-row { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.65rem; }
+    .cta-row a {
+      display: inline-block;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .cta-primary { background: var(--accent); color: var(--bg); }
+    .cta-secondary { border: 1px solid var(--border); color: var(--text); }
+    footer { margin-top: 2rem; font-size: 0.85rem; color: var(--muted); }
+    footer a { color: var(--walrus); }
+    .meta-table td:first-child { color: var(--muted); width: 38%; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="top-nav">
+      <a href="/">← Dashboard</a>
+      <a href="/product">MCP product</a>
+      <a href="/kiosk">Kiosk</a>
+    </nav>
+    <header>
+      <span class="badge">Walrus track · Sui Overflow 2026</span>
+      <h1>MemWal Agent Memory</h1>
+      <p class="lead">
+        <strong>One line:</strong> A hybrid, verifiable memory layer and memory economy for AI agents —
+        fast and private locally, durable and provable on <strong>Walrus</strong>, tradeable on <strong>Sui</strong>.
+      </p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/JUDGE_GUIDE.md">Judge guide (5 min)</a>
+        <a class="cta-secondary" href="https://github.com/Olympusxvn/memwal-agent-memory">GitHub repo</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>Quick links</h2>
+      <table class="meta-table">
+        <tr><td>Repository</td><td><a href="https://github.com/Olympusxvn/memwal-agent-memory">github.com/Olympusxvn/memwal-agent-memory</a></td></tr>
+        <tr><td>Hackathon</td><td><a href="https://overflow.sui.io">Sui Overflow 2026</a> · <a href="https://mystenlabs.notion.site/walrus-track-problem-statement">Walrus track</a></td></tr>
+        <tr><td>Live dashboard</td><td><a href="https://memwalpp-dashboard.vercel.app/">memwalpp-dashboard.vercel.app</a></td></tr>
+        <tr><td>Judge quickstart</td><td><a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/JUDGE_GUIDE.md">JUDGE_GUIDE.md</a> (no keys)</td></tr>
+        <tr><td>Source (markdown)</td><td><a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/SUMMARY.md">SUMMARY.md</a></td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>What is it?</h2>
+      <p>
+        <strong>MemWal Agent Memory</strong> lets autonomous agents <strong>remember, recall, prove, share, and monetize</strong>
+        knowledge — without being locked to one app or losing context every session.
+      </p>
+      <p style="margin-top:0.75rem">
+        It <strong>wraps</strong> the official <a href="https://docs.memwal.ai/">MemWal</a> SDK (Walrus Memory). It does
+        <strong>not</strong> fork Mysten’s stack. It adds:
+      </p>
+      <ul>
+        <li><strong>Local-first</strong> speed and privacy (SQLite + vectors)</li>
+        <li><strong>Controlled promotion</strong> to Walrus (redaction + quality gates)</li>
+        <li><strong>Sui Move</strong> marketplace, bounties, and royalties</li>
+        <li><strong>MCP</strong> for Cursor, Claude, OpenClaw, or any MCP client</li>
+      </ul>
+      <p style="margin-top:0.75rem;font-size:0.88rem;color:var(--muted)">
+        Display name <strong>MemWal++</strong> in some UI; repo scope: <code>memwal-agent-memory</code> / <code>@memwalpp/*</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Role in the stack</h2>
+      <div class="diagram">┌─────────────────────────────────────────────────────────────┐
+│  Experience — dashboard, wallet, marketplace UI             │
+├─────────────────────────────────────────────────────────────┤
+│  Agents — OpenClaw/NemoClaw hooks, swarm demos, MCP server  │
+├─────────────────────────────────────────────────────────────┤
+│  Hybrid memory — local store ◄──sync──► MemWal → Walrus     │
+├─────────────────────────────────────────────────────────────┤
+│  Sui Move — packs, marketplace, bounty escrow, royalties   │
+└─────────────────────────────────────────────────────────────┘</div>
+      <table>
+        <tr><th>Layer</th><th>Role</th></tr>
+        <tr><td>Local memory</td><td>Fast recall, offline work, PII stays local until policy allows upload</td></tr>
+        <tr><td>MemWal + Walrus</td><td>Encrypted blobs, semantic recall, portable proof (<code>walrusBlobId</code>)</td></tr>
+        <tr><td>Move contracts</td><td>List, buy, fork packs; bounties tied to Walrus blob fulfillment</td></tr>
+        <tr><td>MCP</td><td>Universal API — no monorepo imports required</td></tr>
+      </table>
+      <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--muted)">
+        <strong>North star:</strong> bounty posted → hunter acquires memory → improves → forks → payout —
+        traceable to local policy, a Walrus blob, or an on-chain event.
+      </p>
+    </section>
+
+    <section>
+      <h2>Who benefits</h2>
+      <h3>AI agents</h3>
+      <ul>
+        <li>Remember across sessions without stuffing full chat logs into every prompt</li>
+        <li>Recall by meaning (semantic search)</li>
+        <li>Work offline; sync when credentials and quality rules allow</li>
+        <li>Multi-agent flows (poster + hunter bounty demo)</li>
+      </ul>
+      <h3>Developers</h3>
+      <ul>
+        <li><code>pnpm mcp:e2e</code> — MCP without wallet setup</li>
+        <li><code>MemorySyncService</code> — redact → gate → promote</li>
+        <li>Mainnet Move — see <a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/docs/deploy.md">deploy.md</a></li>
+      </ul>
+      <h3>Judges</h3>
+      <ul>
+        <li>Runnable in minutes — no API keys for core path</li>
+        <li>Walrus on critical path — blob ids on records and bounties</li>
+        <li><a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/SUBMISSION.md">SUBMISSION.md</a> · workshop map</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Core benefits</h2>
+      <table>
+        <tr><th>Benefit</th><th>What you get</th></tr>
+        <tr><td>Speed</td><td>Local SQLite recall for agent turns</td></tr>
+        <tr><td>Privacy</td><td>PII redaction + quality gate before Walrus</td></tr>
+        <tr><td>Verifiability</td><td><code>walrusBlobId</code>; bounty fulfillment on-chain</td></tr>
+        <tr><td>Portability</td><td>MemWal namespaces + Walrus blobs</td></tr>
+        <tr><td>Economy</td><td>Buy, fork, improve memories; royalties</td></tr>
+        <tr><td>Accessibility</td><td>MCP: remember, recall, search, sync, …</td></tr>
+        <tr><td>Judge-friendly</td><td>Offline demos exit 0; live Walrus = one <code>.env</code> block</td></tr>
+      </table>
+      <p style="margin-top:0.75rem;font-size:0.88rem">Priority: Verifiability › Privacy › Performance › Agent autonomy.</p>
+    </section>
+
+    <section>
+      <h2>How it works</h2>
+      <ol style="margin-left:1.25rem">
+        <li><strong>Write locally</strong> — SQLite (fast, private)</li>
+        <li><strong>Gate</strong> — redact + quality scorer</li>
+        <li><strong>Promote</strong> — MemWal <code>remember</code> → SEAL → Walrus blob</li>
+        <li><strong>Recall</strong> — hybrid local + durable semantic search</li>
+        <li><strong>Trade / bounty</strong> — Move + Walrus-backed fulfillment</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>vs official MemWal</h2>
+      <table>
+        <tr><th></th><th>Official MemWal</th><th>MemWal Agent Memory</th></tr>
+        <tr><td>Storage</td><td>Walrus-centric</td><td><strong>Local + Walrus</strong></td></tr>
+        <tr><td>Before upload</td><td>Encryption</td><td>Encryption + <strong>redaction + gate</strong></td></tr>
+        <tr><td>Economy</td><td>None</td><td><strong>Marketplace, bounty, royalty</strong></td></tr>
+        <tr><td>Any agent</td><td>SDK / OpenClaw</td><td><strong>+ MCP server</strong></td></tr>
+        <tr><td>Offline</td><td>Limited</td><td><strong>Offline-first</strong></td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Walrus track fit</h2>
+      <p>Persistent verifiable memory, multi-agent bounty story, MCP tooling, mainnet Sui objects.</p>
+      <p style="margin-top:0.65rem;font-size:0.88rem;color:var(--muted)">
+        Complements <a href="https://mystenlabs.notion.site/agentic-web-problem-statement">Agentic Web</a> as the memory and proof layer — not a DeFi risk bot or swap intent engine.
+      </p>
+    </section>
+
+    <section>
+      <h2>Verify in 5 minutes</h2>
+      <pre>git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt</pre>
+      <table>
+        <tr><th>Result</th><th>Meaning</th></tr>
+        <tr><td>Exit <code>0</code></td><td>Core integration works</td></tr>
+        <tr><td><code>Not promoted (offline)</code></td><td>Normal without MemWal keys — not a failure</td></tr>
+        <tr><td><code>✓ Promoted — blob 0x…</code></td><td>Optional: <code>MEMWAL_*</code> + <code>MEMWAL_AUTO_PUSH=1</code></td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Read next</h2>
+      <table>
+        <tr><th>Audience</th><th>Document</th></tr>
+        <tr><td>Judges</td><td><a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/JUDGE_GUIDE.md">JUDGE_GUIDE</a> · <a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/SUBMISSION.md">SUBMISSION</a></td></tr>
+        <tr><td>Workshop</td><td><a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/docs/judge-walrus-memory-workshop.md">judge-walrus-memory-workshop</a></td></tr>
+        <tr><td>Architecture</td><td><a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/docs/ARCHITECTURE.md">ARCHITECTURE</a></td></tr>
+        <tr><td>MCP product</td><td><a href="/product">/product</a> on this dashboard</td></tr>
+      </table>
+    </section>
+
+    <footer>
+      <p>
+        <a href="https://github.com/Olympusxvn/memwal-agent-memory/blob/main/SUMMARY.md">SUMMARY.md</a> ·
+        <a href="https://docs.memwal.ai/">MemWal docs</a> ·
+        <a href="https://github.com/Olympusxvn/memwal-agent-memory">GitHub</a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
