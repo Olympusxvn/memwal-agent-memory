@@ -314,6 +314,7 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | [`openspec/README.md`](openspec/README.md) | Pointer: specs live under `docs/specs/` |
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | **5–10 min judge runbook** |
 | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Official workshop → this submission (judge map) |
+| [`docs/judge-final-checklist.md`](docs/judge-final-checklist.md) | Maintainer verification log (smoke tests) |
 | [`SUBMISSION.md`](SUBMISSION.md) | **Final submission brief** (Walrus value + why win) |
 | [`CHANGELOG.md`](CHANGELOG.md) | Notable changes and operational notes |
 

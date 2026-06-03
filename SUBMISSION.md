@@ -147,6 +147,8 @@ MemWal · Walrus · Sui Move · TypeScript monorepo (Turborepo) · OpenClaw/Nemo
 
 ## 9. Verification
 
+**Maintainer smoke (2026-06-01):** [`docs/judge-final-checklist.md`](docs/judge-final-checklist.md) — `mcp:e2e`, `agent:demo`, `agent:bounty-hunt` all exit `0` without keys.
+
 ```bash
 pnpm check && pnpm build && pnpm test
 pnpm mcp:e2e           # MCP stdio E2E
