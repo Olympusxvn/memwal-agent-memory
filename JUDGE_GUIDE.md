@@ -21,7 +21,7 @@
 | Question | Answer |
 |----------|--------|
 | **Official stack?** | **Walrus Memory (MemWal)** — `remember` / `recall` / Walrus blobs + Sui account. We **wrap** [`@mysten-incubation/memwal`](https://www.npmjs.com/package/@mysten-incubation/memwal), not fork it. |
-| **Workshop relationship?** | Built on the [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e) curriculum ([kit repo](https://github.com/DionisisLougaris/memwal-workshop-kit)). **Judges verify this repo**, not the kit. |
+| **Workshop relationship?** | Built on the [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e) curriculum ([kit](https://github.com/DionisisLougaris/walrus-memory-workshop-kit) · [`SKILL.md`](https://github.com/DionisisLougaris/walrus-memory-workshop-kit/blob/main/SKILL.md)). **Judges verify this repo**, not the kit. |
 | **What we added?** | **Hybrid** local SQLite + redact/quality gates → promote to Walrus; **MCP** for any agent; **mainnet Move** marketplace + bounties tied to `walrus_blob_id`. |
 | **Staging vs mainnet?** | Workshop uses **staging.memwal.ai**. This submission’s **on-chain IDs are mainnet** — see [On-chain](#path-d--contracts--ci-5-min-optional) and [`docs/deploy.md`](docs/deploy.md). Live MemWal push uses **mainnet** relayer in [`.env.example`](.env.example). |
 

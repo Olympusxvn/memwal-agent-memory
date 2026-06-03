@@ -31,7 +31,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 | **Brief** | [`SUBMISSION.md`](SUBMISSION.md) |
 | **Walrus code path** | `packages/core/src/memory/memory-sync-service.ts` |
 
-**Built on official Walrus Memory (MemWal)** from the [Overflow workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e); this repo adds hybrid local memory, MCP, and mainnet Move marketplace — you do **not** need the [workshop kit](https://github.com/DionisisLougaris/memwal-workshop-kit) to score us.
+**Built on official Walrus Memory (MemWal)** from the [Overflow workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e); this repo adds hybrid local memory, MCP, and mainnet Move marketplace — you do **not** need the [workshop kit](https://github.com/DionisisLougaris/walrus-memory-workshop-kit) to score us.
 
 No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PASS`. Optional live Walrus: [`.env.example`](.env.example) + `MEMWAL_AUTO_PUSH=1` (mainnet relayer).
 
@@ -337,7 +337,9 @@ External links and key in-repo docs for hackathon citation, judges, product MCP,
 | Resource | URL |
 |----------|-----|
 | Workshop guide (Notion) | https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e |
-| Workshop hands-on kit | https://github.com/DionisisLougaris/memwal-workshop-kit |
+| Workshop hands-on kit | https://github.com/DionisisLougaris/walrus-memory-workshop-kit |
+| Kit `SKILL.md` (SDK reference) | https://github.com/DionisisLougaris/walrus-memory-workshop-kit/blob/main/SKILL.md |
+| Workshop closing survey | https://docs.google.com/forms/d/e/1FAIpQLSdNxVFuVipZVjzZH2YDqvf8794i8mFgbXQ2mw9XvgwXNElj6Q/viewform |
 | Workshop recording (~90 min) | https://www.youtube.com/watch?v=GncjVUEJw9Y |
 | Walrus Memory 101 slides | https://drive.google.com/file/d/1x4QePXh_8q7Gc9CBDAvtWq5axSMJFK2H/view |
 | **Judge map (kit → this repo)** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
