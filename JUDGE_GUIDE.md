@@ -8,10 +8,42 @@
 |----------|------|
 | Repository | https://github.com/Olympusxvn/memwal-agent-memory |
 | Live demo (dashboard) | https://memwalpp-dashboard.vercel.app/ |
+| **Workshop → submission map** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
 | Submission brief | [`SUBMISSION.md`](SUBMISSION.md) |
 | Architecture | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | Master OpenSpec | [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) |
 | Diagram | [`docs/diagrams/memwalpp-merged-architecture.svg`](docs/diagrams/memwalpp-merged-architecture.svg) |
+
+---
+
+## What this project is (read first — 60 s)
+
+| Question | Answer |
+|----------|--------|
+| **Official stack?** | **Walrus Memory (MemWal)** — `remember` / `recall` / Walrus blobs + Sui account. We **wrap** [`@mysten-incubation/memwal`](https://www.npmjs.com/package/@mysten-incubation/memwal), not fork it. |
+| **Workshop relationship?** | Built on the [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e) curriculum ([kit repo](https://github.com/DionisisLougaris/memwal-workshop-kit)). **Judges verify this repo**, not the kit. |
+| **What we added?** | **Hybrid** local SQLite + redact/quality gates → promote to Walrus; **MCP** for any agent; **mainnet Move** marketplace + bounties tied to `walrus_blob_id`. |
+| **Staging vs mainnet?** | Workshop uses **staging.memwal.ai**. This submission’s **on-chain IDs are mainnet** — see [On-chain](#path-d--contracts--ci-5-min-optional) and [`docs/deploy.md`](docs/deploy.md). Live MemWal push uses **mainnet** relayer in [`.env.example`](.env.example). |
+
+**Extension map (workshop → here):** multi-namespace → namespaces in sync/MCP; verify Walrus → `walrusBlobId` + bounty fulfillment; permissions → mainnet package + deploy doc. Details: [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md).
+
+---
+
+## Fastest verify (copy-paste)
+
+```bash
+git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
+```
+
+| Command | Exit `0` means |
+|---------|----------------|
+| `pnpm mcp:e2e` | MCP memory tools work (stdio); chain tools OK without keys (`chain_not_configured`) |
+| `pnpm agent:demo` | Hybrid hooks + 5-step narrative |
+| `pnpm agent:bounty-hunt` | Poster + Hunter agents; recall injects context |
+
+Optional live Walrus blob: [Path B](#path-b--live-walrus-blob-id-2-min-optional).
 
 ---
 

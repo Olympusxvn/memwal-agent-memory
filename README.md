@@ -18,17 +18,22 @@ Built for **[Sui Overflow 2026](https://overflow.sui.io)** — **[Walrus track](
 ### For judges (5–10 min) — start here
 
 ```bash
-pnpm install && pnpm agent:demo && pnpm agent:bounty-hunt
+git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
 ```
 
 | | |
 |---|---|
 | **Live demo (dashboard)** | https://memwalpp-dashboard.vercel.app/ |
 | **Runbook** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) |
+| **Workshop → this repo (3 min read)** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
 | **Brief** | [`SUBMISSION.md`](SUBMISSION.md) |
 | **Walrus code path** | `packages/core/src/memory/memory-sync-service.ts` |
 
-No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PASS`. Optional live Walrus: [`.env.example`](.env.example) + `MEMWAL_AUTO_PUSH=1`.
+**Built on official Walrus Memory (MemWal)** from the [Overflow workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e); this repo adds hybrid local memory, MCP, and mainnet Move marketplace — you do **not** need the [workshop kit](https://github.com/DionisisLougaris/memwal-workshop-kit) to score us.
+
+No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PASS`. Optional live Walrus: [`.env.example`](.env.example) + `MEMWAL_AUTO_PUSH=1` (mainnet relayer).
 
 ### Product — Cursor & Claude (post-hackathon)
 
@@ -308,6 +313,7 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | [`.cursor/rules/memory-marketplace-rules.mdc`](.cursor/rules/memory-marketplace-rules.mdc) | Primary Cursor project rules |
 | [`openspec/README.md`](openspec/README.md) | Pointer: specs live under `docs/specs/` |
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | **5–10 min judge runbook** |
+| [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Official workshop → this submission (judge map) |
 | [`SUBMISSION.md`](SUBMISSION.md) | **Final submission brief** (Walrus value + why win) |
 | [`CHANGELOG.md`](CHANGELOG.md) | Notable changes and operational notes |
 
@@ -315,7 +321,7 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 
 ## References
 
-Tổng hợp link ngoài repo và tài liệu nội bộ quan trọng — dùng khi cite hackathon, product MCP, hoặc on-chain.
+External links and key in-repo docs for hackathon citation, judges, product MCP, and on-chain verification.
 
 ### Hackathon & Walrus track
 
@@ -325,6 +331,16 @@ Tổng hợp link ngoài repo và tài liệu nội bộ quan trọng — dùng 
 | Walrus track problem statement | https://mystenlabs.notion.site/walrus-track-problem-statement |
 | Walrus | https://www.walrus.xyz |
 | Sui | https://sui.io |
+
+### Walrus Memory workshop (official curriculum we built on)
+
+| Resource | URL |
+|----------|-----|
+| Workshop guide (Notion) | https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e |
+| Workshop hands-on kit | https://github.com/DionisisLougaris/memwal-workshop-kit |
+| Workshop recording (~90 min) | https://www.youtube.com/watch?v=GncjVUEJw9Y |
+| Walrus Memory 101 slides | https://drive.google.com/file/d/1x4QePXh_8q7Gc9CBDAvtWq5axSMJFK2H/view |
+| **Judge map (kit → this repo)** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
 
 ### Live demos & product (Cursor / Claude)
 
@@ -340,6 +356,7 @@ Tổng hợp link ngoài repo và tài liệu nội bộ quan trọng — dùng 
 | Doc | Purpose |
 |-----|---------|
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | 5–10 min judge runbook (no keys) |
+| [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Workshop curriculum → this submission |
 | [`SUBMISSION.md`](SUBMISSION.md) | Walrus track submission brief |
 | [`PROJECT.md`](PROJECT.md) | Vision, goals, non-goals |
 | [`ROADMAP.md`](ROADMAP.md) | Phase status |

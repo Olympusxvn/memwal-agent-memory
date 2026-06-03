@@ -2,6 +2,8 @@
 
 Connect **Cursor**, **Claude Desktop**, or any MCP client to the hybrid memory layer without importing `@memwalpp/*` packages.
 
+**Judges:** fastest path is [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md#judge-mcp-quickstart-2-min) (`pnpm mcp:e2e`). Workshop context: [`judge-walrus-memory-workshop.md`](judge-walrus-memory-workshop.md).
+
 **Product users (Cursor / Claude):** start at [`product/README.md`](product/README.md) — Pro Local vs + Walrus Sync, smoke test, deeplink.
 
 ## Prerequisites

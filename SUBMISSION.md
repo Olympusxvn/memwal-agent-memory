@@ -13,6 +13,7 @@
 | **MCP product intro (Cursor / Claude)** | https://memwalpp-dashboard.vercel.app/product |
 | **Demo video (~2:26)** | [`docs/memwalpp-demo.mp4`](docs/memwalpp-demo.mp4) · regenerate: `pnpm demo:publish` |
 | **Judge runbook (start here)** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) — **5–10 minutes**, no API keys required |
+| **Workshop → submission map** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) — official MemWal workshop vs this repo |
 | **Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [SVG diagram](docs/diagrams/memwalpp-merged-architecture.svg) |
 | **Master OpenSpec** | [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) |
 
@@ -33,6 +34,8 @@ Chat logs and opaque databases fail judges and marketplaces: there is no durable
 ## 2. Solution (one paragraph)
 
 **MemWal Agent Memory** is a **hybrid verifiable memory layer** and **memory economy**: agents read/write **SQLite-local** memory first, promote only redacted, quality-scored rows to **MemWal → Walrus**, and anchor packs and bounties on **Sui Move** (MemoryPack NFT, marketplace, WAL escrow bounties with `walrus_blob_id` fulfillment). OpenClaw-style hooks wire the story in runnable demos; a **universal MCP Server** (`@memwalpp/mcp`) exposes the same layer to any MCP-compatible agent without importing our packages.
+
+We built on the official **[Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e)** ([hands-on kit](https://github.com/DionisisLougaris/memwal-workshop-kit), [recording](https://www.youtube.com/watch?v=GncjVUEJw9Y)) — `remember` / `recall` / namespaces on Walrus — and extended it with hybrid gates, judge MCP, and **mainnet** Move. Judges verify **this repository** only; see [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md).
 
 ---
 
@@ -169,6 +172,7 @@ Built with AI assistants (Cursor, Claude) per **ADR-012**. All material decision
 | Document | Use |
 |----------|-----|
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | Step-by-step judge path |
+| [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Workshop kit vs submission (judge map) |
 | [`README.md`](README.md) | Contributor setup |
 | [`PROJECT.md`](PROJECT.md) | Vision and goals |
 | [`docs/deploy.md`](docs/deploy.md) | Move PTB + object IDs |

@@ -177,7 +177,7 @@ MemWal Agent Memory is a **Walrus-track** submission for **Sui Overflow 2026**: 
 
 MemWal Agent Memory satisfies the Walrus track by placing **durable agent memory on Walrus** via the official MemWal path, while keeping day-to-day agent work **local-first**.
 
-**Judge commands:** `pnpm agent:demo` · `pnpm agent:bounty-hunt` · [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md)
+**Judge commands:** `pnpm mcp:e2e` · `pnpm agent:demo` · `pnpm agent:bounty-hunt` · [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md) · [`judge-walrus-memory-workshop.md`](judge-walrus-memory-workshop.md)
 
 | Track criterion | MemWal Agent Memory evidence |
 |-----------------|-------------------|
