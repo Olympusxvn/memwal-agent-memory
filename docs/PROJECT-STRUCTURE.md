@@ -102,10 +102,6 @@ Internal planning (`docs/process/plans/`, legacy `SOURCE-memwalpp.md`) — optio
 | Workflow | Needed? | Purpose |
 |----------|---------|---------|
 | **`ci.yml`** | **Yes** | `sui move test` + `pnpm test` + turbo `lint` / `check` / `build` |
-| **`ai-review.yml`** | **No** (hackathon) | Optional bot PR review — adds noise, not a judge signal |
-| **`retro-summary.yml`** | **No** (hackathon) | Optional sprint retro automation — not submission-critical |
-
-**Recommendation:** Keep **only `ci.yml`** until post-hackathon. Judges care that CI is green, not extra AI workflows.
 
 ---
 
