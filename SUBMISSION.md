@@ -93,6 +93,18 @@ MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt
 
 Look for `✓ Promoted — blob …` in poster step 3.
 
+### Honest scope (stubs vs real)
+
+| Component | Demo / CLI | Production path |
+|-----------|------------|-----------------|
+| Hybrid sync → Walrus | **Real** with `MEMWAL_*` | `MemorySyncService` + `DurableMemoryStore` |
+| Move marketplace & bounty modules | **Real** on mainnet | [`docs/deploy.md`](docs/deploy.md) · `pnpm contracts:test` |
+| `agent:bounty-hunt` bounty object | **Stub** metadata (`stub-bounty.ts`) | Not live escrow in offline judge path |
+| `onTaskComplete` outcome | **Stub** (ADR-005) | Event shape wired; full PTB batch deferred |
+| Kiosk indexer listings | **Placeholder** UI | Schema in `docs/specs/indexer-schema.sql` |
+
+**One line:** Judges verify **memory + Walrus + MCP** without keys; **on-chain IDs and Move tests are real**; CLI bounty escrow is a **labeled stub**, not a hidden mock of Walrus.
+
 ---
 
 ## 5. Why this deserves to win Walrus Track

@@ -165,6 +165,8 @@ memwal-agent-memory/
 └── .cursor/rules/        # memory-marketplace-rules.mdc, memwal-agent-memory.mdc
 ```
 
+**Full tree + CI/testing map:** [`docs/PROJECT-STRUCTURE.md`](docs/PROJECT-STRUCTURE.md)
+
 ### Current structure (confirmed)
 
 | Area | Status | Notes |
@@ -304,7 +306,8 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | [`SUMMARY.md`](SUMMARY.md) | Role, benefits, who it’s for |
 | [`PROJECT.md`](PROJECT.md) | Vision, goals, non-goals |
 | [`ROADMAP.md`](ROADMAP.md) | Phased milestones + current status |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | **Canonical** layered architecture + flows + repo map |
+| [`docs/PROJECT-STRUCTURE.md`](docs/PROJECT-STRUCTURE.md) | **Repo tree**, package DAG, CI, colocated tests |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | **Canonical** layered architecture + flows |
 | [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) | **Master project OpenSpec** |
 | [`docs/mcp-setup.md`](docs/mcp-setup.md) | **MCP E2E setup** (Cursor / Claude Desktop) |
 | [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md) | MCP Server OpenSpec |

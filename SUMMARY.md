@@ -162,6 +162,7 @@ Last maintainer smoke log: [`docs/judge-final-checklist.md`](docs/judge-final-ch
 |----------|----------|
 | **Judges** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) · [`SUBMISSION.md`](SUBMISSION.md) |
 | **Workshop alignment** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
+| **Repo layout** | [`docs/PROJECT-STRUCTURE.md`](docs/PROJECT-STRUCTURE.md) |
 | **Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [diagram SVG](docs/diagrams/memwalpp-merged-architecture.svg) |
 | **Vision & goals** | [`PROJECT.md`](PROJECT.md) |
 | **On-chain IDs** | [`docs/deploy.md`](docs/deploy.md) |

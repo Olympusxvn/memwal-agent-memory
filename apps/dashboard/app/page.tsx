@@ -126,7 +126,8 @@ export default function HomePage() {
               <strong>agent:demo</strong> — seed memory, hybrid recall, hook lifecycle (local-first → optional Walrus).
             </li>
             <li>
-              <strong>agent:bounty-hunt</strong> — poster + hunter agents; same sync path with bounty fulfillment stub.
+              <strong>agent:bounty-hunt</strong> — poster + hunter agents; hybrid sync is real; bounty metadata is a{" "}
+              <strong>labeled stub</strong> (Move modules + mainnet IDs are real — see SUBMISSION.md).
             </li>
             <li>
               Connect wallet on <Link href="/kiosk">Memory Kiosk</Link> for live <code>post_bounty</code> PTBs
