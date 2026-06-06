@@ -16,7 +16,7 @@
 
 **MemWal Agent Memory** lets autonomous agents **remember, recall, prove, share, and monetize** knowledge — without being locked to one app or losing context every session.
 
-It **wraps** the official [MemWal](https://docs.memwal.ai/) SDK (Walrus Memory). It does **not** fork Mysten’s stack. It adds:
+It **wraps** the official [Walrus Memory](https://docs.wal.app) SDK (`@mysten-incubation/memwal`). It does **not** fork Mysten’s stack. It adds:
 
 - **Local-first** speed and privacy (SQLite + vectors)
 - **Controlled promotion** to Walrus (redaction + quality gates)

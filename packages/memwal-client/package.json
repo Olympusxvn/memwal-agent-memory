@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@memwalpp/shared": "workspace:*",
-    "@mysten-incubation/memwal": "^0.0.3",
+    "@mysten-incubation/memwal": "^0.0.7",
     "@mysten/sui": "^2.16.2"
   },
   "devDependencies": {

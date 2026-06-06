@@ -13,6 +13,7 @@ function mockService(overrides: Partial<MemWalService> = {}): MemWalService {
     isLive: true,
     remember: vi.fn().mockResolvedValue({ jobId: "job-1", blobId: "0x" + "a".repeat(64) }),
     recall: vi.fn().mockResolvedValue([{ text: "hit-one", blobId: "0x" + "b".repeat(64), distance: 0.1 }]),
+    restore: vi.fn().mockResolvedValue({ restored: 1, skipped: 0, total: 1 }),
     health: vi.fn().mockResolvedValue({ ok: true, version: "1.0" }),
     destroy: vi.fn(),
     ...overrides,
@@ -37,6 +38,7 @@ describe("DurableMemoryStore", () => {
       isLive: false,
       remember: vi.fn(),
       recall: vi.fn(),
+      restore: vi.fn(),
       health: vi.fn(),
       destroy: vi.fn(),
     };

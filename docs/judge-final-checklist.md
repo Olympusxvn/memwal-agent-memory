@@ -36,7 +36,9 @@ Offline `Not promoted (offline)` / `Chain offline` in demos is **expected** with
 | Move tests | Sui CLI | `pnpm contracts:test` | 8 Move tests |
 | Full CI | — | `pnpm check && pnpm test` | Typecheck + unit tests |
 
-Use **mainnet** relayer (`https://relayer.memwal.ai`) for live push — workshop kit uses **staging** by default.
+Use **mainnet** relayer (`https://relayer.memory.walrus.xyz`) for live push — workshop kit uses **staging** (`https://relayer-staging.memory.walrus.xyz`) by default.
+
+Optional restore proof (with `MEMWAL_*` in `.env`): `pnpm memwal:restore-smoke`.
 
 ---
 

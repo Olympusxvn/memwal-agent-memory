@@ -1,6 +1,6 @@
 # Cursor handoff — MemWal Agent Memory
 
-Session resume notes (**no private keys**). Prefer canonical docs: [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md), [deploy.md](deploy.md).
+Session resume notes (**no private keys**). Prefer canonical docs: [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md), [deploy.md](deploy.md), [walrus-memory-alignment.md](walrus-memory-alignment.md).
 
 ## GitHub
 

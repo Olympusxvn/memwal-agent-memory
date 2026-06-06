@@ -17,7 +17,7 @@ export {
 export type { MemWalClientConfig } from "./config.js";
 export { loadMemWalConfigFromEnv, assertMemWalConfig } from "./config.js";
 
-export type { MemWalService, MemWalRecallHit } from "./service.js";
+export type { MemWalService, MemWalRecallHit, MemWalRestoreResult } from "./service.js";
 export { createMemWalService, tryCreateMemWalServiceFromEnv } from "./service.js";
 
 export type {

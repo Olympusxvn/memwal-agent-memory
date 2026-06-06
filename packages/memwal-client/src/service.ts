@@ -10,12 +10,19 @@ export interface MemWalRecallHit {
   distance?: number;
 }
 
+export interface MemWalRestoreResult {
+  restored: number;
+  skipped: number;
+  total: number;
+}
+
 export interface MemWalService {
   remember(
     text: string,
     opts?: { namespace?: string; metadata?: Record<string, string> },
   ): Promise<{ jobId?: string; blobId?: string }>;
   recall(query: string, limit?: number, namespace?: string): Promise<MemWalRecallHit[]>;
+  restore(namespace: string, limit?: number): Promise<MemWalRestoreResult>;
   health(): Promise<{ ok: boolean; version?: string }>;
   destroy(): void;
   readonly isLive: boolean;
@@ -33,6 +40,14 @@ class OfflineMemWalService implements MemWalService {
   }
 
   recall(): Promise<MemWalRecallHit[]> {
+    return Promise.reject(
+      new MemWalConfigError(
+        "MemWal is not configured. Set MEMWAL_PRIVATE_KEY and MEMWAL_ACCOUNT_ID (see .env.example).",
+      ),
+    );
+  }
+
+  restore(): Promise<MemWalRestoreResult> {
     return Promise.reject(
       new MemWalConfigError(
         "MemWal is not configured. Set MEMWAL_PRIVATE_KEY and MEMWAL_ACCOUNT_ID (see .env.example).",
@@ -83,12 +98,22 @@ class LiveMemWalService implements MemWalService {
       throw new RangeError("recall: query must be non-empty");
     }
     const ns = namespace ?? this.defaultNamespace;
-    const result = await this.inner.recall(query, limit, ns);
+    const result = await this.inner.recall({ query, limit, namespace: ns });
     return result.results.map((m) => ({
       text: m.text,
       blobId: m.blob_id,
       distance: m.distance,
     }));
+  }
+
+  async restore(namespace: string, limit = 10): Promise<MemWalRestoreResult> {
+    const ns = namespace.trim() || this.defaultNamespace || "default";
+    const result = await this.inner.restore(ns, limit);
+    return {
+      restored: result.restored,
+      skipped: result.skipped,
+      total: result.total,
+    };
   }
 
   async health(): Promise<{ ok: boolean; version?: string }> {

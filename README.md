@@ -67,7 +67,7 @@ No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PAS
 
 ## Overview
 
-MemWal Agent Memory combines **Walrus + [MemWal](https://docs.memwal.ai)** (durable, encrypted, verifiable recall) with **Sui Move** (MemoryPack-style NFTs, marketplace, bounties, royalties, delegate bridge) and **NemoClaw / OpenClaw** orchestration (hooks, skills, bounty agents). A **hybrid memory plane** keeps work **local-first** (fast recall, quality gates, PII redaction) and syncs upward only when memories meet policy — then **Walrus** holds the cryptographic truth judges can verify.
+MemWal Agent Memory combines **Walrus + [Walrus Memory](https://docs.wal.app)** (durable, encrypted, verifiable recall) with **Sui Move** (MemoryPack-style NFTs, marketplace, bounties, royalties, delegate bridge) and **NemoClaw / OpenClaw** orchestration (hooks, skills, bounty agents). A **hybrid memory plane** keeps work **local-first** (fast recall, quality gates, PII redaction) and syncs upward only when memories meet policy — then **Walrus** holds the cryptographic truth judges can verify.
 
 **Canonical architecture (merged, final):** [`docs/diagrams/memwalpp-merged-architecture.svg`](docs/diagrams/memwalpp-merged-architecture.svg)
 
@@ -381,9 +381,9 @@ External links and key in-repo docs for hackathon citation, judges, product MCP,
 
 | Resource | URL |
 |----------|-----|
-| MemWal docs | https://docs.memwal.ai/ |
-| What is MemWal? | https://docs.memwal.ai/getting-started/what-is-memwal |
-| MemWal LLM index | https://docs.memwal.ai/llms.txt |
+| Walrus Memory docs | https://docs.wal.app |
+| Walrus Memory LLM index | https://docs.wal.app/llms.txt |
+| Alignment backlog (P2/P3) | [`docs/walrus-memory-alignment.md`](docs/walrus-memory-alignment.md) |
 | MemWal GitHub | https://github.com/MystenLabs/MemWal |
 | npm SDK | `@mysten-incubation/memwal` |
 | OpenClaw plugin | `@mysten-incubation/oc-memwal` — [MemWal README](https://github.com/MystenLabs/MemWal#openclaw--nemoclaw-plugin) |

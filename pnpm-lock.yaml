@@ -189,8 +189,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@mysten-incubation/memwal':
-        specifier: ^0.0.3
-        version: 0.0.3(@mysten/seal@1.1.3(@mysten/sui@2.16.2(typescript@5.9.3)))(@mysten/sui@2.16.2(typescript@5.9.3))(zod@3.25.76)
+        specifier: ^0.0.7
+        version: 0.0.7(@mysten/seal@1.1.3(@mysten/sui@2.16.2(typescript@5.9.3)))(@mysten/sui@2.16.2(typescript@5.9.3))(zod@3.25.76)
       '@mysten/sui':
         specifier: ^2.16.2
         version: 2.16.2(typescript@5.9.3)
@@ -673,8 +673,8 @@ packages:
       '@cfworker/json-schema':
         optional: true
 
-  '@mysten-incubation/memwal@0.0.3':
-    resolution: {integrity: sha512-TafWL5MPEOPXmQstap5YP/5j6tm6x+ZJXTnEG6KKoIfyE7krKZ8lIZCsa6EcS4hrzY1rDtr+El5RxjmKlGhCig==}
+  '@mysten-incubation/memwal@0.0.7':
+    resolution: {integrity: sha512-jZycnsstVX/aP33OyJM3bTciwFiiOEcZV4XfhHGbqh8e9pMV/pbOAfD5m9gxrD3V8en29QGAISBsiMIdP3CIyg==}
     peerDependencies:
       '@mysten/seal': '>=1.1.0'
       '@mysten/sui': '>=2.5.0'
@@ -3751,7 +3751,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mysten-incubation/memwal@0.0.3(@mysten/seal@1.1.3(@mysten/sui@2.16.2(typescript@5.9.3)))(@mysten/sui@2.16.2(typescript@5.9.3))(zod@3.25.76)':
+  '@mysten-incubation/memwal@0.0.7(@mysten/seal@1.1.3(@mysten/sui@2.16.2(typescript@5.9.3)))(@mysten/sui@2.16.2(typescript@5.9.3))(zod@3.25.76)':
     dependencies:
       '@mysten/seal': 1.1.3(@mysten/sui@2.16.2(typescript@5.9.3))
       '@mysten/sui': 2.16.2(typescript@5.9.3)

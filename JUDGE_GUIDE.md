@@ -25,7 +25,7 @@
 | **Official stack?** | **Walrus Memory (MemWal)** — `remember` / `recall` / Walrus blobs + Sui account. We **wrap** [`@mysten-incubation/memwal`](https://www.npmjs.com/package/@mysten-incubation/memwal), not fork it. |
 | **Workshop relationship?** | Built on the [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e) curriculum ([kit](https://github.com/DionisisLougaris/walrus-memory-workshop-kit) · [`SKILL.md`](https://github.com/DionisisLougaris/walrus-memory-workshop-kit/blob/main/SKILL.md)). **Judges verify this repo**, not the kit. |
 | **What we added?** | **Hybrid** local SQLite + redact/quality gates → promote to Walrus; **MCP** for any agent; **mainnet Move** marketplace + bounties tied to `walrus_blob_id`. |
-| **Staging vs mainnet?** | Workshop uses **staging.memwal.ai**. This submission’s **on-chain IDs are mainnet** — see [On-chain](#path-d--contracts--ci-5-min-optional) and [`docs/deploy.md`](docs/deploy.md). Live MemWal push uses **mainnet** relayer in [`.env.example`](.env.example). |
+| **Staging vs mainnet?** | Workshop uses **staging.memory.walrus.xyz**. This submission’s **on-chain IDs are mainnet** — see [On-chain](#path-d--contracts--ci-5-min-optional) and [`docs/deploy.md`](docs/deploy.md). Live Walrus push uses **mainnet** relayer `https://relayer.memory.walrus.xyz` in [`.env.example`](.env.example). |
 
 **Extension map (workshop → here):** multi-namespace → namespaces in sync/MCP; verify Walrus → `walrusBlobId` + bounty fulfillment; permissions → mainnet package + deploy doc. Details: [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md).
 
@@ -45,7 +45,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 | `pnpm agent:demo` | Hybrid hooks + 5-step narrative |
 | `pnpm agent:bounty-hunt` | Poster + Hunter agents; recall injects context |
 
-Optional live Walrus blob: [Path B](#path-b--live-walrus-blob-id-2-min-optional).
+Optional live Walrus blob: [Path B](#path-b--live-walrus-blob-id-2-min-optional). Optional **restore proof**: [Path B+](#path-b-restore-proof-1-min-optional).
 
 ---
 
@@ -151,6 +151,29 @@ MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt
 |-------|----------|
 | Poster step 3 | `✓ Promoted — blob 0x…` (or similar) |
 | Durable line | `Durable: live` in step 1 banner |
+
+Set `MEMWAL_WAIT_FOR_REMEMBER=1` if recall right after promote returns empty (async upload takes ~5–15s).
+
+---
+
+## Path B+ — Restore proof (~+1 min, optional)
+
+Proves Walrus blobs can rebuild the relayer search index (workshop extension B).
+
+1. Same `.env` as Path B (`MEMWAL_PRIVATE_KEY`, `MEMWAL_ACCOUNT_ID`; relayer defaults to mainnet in `.env.example`).
+2. Run:
+
+```bash
+pnpm memwal:restore-smoke
+```
+
+| Check | Expected |
+|-------|----------|
+| Exit code | `0` |
+| Output | `restored=N skipped=M total=T` for your `MEMWAL_NAMESPACE` |
+| Meaning | Namespace re-indexed from Walrus — not just relayer cache |
+
+Then `recall` the same namespace to confirm search works. Official tool: `memwal_restore` in `@mysten-incubation/memwal-mcp`.
 
 ---
 

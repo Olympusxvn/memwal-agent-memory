@@ -11,7 +11,7 @@ See repo root [`.env.example`](../../.env.example). Required for a **live** clie
 
 - `MEMWAL_PRIVATE_KEY` — delegate key (ADR-002: never log)
 - `MEMWAL_ACCOUNT_ID`
-- `MEMWAL_SERVER_URL` — relayer URL
+- `MEMWAL_SERVER_URL` — relayer URL (default: `https://relayer.memory.walrus.xyz`)
 
 Optional: `MEMWAL_NAMESPACE`, `MEMWAL_WAIT_FOR_REMEMBER`, `MEMWAL_RETRY_MAX`, `MEMWAL_MIN_REQUEST_INTERVAL_MS`.
 
@@ -38,6 +38,7 @@ const svc = tryCreateMemWalServiceFromEnv();
 if (svc.isLive) {
   await svc.remember("text", { namespace: "my-ns" });
   const hits = await svc.recall("query", 10, "my-ns");
+  await svc.restore("my-ns", 10); // re-index from Walrus blobs
   svc.destroy();
 }
 ```

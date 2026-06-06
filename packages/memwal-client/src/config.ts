@@ -31,7 +31,8 @@ export function loadMemWalConfigFromEnv(
   if (!key || !accountId) {
     return null;
   }
-  const serverUrl = trimOrEmpty(env.MEMWAL_SERVER_URL) || undefined;
+  const serverUrl =
+    trimOrEmpty(env.MEMWAL_SERVER_URL) || "https://relayer.memory.walrus.xyz";
   const namespace = trimOrEmpty(env.MEMWAL_NAMESPACE) || "default";
   const waitRaw = trimOrEmpty(env.MEMWAL_WAIT_FOR_REMEMBER).toLowerCase();
   const waitForRemember = waitRaw === "1" || waitRaw === "true" || waitRaw === "yes";

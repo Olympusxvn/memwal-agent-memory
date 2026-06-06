@@ -92,6 +92,7 @@ Apps **must not** be imported by `packages/*`.
 | **Contributors** | [README.md](../README.md) → [ARCHITECTURE.md](ARCHITECTURE.md) → [PROJECT.md](../PROJECT.md) |
 | **On-chain** | [deploy.md](deploy.md) |
 | **Workshop context** | [judge-walrus-memory-workshop.md](judge-walrus-memory-workshop.md) |
+| **Walrus Memory backlog** | [walrus-memory-alignment.md](walrus-memory-alignment.md) |
 
 Internal planning (`docs/process/plans/`, legacy `SOURCE-memwalpp.md`) — optional; not required for judges.
 

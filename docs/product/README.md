@@ -1,6 +1,6 @@
 # MemWal MCP — Product guide (Cursor & Claude)
 
-**Project memory for AI assistants.** Local-first by default; optional Walrus backup via [MemWal](https://docs.memwal.ai/).
+**Project memory for AI assistants.** Local-first by default; optional Walrus backup via [Walrus Memory](https://docs.wal.app).
 
 **Live intro:** https://memwalpp-dashboard.vercel.app/product
 
@@ -19,6 +19,18 @@
 | **Best for** | Daily Cursor / Claude coding | Backup, second machine, team durable layer |
 
 Chain marketplace tools are **not** part of this product guide — see [`docs/deploy.md`](../deploy.md) for operators.
+
+---
+
+## Official Walrus Memory MCP vs `@memwalpp/mcp`
+
+| Use case | Package | Setup |
+|----------|---------|-------|
+| **Pure Walrus Memory** (remember/recall/analyze/restore on relayer) | [`@mysten-incubation/memwal-mcp`](https://www.npmjs.com/package/@mysten-incubation/memwal-mcp) | `npx -y @mysten-incubation/memwal-mcp --prod` → agent calls `memwal_login` |
+| **Hybrid project memory** (local SQLite + optional promote + redact gate) | **`@memwalpp/mcp`** (this repo) | `pnpm mcp:build` + [`.cursor/mcp.json`](../../.cursor/mcp.json) |
+| **Hackathon judges (no keys)** | **`@memwalpp/mcp`** | `pnpm mcp:e2e` |
+
+They complement each other — not replacements. Post-hackathon alignment notes: [`walrus-memory-alignment.md`](../walrus-memory-alignment.md).
 
 ---
 
@@ -64,10 +76,10 @@ Add to MCP server `env` (never commit keys):
 ```bash
 MEMWAL_PRIVATE_KEY=...      # delegate only
 MEMWAL_ACCOUNT_ID=...
-MEMWAL_SERVER_URL=https://...
+MEMWAL_SERVER_URL=https://relayer.memory.walrus.xyz
 ```
 
-Then use MCP tools with `promote: true` on `remember`, or call `sync` / `promote`. See [MemWal quick start](https://docs.memwal.ai/) and [`.env.example`](../../.env.example).
+Then use MCP tools with `promote: true` on `remember`, or call `sync` / `promote`. See [Walrus Memory quick start](https://docs.wal.app) and [`.env.example`](../../.env.example).
 
 ---
 
