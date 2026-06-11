@@ -103,22 +103,17 @@ class LiveDurableMemoryStore implements DurableMemoryStore {
     return this.runWithRetry(async () => {
       const result = await this.service.remember(record.content, {
         namespace,
+        wait,
         metadata: {
           ...record.metadata,
           recordId: record.id,
           contentVersion: bumpContentVersion(record.metadata),
         },
       });
-      let blobId = result.blobId;
-      let jobId = result.jobId;
-      if (wait && jobId && !blobId) {
-        // Facade already waited when waitForRemember on service; blobId should be set.
-        blobId = result.blobId;
-      }
       return {
         recordId: record.id,
-        jobId,
-        blobId,
+        jobId: result.jobId,
+        blobId: result.blobId,
         namespace,
       };
     });
@@ -150,7 +145,7 @@ class LiveDurableMemoryStore implements DurableMemoryStore {
     }
     const ns = opts?.namespace ?? this.defaultNamespace;
     this.tombstones.add(`${ns}:${recordId}`);
-    // Remote delete not exposed in @mysten-incubation/memwal v0.0.3 — tombstone only.
+    // Remote delete not exposed by @mysten-incubation/memwal — tombstone only.
   }
 
   async listVersions(recordId: string, opts?: NamespaceOpts): Promise<MemoryVersion[]> {
@@ -246,11 +241,15 @@ export function applyRememberResult(
   return {
     ...record,
     namespace: result.namespace,
-    synced: Boolean(result.blobId),
+    // "synced" = durable layer accepted the write (jobId) or finished it (blobId).
+    // Async remember returns only a jobId; marking synced avoids re-pushing it.
+    synced: Boolean(result.blobId || result.jobId),
     walrusBlobId,
     metadata: {
       ...record.metadata,
       lastJobId: result.jobId ?? record.metadata?.lastJobId ?? "",
+      // "1" until the blob id is known (async remember without wait).
+      walrusPending: result.blobId ? "0" : "1",
       promotedAtMs: String(Date.now()),
       contentVersion: bumpContentVersion(record.metadata),
     },

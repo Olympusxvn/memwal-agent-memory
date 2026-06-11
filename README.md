@@ -239,11 +239,13 @@ pnpm contracts:info    # print package ID + PTB target examples
 
 ```bash
 pnpm install
+pnpm mcp:build           # build the MCP server
+pnpm mcp:e2e             # stdio client → remember/recall (MCP verification)
 pnpm agent:demo          # hybrid memory + hooks (offline OK)
 pnpm agent:bounty-hunt   # poster + hunter swarm
 ```
 
-Expected: colored step output, `── RESULT ──` summary, **exit 0**.
+Expected: each step prints colored output ending in a `── RESULT ──` summary, **exit 0**. (Same steps as the "For judges" one-liner at the top.)
 
 ### Developer path
 
@@ -263,7 +265,7 @@ pnpm --filter @memwalpp/core test
 # .env — delegate key only (ADR-002); never commit
 MEMWAL_PRIVATE_KEY=...
 MEMWAL_ACCOUNT_ID=...
-MEMWAL_SERVER_URL=http://localhost:3001
+MEMWAL_SERVER_URL=https://relayer.memory.walrus.xyz   # mainnet relayer (see .env.example)
 MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt
 ```
 

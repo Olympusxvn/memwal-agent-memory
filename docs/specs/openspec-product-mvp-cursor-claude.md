@@ -29,7 +29,7 @@ Non-goals for MVP: dashboard, indexer, marketplace UI, npm chain tools discovery
 | Tier | Name | Requires | Value |
 |------|------|----------|-------|
 | **MVP default** | **Pro Local** | Node 20+ only | Fast recall, offline, no secrets |
-| **Add-on** | **+ Walrus Sync** | MemWal delegate + relayer ([docs.memwal.ai](https://docs.memwal.ai/)) | Durable encrypted blobs, cross-device |
+| **Add-on** | **+ Walrus Sync** | MemWal delegate + relayer ([docs.wal.app](https://docs.wal.app/)) | Durable encrypted blobs, cross-device |
 
 Chain tools (`createBounty`, …) remain **advanced / hidden** in product docs until Phase 3.
 
@@ -225,5 +225,5 @@ Docs: [Cursor MCP install links](https://cursor.com/docs/mcp/install-links).
 
 - MCP setup (technical): [`../mcp-setup.md`](../mcp-setup.md)
 - MCP OpenSpec: [`openspec-mcp-server.md`](openspec-mcp-server.md)
-- Official MemWal: [docs.memwal.ai](https://docs.memwal.ai/) · [GitHub MystenLabs/MemWal](https://github.com/MystenLabs/MemWal)
+- Official Walrus Memory: [docs.wal.app](https://docs.wal.app/) · [npm @mysten-incubation/memwal](https://www.npmjs.com/package/@mysten-incubation/memwal)
 - Judge path (separate): [`../../JUDGE_GUIDE.md`](../../JUDGE_GUIDE.md)

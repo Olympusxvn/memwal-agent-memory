@@ -19,7 +19,12 @@ export interface MemWalRestoreResult {
 export interface MemWalService {
   remember(
     text: string,
-    opts?: { namespace?: string; metadata?: Record<string, string> },
+    opts?: {
+      namespace?: string;
+      metadata?: Record<string, string>;
+      /** Block until the Walrus blob id is known (overrides client default). */
+      wait?: boolean;
+    },
   ): Promise<{ jobId?: string; blobId?: string }>;
   recall(query: string, limit?: number, namespace?: string): Promise<MemWalRecallHit[]>;
   restore(namespace: string, limit?: number): Promise<MemWalRestoreResult>;
@@ -79,13 +84,18 @@ class LiveMemWalService implements MemWalService {
 
   async remember(
     text: string,
-    opts?: { namespace?: string; metadata?: Record<string, string> },
+    opts?: {
+      namespace?: string;
+      metadata?: Record<string, string>;
+      wait?: boolean;
+    },
   ): Promise<{ jobId?: string; blobId?: string }> {
     if (!text.trim()) {
       throw new RangeError("remember: text must be non-empty");
     }
     const ns = opts?.namespace ?? opts?.metadata?.namespace ?? this.defaultNamespace;
-    if (this.waitForRemember) {
+    const wait = opts?.wait ?? this.waitForRemember;
+    if (wait) {
       const result = await this.inner.rememberAndWait(text, ns);
       return { jobId: result.job_id, blobId: result.blob_id };
     }

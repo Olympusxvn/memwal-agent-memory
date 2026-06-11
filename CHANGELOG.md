@@ -6,6 +6,30 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fixed — sync / Walrus correctness (2026-06-11)
+
+Clean-code + clear-docs review pass. All changes verified: `pnpm check` (12/12), full test suite (local-memory 23 · core 8 · memwal-client 10 · mcp 14), `pnpm build` (8/8), and both judge demos (`agent:demo`, `agent:bounty-hunt`) exit 0.
+
+- **Durable `wait` pipeline:** `MemWalService.remember` now accepts a per-call `wait` flag and `LiveDurableMemoryStore` forwards it to the SDK (`rememberAndWait`). Previously `MemorySyncService.waitForPush` had **no effect** (the durable store computed `wait` but never passed it down); removed the dead no-op block.
+- **`synced` semantics unified:** both `applyRememberResult` and the inline push path in `MemorySyncService` now use `synced = Boolean(blobId || jobId)` ("handed off to the durable layer") and set a `walrusPending` metadata flag (`"1"` until the blob id is known). Avoids re-push loops on async remember while staying honest about pending blobs.
+- **Duplicate-on-pull:** `pullQuery` now reconciles durable hits to existing local rows by `walrusBlobId`. The relayer `recall` API returns no server-readable metadata (Architecture A), so `recordId` cannot be recovered from a hit — matching on blob id prevents creating duplicate `dur-*` rows on re-pull.
+- **Conflict merge:** `local_wins` now preserves **unsynced** local edits (previously only kept local content when `synced` was already true); removed the redundant `merge_metadata` branch that duplicated the default.
+- **PII redaction:** confirmed the global-regex reuse in `redactForUpstream` is **not** a bug (`String.replace` resets `lastIndex`, unlike `.test()/.exec()`); added a regression test covering 5 consecutive redactions.
+
+### Changed — shared runtime bootstrap (2026-06-11)
+
+- **New `@memwalpp/local-memory` exports:** `createSharedLocalStore` + `sqliteNativeAvailable` (in `store/create-shared-local-store.ts`). The SQLite-gate + in-memory fallback now lives in one place; `apps/agent-swarm` and `@memwalpp/mcp` reuse it instead of duplicating ~60 lines of `node:fs`/`require("better-sqlite3")` wiring.
+- **Removed dead code:** `handleChainStub` in `@memwalpp/mcp` (no call sites).
+- **Kept on purpose (with rationale):** `SyncQueue` (documented optional API in `openspec-memory-sync-service.md`); the dashboard hash helpers (`node:crypto` is sync, browser needs async Web Crypto — cannot share); the stricter test-only `sqliteNativeAvailable` gates (they open a real DB, not just `require`).
+
+### Docs — judge alignment fixes (2026-06-11)
+
+- **`packages/sui-contracts/README.md`:** marked Move v2 as **live on mainnet** (removed stale "operator bootstrap pending" + `--discover`), added published-at + v2 object IDs, and fixed the `moveTarget()` example to use published-at `0x9de4…` instead of original `0x48db…`. Same `moveTarget` id fix in `docs/specs/openspec-move-contracts-refactor.md`.
+- **Unified judge quickstart:** README "Quick start" and `SUBMISSION.md` §4 now include `pnpm mcp:build` + `pnpm mcp:e2e` so every judge path covers MCP verification.
+- **`README.md`:** `MEMWAL_SERVER_URL` example fixed `http://localhost:3001` → `https://relayer.memory.walrus.xyz` (matches `.env.example`).
+- **Phase status reconciled:** `SUBMISSION.md` phase table aligned with `ROADMAP.md` (phases 4 & 8 shown as partial ◐); fixed ROADMAP internal overview-vs-detail mismatches for phases 7/8/9 (v2 now "mainnet").
+- **Naming + small fixes:** added a naming glossary to `JUDGE_GUIDE.md`; refreshed stale `MemWal++` titles (`docs/CLAUDE.md`, `docs/GIT-AND-VERSIONING.md`, `.env.example` header) to **MemWal Agent Memory**; reordered Path D before Path E in `JUDGE_GUIDE.md`; fixed `SUMMARY.md` ADR-012 link, a stray Vietnamese clause in `docs/ARCHITECTURE.md`, and `docs.memwal.ai` → `docs.wal.app` in `openspec-product-mvp-cursor-claude.md`.
+
 ### Changed — project rebrand (2026-05-31)
 
 - **Renamed project:** **MemWal++** → **MemWal Agent Memory** (`memwal-agent-memory`).

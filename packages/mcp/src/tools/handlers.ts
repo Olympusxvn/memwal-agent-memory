@@ -185,14 +185,6 @@ export async function handleGetStats(rt: ToolRuntime): Promise<Record<string, un
   };
 }
 
-export function handleChainStub(toolName: string): Record<string, unknown> {
-  return {
-    skipReason: "not_implemented",
-    tool: toolName,
-    message: "On-chain PTB wiring is scheduled for Sprint S4 (Phase 8).",
-  };
-}
-
 export function handleGetLineage(): Record<string, unknown> {
   return {
     skipReason: "indexer_pending",

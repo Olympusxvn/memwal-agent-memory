@@ -56,6 +56,19 @@ describe("DurableMemoryStore", () => {
     expect(svc.remember).toHaveBeenCalledOnce();
   });
 
+  it("remember forwards the wait flag to the service", async () => {
+    const remember = vi
+      .fn()
+      .mockResolvedValue({ jobId: "job-1", blobId: "0x" + "a".repeat(64) });
+    const svc = mockService({ remember });
+    const store = createDurableMemoryStore(svc);
+    await store.remember(sampleRecord(), { wait: true });
+    expect(remember).toHaveBeenCalledWith(
+      "hello durable",
+      expect.objectContaining({ wait: true }),
+    );
+  });
+
   it("search returns recall hits", async () => {
     const svc = mockService();
     const store = createDurableMemoryStore(svc);
@@ -82,5 +95,18 @@ describe("DurableMemoryStore", () => {
     expect(updated.synced).toBe(true);
     expect(updated.walrusBlobId).toBeDefined();
     expect(updated.metadata?.lastJobId).toBe("job-1");
+    expect(updated.metadata?.walrusPending).toBe("0");
+  });
+
+  it("applyRememberResult marks synced+pending when only a jobId is returned", () => {
+    const updated = applyRememberResult(sampleRecord(), {
+      recordId: "rec-1",
+      jobId: "job-async",
+      namespace: "ns1",
+    });
+    // Async remember (no wait): accepted by the relayer but blob id not known yet.
+    expect(updated.synced).toBe(true);
+    expect(updated.walrusBlobId).toBeUndefined();
+    expect(updated.metadata?.walrusPending).toBe("1");
   });
 });

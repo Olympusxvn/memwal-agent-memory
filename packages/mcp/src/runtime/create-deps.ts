@@ -1,13 +1,9 @@
-import fs from "node:fs";
-import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 
-const require = createRequire(import.meta.url);
-
 import { createMemorySyncService, noopSyncLogger } from "@memwalpp/core";
 import type { LocalMemoryStore } from "@memwalpp/local-memory";
-import { InMemoryLocalMemoryStore, SqliteLocalStore } from "@memwalpp/local-memory";
+import { createSharedLocalStore } from "@memwalpp/local-memory";
 import type { ChainClient } from "@memwalpp/memwal-client";
 import {
   createDurableMemoryStore,
@@ -18,35 +14,14 @@ import {
 import { assertNoOwnerKeys } from "../middleware/auth.js";
 import type { MemWalMcpConfig, MemWalMcpDeps } from "../types.js";
 
-function sqliteNativeAvailable(): boolean {
-  try {
-    require("better-sqlite3");
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 function createLocalStore(namespace: string): LocalMemoryStore {
-  if (process.env.MEMWAL_MCP_USE_MEMORY?.trim() === "1") {
-    return new InMemoryLocalMemoryStore();
-  }
-
-  if (!sqliteNativeAvailable()) {
-    return new InMemoryLocalMemoryStore();
-  }
-
   const baseDir =
     process.env.MEMWAL_MCP_DATA_DIR?.trim() ||
     path.join(os.homedir(), ".memwal-agent-memory", "mcp");
-  fs.mkdirSync(baseDir, { recursive: true });
-  const dbPath = path.join(baseDir, `${namespace.replace(/[^a-z0-9-_]/gi, "_")}.db`);
-
-  try {
-    return new SqliteLocalStore(dbPath);
-  } catch {
-    return new InMemoryLocalMemoryStore();
-  }
+  return createSharedLocalStore(namespace, {
+    forceMemory: process.env.MEMWAL_MCP_USE_MEMORY?.trim() === "1",
+    baseDir,
+  }).store;
 }
 
 export function resolveMcpConfig(

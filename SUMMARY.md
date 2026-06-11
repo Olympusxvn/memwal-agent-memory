@@ -174,4 +174,4 @@ Last maintainer smoke log: [`docs/judge-final-checklist.md`](docs/judge-final-ch
 
 ## Acknowledgements
 
-Built on **Sui**, **Walrus**, and **MemWal** (Mysten / Walrus Foundation), the [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e), and open agent tooling ([MCP](https://modelcontextprotocol.io/), [NemoClaw](https://github.com/NVIDIA/NemoClaw)). AI-assisted development is disclosed in [ADR-012](docs/decisions/).
+Built on **Sui**, **Walrus**, and **MemWal** (Mysten / Walrus Foundation), the [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e), and open agent tooling ([MCP](https://modelcontextprotocol.io/), [NemoClaw](https://github.com/NVIDIA/NemoClaw)). AI-assisted development is disclosed in [ADR-012](docs/decisions/ADR-012.md).

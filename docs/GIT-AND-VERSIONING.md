@@ -1,4 +1,4 @@
-# Git branching and versioning — MemWal++
+# Git branching and versioning — MemWal Agent Memory
 
 Optimized for a **short, high-intensity hackathon** with a **single integration line** and optional demo tags.
 

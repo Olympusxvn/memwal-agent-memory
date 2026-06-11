@@ -12,4 +12,13 @@ export { InMemoryLocalMemoryStore } from "./store/in-memory-store.js";
 export { SqliteLocalStore } from "./store/sqlite/SQLiteLocalStore.js";
 export type { SQLiteLocalStoreOptions } from "./store/sqlite/SQLiteLocalStore.js";
 
+export {
+  createSharedLocalStore,
+  sqliteNativeAvailable,
+} from "./store/create-shared-local-store.js";
+export type {
+  CreateSharedLocalStoreOptions,
+  SharedLocalStore,
+} from "./store/create-shared-local-store.js";
+
 export * from "./adapters/index.js";

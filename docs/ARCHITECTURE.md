@@ -2,8 +2,8 @@
 
 **Project:** `memwal-agent-memory` · **Track:** Sui Overflow 2026 — Walrus Track  
 **Mainnet package (judges):** `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`  
-**Status:** canonical reference for implementation and reviews (ưu tiên đọc cho **Cursor / AI agents** trước khi sửa code).  
-**Diagram:** [`diagrams/memwalpp-merged-architecture.svg`](diagrams/memwalpp-merged-architecture.svg) (`memwalpp_merged_architecture.svg`).  
+**Status:** canonical reference for implementation and reviews (read first for Cursor / AI agents before changing code).  
+**Diagram:** [`diagrams/memwalpp-merged-architecture.svg`](diagrams/memwalpp-merged-architecture.svg).  
 **Decisions:** [`decisions/`](decisions/) (ADR-001 … ADR-013). **Monorepo boundaries:** [ADR-013 — Monorepo layout](decisions/ADR-013.md).
 
 **OpenSpec (read first):**

@@ -1,6 +1,6 @@
 import type { DurableMemoryStore } from "@memwalpp/memwal-client";
 import { MemWalConfigError } from "@memwalpp/memwal-client";
-import type { LocalMemoryStore } from "@memwalpp/local-memory";
+import { LOCAL_MEMORY_RECALL_MAX, type LocalMemoryStore } from "@memwalpp/local-memory";
 import type { MemoryRecord, ObjectId } from "@memwalpp/shared";
 
 import { allowUpstream, isTombstone, mergeDurableHitIntoRecord } from "./merge.js";
@@ -119,7 +119,9 @@ class MemorySyncServiceImpl implements MemorySyncService {
 
       const synced: MemoryRecord = {
         ...prePush,
-        synced: true,
+        // Durable layer accepted (jobId) or finished (blobId) the write; either
+        // way the record is handed off, so don't re-push it on the next sync.
+        synced: Boolean(durableResult.blobId || durableResult.jobId),
         updatedAtMs: Date.now(),
         walrusBlobId: durableResult.blobId
           ? (durableResult.blobId as ObjectId)
@@ -128,6 +130,7 @@ class MemorySyncServiceImpl implements MemorySyncService {
           ...(prePush.metadata ?? {}),
           durableNamespace: durableResult.namespace,
           jobId: durableResult.jobId ?? "",
+          walrusPending: durableResult.blobId ? "0" : "1",
           syncedAtMs: String(Date.now()),
         },
       };
@@ -175,12 +178,17 @@ class MemorySyncServiceImpl implements MemorySyncService {
 
     try {
       const durableHits = await this.durable.search(q, { namespace, limit });
+      // The relayer recall API returns only { text, blobId, distance } (no
+      // server-readable metadata), so a hit usually has no recordId to reconcile
+      // against. Index local rows by walrusBlobId to re-attach pulled hits to the
+      // record that produced them instead of creating duplicate `dur-*` rows.
+      const byBlobId = await this.indexLocalByBlobId(namespace);
       for (let i = 0; i < durableHits.length; i++) {
         const hit = durableHits[i]!;
         const recordId = hit.metadata?.recordId;
-        const existing = recordId
-          ? await this.local.getById(recordId)
-          : undefined;
+        const existing =
+          (recordId ? await this.local.getById(recordId) : undefined) ??
+          (hit.blobId ? byBlobId.get(hit.blobId) : undefined);
         const merged = mergeDurableHitIntoRecord(
           hit,
           namespace,
@@ -202,6 +210,24 @@ class MemorySyncServiceImpl implements MemorySyncService {
     }
 
     return this.local.recall({ namespace, query: q, limit });
+  }
+
+  /** Map walrusBlobId → local record for a namespace (best-effort, bounded). */
+  private async indexLocalByBlobId(
+    namespace: string,
+  ): Promise<Map<string, MemoryRecord>> {
+    const rows = await this.local.recall({
+      namespace,
+      query: "",
+      limit: LOCAL_MEMORY_RECALL_MAX,
+    });
+    const byBlobId = new Map<string, MemoryRecord>();
+    for (const row of rows) {
+      if (row.walrusBlobId) {
+        byBlobId.set(row.walrusBlobId, row);
+      }
+    }
+    return byBlobId;
   }
 
   async syncPending(opts?: { namespace?: string }): Promise<SyncMetrics> {

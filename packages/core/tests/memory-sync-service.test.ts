@@ -125,6 +125,63 @@ describe("MemorySyncService", () => {
     expect(row?.synced).toBe(true);
   });
 
+  it("pullQuery local_wins keeps unsynced local edits", async () => {
+    const local = new InMemoryLocalMemoryStore();
+    await local.remember({
+      id: "r6",
+      namespace: "default",
+      content: "local edit pending durable",
+      createdAtMs: 1,
+      updatedAtMs: 1,
+      synced: false,
+    });
+
+    const durable = liveDurable({
+      search: async () => [
+        { text: "stale durable text", blobId: "blob-r6", metadata: { recordId: "r6" } },
+      ],
+    });
+
+    const sync = createMemorySyncService({
+      local,
+      durable,
+      config: { conflictStrategy: "local_wins" },
+    });
+
+    const rows = await sync.pullQuery("durable", { forceDurable: true });
+    const row = rows.find((r) => r.id === "r6");
+    expect(row?.content).toBe("local edit pending durable");
+  });
+
+  it("pullQuery reconciles durable hits to local rows by walrusBlobId (no duplicates)", async () => {
+    const local = new InMemoryLocalMemoryStore();
+    await local.remember({
+      id: "r7",
+      namespace: "default",
+      content: "original local",
+      createdAtMs: 1,
+      updatedAtMs: 1,
+      synced: true,
+      walrusBlobId: "blob-xyz" as MemoryRecord["walrusBlobId"],
+    });
+
+    const durable = liveDurable({
+      // Relayer recall returns no metadata → only blobId is available to reconcile.
+      search: async () => [{ text: "durable copy", blobId: "blob-xyz" }],
+    });
+
+    const sync = createMemorySyncService({
+      local,
+      durable,
+      config: { conflictStrategy: "durable_wins" },
+    });
+
+    const rows = await sync.pullQuery("durable", { forceDurable: true });
+    const ids = new Set(rows.map((r) => r.id));
+    expect(ids.has("r7")).toBe(true);
+    expect([...ids].some((id) => id.startsWith("dur-"))).toBe(false);
+  });
+
   it("syncPending pushes unsynced rows", async () => {
     const local = new InMemoryLocalMemoryStore();
     const durable = liveDurable({});

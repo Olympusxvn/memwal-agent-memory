@@ -1,9 +1,5 @@
-import fs from "node:fs";
-import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
-
-const require = createRequire(import.meta.url);
 
 import {
   consoleSyncLogger,
@@ -13,7 +9,7 @@ import {
   type MemorySyncService,
 } from "@memwalpp/core";
 import type { LocalMemoryStore } from "@memwalpp/local-memory";
-import { InMemoryLocalMemoryStore, SqliteLocalStore } from "@memwalpp/local-memory";
+import { createSharedLocalStore } from "@memwalpp/local-memory";
 import {
   createDurableMemoryStore,
   tryCreateChainClientFromEnv,
@@ -30,36 +26,6 @@ export interface AgentRuntime {
   chain: ChainClient | null;
 }
 
-function sqliteNativeAvailable(): boolean {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require("better-sqlite3");
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/** Prefer SQLite on disk; fall back to in-memory when native bindings are missing. */
-export function createSharedLocalStore(namespace: string): {
-  store: LocalMemoryStore;
-  kind: "sqlite" | "memory";
-} {
-  if (!sqliteNativeAvailable()) {
-    return { store: new InMemoryLocalMemoryStore(), kind: "memory" };
-  }
-
-  const dir = path.join(os.tmpdir(), "memwalpp-agent-swarm");
-  fs.mkdirSync(dir, { recursive: true });
-  const dbPath = path.join(dir, `${namespace.replace(/[^a-z0-9-_]/gi, "_")}.db`);
-
-  try {
-    return { store: new SqliteLocalStore(dbPath), kind: "sqlite" };
-  } catch {
-    return { store: new InMemoryLocalMemoryStore(), kind: "memory" };
-  }
-}
-
 export function createAgentRuntime(options?: {
   namespace?: string;
   autoPushAfterThink?: boolean;
@@ -70,7 +36,9 @@ export function createAgentRuntime(options?: {
     options?.autoPushAfterThink ??
     process.env.MEMWAL_AUTO_PUSH?.trim() === "1";
 
-  const { store: local, kind: storeKind } = createSharedLocalStore(namespace);
+  const { store: local, kind: storeKind } = createSharedLocalStore(namespace, {
+    baseDir: path.join(os.tmpdir(), "memwalpp-agent-swarm"),
+  });
   const service = tryCreateMemWalServiceFromEnv();
   const durable = createDurableMemoryStore(service, {
     defaultNamespace: namespace,

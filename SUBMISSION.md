@@ -68,6 +68,8 @@ LocalMemoryStore → redactForUpstream → quality gate → MemWal remember → 
 ```bash
 git clone https://github.com/Olympusxvn/memwal-agent-memory.git && cd memwal-agent-memory
 pnpm install
+pnpm mcp:build       # build MCP server
+pnpm mcp:e2e         # MCP stdio: remember → recall
 pnpm agent:demo
 pnpm agent:bounty-hunt
 ```
@@ -83,7 +85,7 @@ pnpm agent:bounty-hunt
 
 **Expected console:** colored `[1/N]` steps → `── RESULT ──` → **exit code 0**.
 
-**MCP (no keys):** `pnpm mcp:build && pnpm mcp:e2e` — universal agent access via stdio; setup [`docs/mcp-setup.md`](docs/mcp-setup.md) · [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md#judge-mcp-quickstart-2-min).
+**MCP (no keys):** the `mcp:e2e` step above gives universal agent access via stdio; client setup in [`docs/mcp-setup.md`](docs/mcp-setup.md) · [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md#judge-mcp-quickstart-2-min).
 
 **Optional live Walrus (~2 min):** copy [`.env.example`](.env.example), set `MEMWAL_PRIVATE_KEY`, `MEMWAL_ACCOUNT_ID`, `MEMWAL_SERVER_URL`, then:
 
@@ -125,14 +127,14 @@ Look for `✓ Promoted — blob …` in poster step 3.
 | **0–1** | Monorepo, `shared`, `local-memory`, SQLite + redact/score | ✓ |
 | **2** | `MemWalClient`, `DurableMemoryStore`, `MemorySyncService` | ✓ |
 | **3** | Move v1: `memory_nft`, `marketplace`, `bounty`, `royalty`, `delegate_bridge`, `access_policy` | ✓ mainnet |
-| **4** | `MemWalAgentBridge`, agent demos, optional live bounty PTB | ✓ |
+| **4** | `MemWalAgentBridge`, agent demos | ✓ demos · live bounty PTB is a labeled stub |
 | **5** | Master OpenSpec, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md` | ✓ |
 | **6** | MCP Server — memory + chain tools, stdio E2E | ✓ |
 | **7** | Move v2 refactor (upgrade-in-place, tests) | ✓ mainnet |
-| **8** | Dashboard kiosk PTBs, chain client | ✓ |
-| **9** | Submission polish (this doc, judge guide, demo slides) | ✓ |
+| **8** | Dashboard kiosk PTBs (v1), chain client | ◐ kiosk PTBs wired; indexer is schema-only |
+| **9** | Submission polish (this doc, judge guide, demo video) | ✓ |
 
-See [`ROADMAP.md`](ROADMAP.md) for full phase breakdown.
+Status mirrors [`ROADMAP.md`](ROADMAP.md), the granular source of truth. ◐ = partially complete (see "Honest scope" in §4).
 
 ---
 

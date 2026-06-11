@@ -21,12 +21,11 @@ function mergeMetadata(
   incoming: Record<string, string>,
   strategy: ConflictStrategy,
 ): Record<string, string> {
+  // local_wins: union of keys, local values take precedence on conflict.
   if (strategy === "local_wins" && local) {
     return { ...incoming, ...local };
   }
-  if (strategy === "merge_metadata") {
-    return { ...(local ?? {}), ...incoming };
-  }
+  // durable_wins / merge_metadata: union of keys, incoming (durable) wins.
   return { ...(local ?? {}), ...incoming };
 }
 
@@ -44,11 +43,11 @@ export function mergeDurableHitIntoRecord(
   const id = existing?.id ?? stableIdFromHit(hit, namespace, index);
   const walrusBlobId = hit.blobId ? (hit.blobId as ObjectId) : existing?.walrusBlobId;
 
+  // local_wins keeps the local copy (including unsynced local edits); every
+  // other strategy takes the durable text. `content` already defaults to hit.text.
   let content = hit.text;
-  if (existing && strategy === "local_wins" && existing.synced) {
+  if (existing && strategy === "local_wins") {
     content = existing.content;
-  } else if (existing && strategy === "durable_wins") {
-    content = hit.text;
   }
 
   const metadata = mergeMetadata(existing?.metadata, {

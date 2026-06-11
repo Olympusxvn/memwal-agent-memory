@@ -27,6 +27,18 @@ describe("redactForUpstream", () => {
     expect(r.text).toBe("no secrets here");
     expect(r.piiFlags).toHaveLength(0);
   });
+
+  it("redacts consistently across consecutive calls (no global-regex lastIndex drift)", () => {
+    // Module-level /g regexes are reused; String.replace resets lastIndex, but
+    // guard against accidental .test()/.exec() regressions that would skip rows.
+    for (let i = 0; i < 5; i++) {
+      const r = redactForUpstream(`row ${i}: user${i}@example.com and Bearer abcdefghijklmnopqrstuvwxyz012345`);
+      expect(r.text).toContain("[redacted-email]");
+      expect(r.text).not.toContain(`user${i}@example.com`);
+      expect(r.piiFlags).toContain("email");
+      expect(r.piiFlags).toContain("bearer");
+    }
+  });
 });
 
 describe("scoreSnippet / scoreQuality", () => {

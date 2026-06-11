@@ -22,6 +22,7 @@
 
 | Question | Answer |
 |----------|--------|
+| **Naming?** | One project: **MemWal Agent Memory** (repo `memwal-agent-memory`). `MemWal++`, `@memwalpp/*`, and `memwalpp` are legacy short names for the **same** thing. **Walrus Memory (MemWal)** = Mysten's official memory layer we build on. |
 | **Official stack?** | **Walrus Memory (MemWal)** — `remember` / `recall` / Walrus blobs + Sui account. We **wrap** [`@mysten-incubation/memwal`](https://www.npmjs.com/package/@mysten-incubation/memwal), not fork it. |
 | **Workshop relationship?** | Built on the [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e) curriculum ([kit](https://github.com/DionisisLougaris/walrus-memory-workshop-kit) · [`SKILL.md`](https://github.com/DionisisLougaris/walrus-memory-workshop-kit/blob/main/SKILL.md)). **Judges verify this repo**, not the kit. |
 | **What we added?** | **Hybrid** local SQLite + redact/quality gates → promote to Walrus; **MCP** for any agent; **mainnet Move** marketplace + bounties tied to `walrus_blob_id`. |
@@ -188,12 +189,6 @@ Then `recall` the same namespace to confirm search works. Official tool: `memwal
 
 ---
 
-## Path E — MCP Server
-
-See **[Judge MCP quickstart](#judge-mcp-quickstart-2-min)** above.
-
----
-
 ## Path D — Contracts & CI (~+5 min, optional)
 
 ```bash
@@ -203,13 +198,20 @@ pnpm check && pnpm test
 pnpm mcp:e2e            # MCP stdio integration
 ```
 
-**Operators only** (mainnet v2 bootstrap): `pnpm contracts:upgrade-v2` → `pnpm contracts:bootstrap-v2` — see [`docs/deploy.md`](docs/deploy.md).
+**Operators only** (mainnet v2 bootstrap, already live): `pnpm contracts:upgrade-v2` → `pnpm contracts:bootstrap-v2` — see [`docs/deploy.md`](docs/deploy.md).
 
 | Item | Value |
 |------|-------|
-| Package ID | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
+| Package ID (original) | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
+| Published-at (PTB targets) | `0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711` |
 | Marketplace | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
 | Explorer | https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050 |
+
+---
+
+## Path E — MCP Server
+
+See **[Judge MCP quickstart](#judge-mcp-quickstart-2-min)** above.
 
 ---
 

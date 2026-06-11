@@ -398,8 +398,8 @@ upgrade. Provide explicit one-time entry functions, guarded so they can only run
 
 ```ts
 // @memwalpp/shared
-moveTarget("memory_ext", "fork_pack");        // 0x48db…::memory_ext::fork_pack
-moveTarget("marketplace_v2", "buy_pack_v2");  // 0x48db…::marketplace_v2::buy_pack_v2
+moveTarget("memory_ext", "fork_pack");        // 0x9de4…::memory_ext::fork_pack
+moveTarget("marketplace_v2", "buy_pack_v2");  // 0x9de4…::marketplace_v2::buy_pack_v2
 moveTarget("bounty_v2", "submit_fulfillment_v2");
 
 export const CONFIG_OBJECT_ID = "0x…";          // from admin::bootstrap

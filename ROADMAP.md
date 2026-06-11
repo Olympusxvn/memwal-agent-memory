@@ -38,9 +38,9 @@
 | **4** | Autonomous agents + judge demos | ◐ Mostly complete | `openspec-agent-swarm-integration.md` |
 | **5** | Documentation & project branding | ✓ Complete | `openspec-memwal-agent-memory.md`, `PROJECT.md`, `ARCHITECTURE.md`, `ROADMAP.md`, Walrus UI |
 | **6** | MCP Server (universal access) | ✓ Complete | E2E: `pnpm mcp:e2e`; `.cursor/mcp.json` |
-| **7** | Move contracts v2 refactor | ✓ Complete (repo) | `openspec-move-contracts-refactor.md` |
-| **8** | Dashboard + live chain integration | ◐ In progress | PTBs, indexer, live bounty |
-| **9** | Submission polish & judge experience | ◐ In progress | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
+| **7** | Move contracts v2 refactor | ✓ Complete (mainnet) | `openspec-move-contracts-refactor.md`; bootstrapped 2026-06-01 |
+| **8** | Dashboard + live chain integration | ◐ In progress | Kiosk v1 PTBs wired; indexer schema-only |
+| **9** | Submission polish & judge experience | ✓ Complete | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
 
 **Legend:** ✓ Complete · ◐ In progress / partial · ○ Planned
 
@@ -156,7 +156,7 @@
 
 ---
 
-### Phase 7 — Move contracts v2 refactor ✓ (repo)
+### Phase 7 — Move contracts v2 refactor ✓ (mainnet)
 
 **Goal:** upgrade-in-place on existing package ID — versioning + lineage via dynamic fields, stronger bounty + lineage royalty, indexer-friendly events.
 
@@ -165,7 +165,7 @@
 | New modules: `constants`, `events`, `admin`, `memory_ext`, `marketplace_v2`, `bounty_v2` | per refactor spec §3 ✓ |
 | `MemoryPack` layout unchanged; `PackExt` via dynamic field | §4 ✓ |
 | `fork_pack`, `buy_pack_v2`, `fulfill_bounty_v2`, multi-submission bounty | §5 ✓ |
-| Upgrade via existing `UpgradeCap`; package id unchanged | §7 — **operator step (S4)** |
+| Upgrade via existing `UpgradeCap`; package id unchanged | §7 ✓ mainnet (published-at 0x9de4…) |
 | Post-upgrade bootstrap (`Config`, `MarketplaceV2`, `AdminCap`) | §7.2 ✓ mainnet (tx BjV2Q8m…) |
 | `@memwalpp/shared` updated with new object ids + `moveTarget` entries | §8 ✓ |
 | ≥ 8 new Move tests + all v1 tests still pass | §9 ✓ (7 v2 + 1 v1) |
@@ -174,7 +174,7 @@
 
 ---
 
-### Phase 8 — Dashboard + live chain integration ○
+### Phase 8 — Dashboard + live chain integration ◐
 
 | Exit criterion | Target |
 |----------------|--------|
@@ -188,7 +188,7 @@
 
 ---
 
-### Phase 9 — Submission polish ○
+### Phase 9 — Submission polish ✓
 
 | Exit criterion | Target |
 |----------------|--------|

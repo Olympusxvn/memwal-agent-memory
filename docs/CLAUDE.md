@@ -1,4 +1,4 @@
-# CLAUDE.md — MemWal++
+# CLAUDE.md — MemWal Agent Memory
 
 Context for **Claude / Cursor / other coding agents** working in this repo. Canonical architecture: [`ARCHITECTURE.md`](ARCHITECTURE.md). Monorepo rules: [`decisions/ADR-013.md`](decisions/ADR-013.md). Project intent: [`../PROJECT.md`](../PROJECT.md).
 
