@@ -124,6 +124,85 @@ MemWal Agent Memory is a **Walrus-track** submission for **Sui Overflow 2026**: 
 3. **Bounty hunter** → scan chain bounties → local eval → acquire memory → improve → **fork** with royalty path.  
 4. **Verification** → Walrus proof + **on-chain / indexed** metrics (ADR-005 — no pure self-report).
 
+### 3.1 Sequence diagrams
+
+> Tool names match `packages/mcp/src/server.ts`. **Seal encryption + embedding run on the MemWal relayer** (standard mode), not client-side; this repo's value-add is **redaction + quality gate before** handing text to the SDK.
+
+**Write / promote** (`remember` with `promote`, or `sync`):
+
+```mermaid
+sequenceDiagram
+    participant Agent
+    participant MCP as MCP (@memwalpp/mcp)
+    participant Core as MemorySyncService
+    participant Local as Local SQLite
+    participant Client as DurableMemoryStore
+    participant Relayer as MemWal relayer (Seal + embed)
+    participant Walrus
+
+    Agent->>MCP: remember(content, promote=true)
+    MCP->>Core: store + promote
+    Core->>Local: insert (synced=false)
+    Core->>Core: redactForUpstream + quality gate
+    alt passes gate
+        Core->>Client: durable.remember(record)
+        Client->>Relayer: remember(text, namespace)
+        Relayer->>Relayer: Seal encrypt + embed
+        Relayer->>Walrus: upload encrypted blob
+        Walrus-->>Relayer: blobId
+        Relayer-->>Client: { jobId, blobId }
+        Client-->>Core: blobId
+        Core->>Local: mark synced, set walrusBlobId
+    else gate fails or offline
+        Core->>Local: keep pending (skipReason)
+    end
+    MCP-->>Agent: { recordId, status }
+```
+
+**Recall** (`recall` = hybrid; `search` = local-only):
+
+```mermaid
+sequenceDiagram
+    participant Agent
+    participant MCP as MCP (@memwalpp/mcp)
+    participant Core as MemorySyncService
+    participant Local as Local SQLite
+    participant Client as DurableMemoryStore
+    participant Relayer as MemWal relayer
+
+    Agent->>MCP: recall(query, namespace)
+    MCP->>Core: pullQuery
+    Core->>Local: fast local search
+    Local-->>Core: local hits
+    opt forceDurable or live hydrate
+        Core->>Client: durable.recall(query)
+        Client->>Relayer: recall({ query, limit, namespace })
+        Relayer-->>Client: ranked memories (decrypted)
+        Client-->>Core: hydrate local cache
+    end
+    Core-->>MCP: merged results
+    MCP-->>Agent: response
+```
+
+**Restore** (`pnpm memwal:restore-smoke` → SDK `restore`; rebuilds the **relayer** index from Walrus, not local SQLite):
+
+```mermaid
+sequenceDiagram
+    participant Op as Operator / script
+    participant Client as memwal-client
+    participant Relayer as MemWal relayer
+    participant Walrus
+
+    Op->>Client: restore(namespace, limit)
+    Client->>Relayer: restore(namespace, limit)
+    Relayer->>Walrus: list owner+namespace blobs
+    Walrus-->>Relayer: encrypted blobs
+    Relayer->>Relayer: Seal decrypt + re-embed missing
+    Relayer-->>Client: { restored, skipped, total }
+    Client-->>Op: counts
+    Op->>Client: recall(query) to verify
+```
+
 ---
 
 ## 4. Monorepo mapping

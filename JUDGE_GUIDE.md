@@ -218,9 +218,13 @@ pnpm mcp:e2e            # MCP stdio integration
 | Issue | Fix |
 |-------|-----|
 | `pnpm: command not found` | Install pnpm 10 + Node 20+ |
+| `Cannot find module …` | Run `pnpm install && pnpm mcp:build` first |
 | No colored output | Windows Terminal / modern terminal; demos still pass |
 | `pushOne skipped (offline)` | Normal without `.env` — not a failure |
 | SQLite vs in-memory | Both valid; banner shows `Store: sqlite` or `in-memory` |
+| `sui: command not found` | Install Sui CLI — only needed for `pnpm contracts:test` (optional Path D) |
+| Live recall empty right after promote | Walrus upload is async (~5–15s); set `MEMWAL_WAIT_FOR_REMEMBER=1` |
+| `memwal:restore-smoke` returns `0` | Wait for Walrus finality; use the same `MEMWAL_NAMESPACE` as on promote |
 
 ---
 
