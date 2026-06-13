@@ -24,6 +24,7 @@ memwal-agent-memory/
 │   └── sui-contracts/             # Move sources + sui move test
 │
 ├── docs/                          # Human + judge documentation
+│   ├── doc-map.html               # Judge doc hub (synced → dashboard /doc-hub)
 │   ├── PROJECT-STRUCTURE.md       # This file
 │   ├── ARCHITECTURE.md            # System design
 │   ├── deploy.md                  # Mainnet IDs + PTBs
@@ -87,8 +88,8 @@ Apps **must not** be imported by `packages/*`.
 
 | Audience | Start here |
 |----------|------------|
+| **Judges** | Live [doc-hub](https://memwalpp-dashboard.vercel.app/doc-hub/) · [doc-map.html](doc-map.html) → [JUDGE_GUIDE.md](../JUDGE_GUIDE.md) |
 | **Anyone new** | [SUMMARY.md](../SUMMARY.md) · [live /summary](https://memwalpp-dashboard.vercel.app/summary) |
-| **Judges** | [JUDGE_GUIDE.md](../JUDGE_GUIDE.md) → [SUBMISSION.md](../SUBMISSION.md) |
 | **Contributors** | [README.md](../README.md) → [ARCHITECTURE.md](ARCHITECTURE.md) → [PROJECT.md](../PROJECT.md) |
 | **On-chain** | [deploy.md](deploy.md) |
 | **Workshop context** | [judge-walrus-memory-workshop.md](judge-walrus-memory-workshop.md) |

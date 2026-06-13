@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemWal Agent Memory — Judge Documentation Hub</title>
+  <meta name="description" content="Walrus Track submission overview: 5-minute verify path, scoring lens, architecture diagrams, and source file map." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #05050a;
+      --surface: #0f0f1a;
+      --s2: #16162a;
+      --border: rgba(255,255,255,0.07);
+      --text: #f4f2ff;
+      --muted: #9b97b8;
+      --dim: #6b678a;
+      --cyan: #00f5ff;
+      --violet: #a78bfa;
+      --green: #4ade80;
+      --blue: #4da2ff;
+      --grad: linear-gradient(135deg, #00f5ff 0%, #a78bfa 100%);
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --sans: "Inter", system-ui, sans-serif;
+      --radius: 14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { font-family: var(--mono); font-size: 0.88em; }
+
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 24px;
+      background: rgba(5,5,10,0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { font-weight: 700; font-size: 0.92rem; }
+    .brand .track { font-weight: 500; color: var(--dim); font-size: 0.78rem; margin-left: 8px; }
+    .brand span {
+      background: var(--grad);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .topbar nav { display: flex; gap: 6px; flex-wrap: wrap; }
+    .topbar nav a, .btn {
+      font-size: 0.76rem; font-weight: 500;
+      padding: 6px 12px; border-radius: 8px;
+      border: 1px solid var(--border);
+      color: var(--muted); background: var(--surface);
+      cursor: pointer; text-decoration: none;
+    }
+    .topbar nav a:hover, .btn:hover { border-color: rgba(0,245,255,0.35); color: var(--text); text-decoration: none; }
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(0,245,255,0.12), rgba(167,139,250,0.12));
+      border-color: rgba(0,245,255,0.3); color: var(--text);
+    }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    .hero { margin-bottom: 36px; }
+    .hero .eyebrow {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--green); margin-bottom: 10px;
+    }
+    .hero h1 { font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 10px; }
+    .hero .sub { color: var(--muted); max-width: 720px; font-size: 0.95rem; }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .hero-links a {
+      font-size: 0.82rem; padding: 8px 14px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface);
+    }
+    .hero-links a.primary { border-color: rgba(74,222,128,0.4); color: var(--green); }
+
+    .site-return {
+      display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+      padding: 10px 24px; font-size: 0.78rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .site-return a { color: var(--muted); }
+    .site-return a:hover { color: var(--cyan); }
+    .site-return .here { color: var(--green); font-weight: 600; }
+
+    .open-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .open-table th {
+      text-align: left; padding: 10px 14px; color: var(--dim);
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border); width: 22%;
+    }
+    .open-table td {
+      padding: 10px 14px; border-bottom: 1px solid var(--border);
+      color: var(--muted); vertical-align: top;
+    }
+    .open-table tr:last-child td, .open-table tr:last-child th { border-bottom: none; }
+    .open-table code { color: var(--green); font-size: 0.82rem; }
+
+    section { margin-bottom: 44px; scroll-margin-top: 72px; }
+    section > h2 {
+      font-size: 1.05rem; font-weight: 700; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    section > h2::before {
+      content: ""; width: 4px; height: 1.05rem; border-radius: 2px; background: var(--grad);
+    }
+    .section-desc { color: var(--muted); font-size: 0.88rem; margin-bottom: 18px; max-width: 720px; }
+
+    .panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 22px;
+    }
+    .panel.judge { border-color: rgba(74,222,128,0.25); }
+
+    /* summary table */
+    .summary-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .summary-table th {
+      text-align: left; width: 28%; padding: 10px 12px 10px 0;
+      color: var(--dim); font-weight: 600; vertical-align: top;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-table td {
+      padding: 10px 0; color: var(--muted);
+      border-bottom: 1px solid var(--border); vertical-align: top;
+    }
+    .summary-table tr:last-child th, .summary-table tr:last-child td { border-bottom: none; }
+    .summary-table td strong { color: var(--text); }
+
+    /* verify */
+    .verify-cmd {
+      font-family: var(--mono); font-size: 0.78rem; line-height: 1.65;
+      color: var(--green); background: var(--s2);
+      border-radius: 10px; padding: 14px 16px; overflow-x: auto; white-space: pre;
+      margin-bottom: 16px;
+    }
+    .verify-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .verify-table th {
+      text-align: left; padding: 8px 12px; color: var(--dim);
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+    }
+    .verify-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--muted); }
+    .verify-table code { color: var(--cyan); }
+    .pass { color: var(--green); font-weight: 600; font-size: 0.8rem; }
+
+    /* scoring */
+    .score-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .score-table th {
+      text-align: left; padding: 10px 12px; color: var(--dim);
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border); background: var(--s2);
+    }
+    .score-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .score-table .num { color: var(--cyan); font-weight: 700; font-family: var(--mono); width: 32px; }
+    .score-table .q { color: var(--text); font-weight: 500; }
+    .score-table .where { color: var(--muted); font-size: 0.82rem; }
+
+    /* layers */
+    .layers { display: flex; flex-direction: column; gap: 6px; max-width: 760px; }
+    .layer {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 18px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--surface); font-size: 0.88rem;
+    }
+    .layer .tag {
+      flex-shrink: 0; width: 28px; height: 28px;
+      display: grid; place-items: center; border-radius: 8px;
+      font-weight: 700; font-size: 0.75rem; background: var(--s2); color: var(--cyan);
+    }
+    .layer .why { color: var(--dim); font-size: 0.8rem; margin-top: 4px; }
+    .layer .paths { color: var(--dim); font-size: 0.76rem; font-family: var(--mono); margin-top: 4px; }
+
+    /* flows */
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tab {
+      font-size: 0.78rem; padding: 6px 14px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--muted); cursor: pointer;
+    }
+    .tab.active { border-color: rgba(0,245,255,0.4); color: var(--text); background: var(--s2); }
+    .diagram-panel { display: none; }
+    .diagram-panel.active { display: block; }
+    .flow-caption {
+      font-size: 0.82rem; color: var(--muted); margin-bottom: 12px;
+      padding: 10px 14px; background: var(--s2); border-radius: 8px;
+      border-left: 3px solid var(--cyan);
+    }
+    .flow-caption strong { color: var(--text); }
+    .diagram-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; overflow-x: auto;
+    }
+    .arch-img {
+      width: 100%; max-height: 460px; object-fit: contain;
+      border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface);
+      margin-top: 14px;
+    }
+
+    /* key files */
+    .files-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .files-table th {
+      text-align: left; padding: 8px 12px; color: var(--dim);
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+    }
+    .files-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .files-table td:first-child { font-family: var(--mono); font-size: 0.78rem; color: var(--cyan); }
+    .files-table td:last-child { color: var(--muted); }
+
+    /* doc index */
+    .filter input {
+      width: 100%; max-width: 360px; padding: 8px 12px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text); font-size: 0.88rem; margin-bottom: 12px;
+    }
+    .doc-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .doc-table th {
+      text-align: left; padding: 10px 12px; color: var(--dim);
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+    }
+    .doc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .pill {
+      display: inline-block; font-size: 0.66rem; font-weight: 600;
+      padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--dim);
+    }
+    .pill.judge { border-color: rgba(74,222,128,0.35); color: var(--green); }
+
+    .secondary-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;
+      margin-top: 8px;
+    }
+    .mini-card {
+      padding: 14px 16px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--surface);
+      font-size: 0.84rem;
+    }
+    .mini-card h4 { font-size: 0.88rem; margin-bottom: 8px; color: var(--text); }
+    .mini-card ul { padding-left: 16px; color: var(--muted); }
+    .mini-card li { margin-bottom: 4px; }
+
+    /* presentation */
+    .deck-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: var(--bg); flex-direction: column; }
+    .deck-overlay.open { display: flex; }
+    .deck-progress { height: 3px; background: var(--border); }
+    .deck-progress-fill { height: 100%; background: var(--grad); transition: width .35s ease; }
+    .deck-slide {
+      flex: 1; display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 48px 64px; overflow: auto;
+    }
+    .deck-slide.active { display: flex; }
+    .deck-slide .label {
+      font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 12px;
+    }
+    .deck-slide h2 { font-size: clamp(1.3rem, 3vw, 1.9rem); margin-bottom: 20px; max-width: 760px; text-align: center; }
+    .deck-slide ul { list-style: none; max-width: 640px; width: 100%; }
+    .deck-slide ul li {
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      color: var(--muted); font-size: 0.95rem;
+    }
+    .deck-slide ul li strong { color: var(--text); display: block; margin-bottom: 2px; }
+    .deck-slide .cmd {
+      font-family: var(--mono); font-size: 0.8rem; color: var(--green);
+      text-align: center; line-height: 1.7; max-width: 640px;
+    }
+    .deck-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px; border-top: 1px solid var(--border);
+      font-size: 0.8rem; color: var(--dim);
+    }
+    .deck-footer button {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: 8px 16px; border-radius: 8px; cursor: pointer;
+    }
+
+    @media (max-width: 640px) {
+      .topbar { flex-direction: column; align-items: flex-start; }
+      .deck-slide { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-return" aria-label="Dashboard">
+  <a href="https://memwalpp-dashboard.vercel.app/">← Dashboard</a>
+  <a href="https://memwalpp-dashboard.vercel.app/summary">Summary</a>
+  <a href="https://memwalpp-dashboard.vercel.app/kiosk">Kiosk</a>
+  <a href="https://memwalpp-dashboard.vercel.app/product">MCP product</a>
+  <span class="here">Doc Hub</span>
+</nav>
+
+<header class="topbar">
+  <div class="brand">
+    <span>MemWal Agent Memory</span>
+    <span class="track">Walrus Track · Sui Overflow 2026</span>
+  </div>
+  <nav>
+    <a href="#open">Open</a>
+    <a href="#verify">Verify</a>
+    <a href="#scoring">Scoring</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#flows">Flows</a>
+    <a href="#code">Source</a>
+    <a href="#docs">Docs</a>
+    <button type="button" class="btn btn-primary" id="openDeck">Presentation</button>
+    <a href="memwalpp-slides.html">Demo deck</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">For judges — start here</div>
+    <h1>Documentation Hub</h1>
+    <p class="sub">
+      This page is the single entry point for reviewing our Walrus Track submission.
+      Verify the project in under five minutes, then use the diagrams and file map below
+      to confirm Walrus is on the critical path — not a slide-only story.
+    </p>
+    <div class="hero-links">
+      <a class="primary" href="../JUDGE_GUIDE.md">JUDGE_GUIDE.md (runbook)</a>
+      <a href="../SUBMISSION.md">SUBMISSION.md</a>
+      <a href="https://memwalpp-dashboard.vercel.app/doc-hub/" target="_blank" rel="noopener">Live Doc Hub</a>
+      <a href="https://memwalpp-dashboard.vercel.app/" target="_blank" rel="noopener">Live dashboard</a>
+      <a href="https://github.com/Olympusxvn/memwal-agent-memory" target="_blank" rel="noopener">GitHub repo</a>
+    </div>
+  </div>
+
+  <section id="open">
+    <h2>How to open this hub</h2>
+    <p class="section-desc">Judges can use the live URL (no clone) or open the HTML file after cloning the repository.</p>
+    <div class="panel judge">
+      <table class="open-table">
+        <tr>
+          <th>Live (recommended)</th>
+          <td><a href="https://memwalpp-dashboard.vercel.app/doc-hub/" target="_blank" rel="noopener">https://memwalpp-dashboard.vercel.app/doc-hub/</a> — works in any browser, no install.</td>
+        </tr>
+        <tr>
+          <th>Windows</th>
+          <td>After <code>git clone</code>: <code>start docs\doc-map.html</code> (Command Prompt or PowerShell from repo root).</td>
+        </tr>
+        <tr>
+          <th>macOS</th>
+          <td>After <code>git clone</code>: <code>open docs/doc-map.html</code> (Terminal from repo root).</td>
+        </tr>
+        <tr>
+          <th>File path</th>
+          <td><code>docs/doc-map.html</code> in the repository — double-click in your file manager also works.</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- What this is -->
+  <section id="summary">
+    <h2>What this submission is</h2>
+    <p class="section-desc">Read this first (~60 seconds). Full narrative: <a href="../SUMMARY.md">SUMMARY.md</a>.</p>
+    <div class="panel judge">
+      <table class="summary-table">
+        <tr>
+          <th>Project name</th>
+          <td><strong>MemWal Agent Memory</strong> (repo: <code>memwal-agent-memory</code>). Legacy aliases <code>MemWal++</code> / <code>@memwalpp/*</code> refer to the same codebase.</td>
+        </tr>
+        <tr>
+          <th>Official stack</th>
+          <td>Built on <strong>Walrus Memory (MemWal)</strong> — we <strong>wrap</strong> <code>@mysten-incubation/memwal</code>, we do not fork it. Relayer handles Seal encryption and embeddings.</td>
+        </tr>
+        <tr>
+          <th>Our extension</th>
+          <td><strong>Hybrid memory</strong> (local SQLite + redact/quality gates → promote to Walrus) · <strong>MCP server</strong> for any agent · <strong>Mainnet Move</strong> marketplace and bounties tied to <code>walrus_blob_id</code>.</td>
+        </tr>
+        <tr>
+          <th>Workshop kit</th>
+          <td>Aligned with the official Walrus Memory Workshop curriculum. <strong>Judges verify this repository</strong>, not the external workshop kit.</td>
+        </tr>
+        <tr>
+          <th>North-star demo</th>
+          <td>Bounty posted → hunter recalls context → improves memory → promotes to Walrus → <code>submit_fulfillment(blob_id)</code> on Sui.</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- Verify -->
+  <section id="verify">
+    <h2>Five-minute verification</h2>
+    <p class="section-desc">No wallet, no MemWal API keys, no Sui CLI required. Exit code <code>0</code> on every command is the pass bar.</p>
+    <div class="panel judge">
+      <div class="verify-cmd">git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt</div>
+      <table class="verify-table">
+        <thead>
+          <tr><th>Command</th><th>What exit 0 proves</th><th>Pass</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>pnpm mcp:e2e</code></td>
+            <td>MCP stdio server works; memory tools (<code>remember</code>, <code>recall</code>, <code>sync</code>) execute; chain tools return <code>chain_not_configured</code> without keys (expected).</td>
+            <td class="pass">Required</td>
+          </tr>
+          <tr>
+            <td><code>pnpm agent:demo</code></td>
+            <td>Hybrid agent hooks run end-to-end: local store → quality gate → sync narrative with colored <code>[1/N]</code> steps.</td>
+            <td class="pass">Required</td>
+          </tr>
+          <tr>
+            <td><code>pnpm agent:bounty-hunt</code></td>
+            <td>Poster + Hunter agents; recall injects context; bounty fulfillment path references Walrus blob semantics.</td>
+            <td class="pass">Required</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Scoring lens -->
+  <section id="scoring">
+    <h2>Walrus track scoring lens</h2>
+    <p class="section-desc">Five questions judges ask — and exactly where to confirm each answer in this repo.</p>
+    <div class="panel">
+      <table class="score-table">
+        <thead>
+          <tr><th></th><th>Question</th><th>Where to verify</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="num">1</td>
+            <td class="q">Is Walrus on the critical path?</td>
+            <td class="where"><code>packages/core/src/memory/memory-sync-service.ts</code> — <code>pushOne</code> sets <code>walrusBlobId</code>. Bounty: <code>submit_fulfillment(blob_id)</code> in Move.</td>
+          </tr>
+          <tr>
+            <td class="num">2</td>
+            <td class="q">Can I run it without setup pain?</td>
+            <td class="where">Commands above → all exit <code>0</code>. No credentials in default path.</td>
+          </tr>
+          <tr>
+            <td class="num">3</td>
+            <td class="q">Is the MemWal integration real code?</td>
+            <td class="where"><code>packages/memwal-client/</code> wraps SDK. <code>packages/mcp/</code> exposes tools. Not mock-only.</td>
+          </tr>
+          <tr>
+            <td class="num">4</td>
+            <td class="q">Is there an on-chain story?</td>
+            <td class="where">Mainnet package + objects in <a href="deploy.md">docs/deploy.md</a> and <a href="../packages/sui-contracts/README.md">sui-contracts README</a>.</td>
+          </tr>
+          <tr>
+            <td class="num">5</td>
+            <td class="q">Can any agent use it?</td>
+            <td class="where"><code>pnpm mcp:e2e</code> — stdio MCP is the universal access layer.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section id="architecture">
+    <h2>Architecture at a glance</h2>
+    <p class="section-desc">Dependency flows top → bottom. Canonical reference: <a href="ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>
+    <div class="layers">
+      <div class="layer">
+        <span class="tag">A</span>
+        <div>
+          <strong>Experience</strong> — wallet, marketplace UI, live demo dashboard
+          <div class="paths">apps/dashboard</div>
+        </div>
+      </div>
+      <div class="layer">
+        <span class="tag">B</span>
+        <div>
+          <strong>Orchestration</strong> — agent hooks, swarm demos, MCP server
+          <div class="paths">apps/agent-swarm · packages/mcp · packages/core/agent</div>
+          <div class="why">Judge entry: <code>pnpm mcp:e2e</code> and <code>pnpm agent:demo</code></div>
+        </div>
+      </div>
+      <div class="layer">
+        <span class="tag">C</span>
+        <div>
+          <strong>Hybrid memory</strong> — local SQLite, redact, quality gate, promote to Walrus
+          <div class="paths">packages/local-memory · packages/memwal-client · packages/core/memory</div>
+          <div class="why">Walrus critical path: <code>MemorySyncService.pushOne</code></div>
+        </div>
+      </div>
+      <div class="layer">
+        <span class="tag">D</span>
+        <div>
+          <strong>Chain + durable storage</strong> — Move marketplace, bounty escrow, Walrus blobs
+          <div class="paths">packages/sui-contracts · @mysten-incubation/memwal → relayer → Walrus</div>
+        </div>
+      </div>
+    </div>
+    <img class="arch-img" src="diagrams/memwalpp-merged-architecture.svg" alt="Merged architecture diagram" loading="lazy" />
+  </section>
+
+  <!-- Flows -->
+  <section id="flows">
+    <h2>Critical data flows</h2>
+    <p class="section-desc">Same diagrams as <a href="ARCHITECTURE.md">ARCHITECTURE.md</a> §3.1. Each tab notes what judges should confirm.</p>
+    <div class="tabs">
+      <button class="tab active" data-tab="write" type="button">Write / promote</button>
+      <button class="tab" data-tab="recall" type="button">Recall</button>
+      <button class="tab" data-tab="bounty" type="button">Bounty economy</button>
+      <button class="tab" data-tab="restore" type="button">Restore (optional)</button>
+    </div>
+    <div class="diagram-panel active" id="panel-write">
+      <div class="flow-caption"><strong>Judge check:</strong> promoted memories pass redaction + quality gate before <code>remember()</code> reaches the MemWal relayer. Success sets <code>walrusBlobId</code> on the local record.</div>
+      <div class="diagram-box"><pre class="mermaid">
+sequenceDiagram
+    participant Agent
+    participant MCP as MCP Server
+    participant Sync as MemorySyncService
+    participant Local as Local SQLite
+    participant Durable as DurableMemoryStore
+    participant Relayer as MemWal relayer
+    participant Walrus
+    Agent->>MCP: remember(promote=true)
+    MCP->>Sync: store and promote
+    Sync->>Local: insert synced=false
+    Sync->>Sync: redactForUpstream + quality gate
+    alt passes gate
+        Sync->>Durable: remember(record)
+        Durable->>Relayer: remember(text)
+        Relayer->>Walrus: upload encrypted blob
+        Walrus-->>Relayer: blobId
+        Relayer-->>Durable: jobId and blobId
+        Sync->>Local: synced=true, walrusBlobId set
+    else gate fails
+        Sync->>Local: stays pending
+    end
+      </pre></div>
+    </div>
+    <div class="diagram-panel" id="panel-recall">
+      <div class="flow-caption"><strong>Judge check:</strong> recall is hybrid — fast local search first; optional durable hydrate from MemWal relayer. MCP tool <code>recall</code> exercises this path.</div>
+      <div class="diagram-box"><pre class="mermaid">
+sequenceDiagram
+    participant Agent
+    participant MCP as MCP Server
+    participant Sync as MemorySyncService
+    participant Local as Local SQLite
+    participant Durable as DurableMemoryStore
+    participant Relayer as MemWal relayer
+    Agent->>MCP: recall(query)
+    MCP->>Sync: pullQuery
+    Sync->>Local: local search
+    opt durable hydrate
+        Sync->>Durable: recall(query)
+        Durable->>Relayer: recall
+        Relayer-->>Durable: decrypted hits
+        Sync->>Local: merge into cache
+    end
+    MCP-->>Agent: results
+      </pre></div>
+    </div>
+    <div class="diagram-panel" id="panel-bounty">
+      <div class="flow-caption"><strong>Judge check:</strong> the demo narrative ties improved memory to a Walrus blob, then to on-chain bounty fulfillment. Run <code>pnpm agent:bounty-hunt</code> to see the agent side.</div>
+      <div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    A[Poster agent] -->|createBounty| B[Sui Move escrow]
+    C[Hunter agent] -->|recall| D[Hybrid memory]
+    D -->|pushOne| E[walrusBlobId]
+    E --> F[Walrus blob]
+    C -->|submit_fulfillment| B
+    F -.cryptographic proof.-> B
+    B -->|WAL payout| C
+      </pre></div>
+    </div>
+    <div class="diagram-panel" id="panel-restore">
+      <div class="flow-caption"><strong>Optional proof:</strong> SDK <code>restore</code> rebuilds the relayer index from Walrus blobs. See <code>JUDGE_GUIDE.md</code> Path B+.</div>
+      <div class="diagram-box"><pre class="mermaid">
+sequenceDiagram
+    participant Op as Operator
+    participant Client as memwal-client
+    participant Relayer as MemWal relayer
+    participant Walrus
+    Op->>Client: restore(namespace)
+    Client->>Relayer: restore
+    Relayer->>Walrus: list owner blobs
+    Walrus-->>Relayer: encrypted blobs
+    Relayer-->>Client: restored counts
+      </pre></div>
+    </div>
+  </section>
+
+  <!-- Source files -->
+  <section id="code">
+    <h2>Key source files</h2>
+    <p class="section-desc">Open these directly when scoring — no need to search the monorepo.</p>
+    <div class="panel">
+      <table class="files-table">
+        <thead><tr><th>File</th><th>Why it matters for judges</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>packages/core/src/memory/memory-sync-service.ts</td>
+            <td>Walrus promotion path: <code>pushOne</code>, <code>pullQuery</code>, conflict merge, <code>walrusBlobId</code> reconciliation.</td>
+          </tr>
+          <tr>
+            <td>packages/memwal-client/src/durable/durable-memory-store.ts</td>
+            <td>SDK wrapper with retry, <code>wait</code> flag, <code>synced</code> semantics.</td>
+          </tr>
+          <tr>
+            <td>packages/memwal-client/src/service.ts</td>
+            <td>Live MemWal service: <code>remember</code> / <code>recall</code> / <code>restore</code> against relayer.</td>
+          </tr>
+          <tr>
+            <td>packages/local-memory/src/redact.ts</td>
+            <td>PII redaction before anything leaves the machine.</td>
+          </tr>
+          <tr>
+            <td>packages/mcp/src/tools/handlers.ts</td>
+            <td>MCP tool implementations judges hit via <code>mcp:e2e</code>.</td>
+          </tr>
+          <tr>
+            <td>packages/sui-contracts/sources/</td>
+            <td>Move modules: marketplace, bounty, memory_nft — <code>sui move test</code> in CI.</td>
+          </tr>
+          <tr>
+            <td>apps/agent-swarm/src/</td>
+            <td>Judge demos: <code>agent:demo</code> and <code>agent:bounty-hunt</code> narratives.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Doc index -->
+  <section id="docs">
+    <h2>Document index</h2>
+    <p class="section-desc">Judge-facing documents listed first. Filter to narrow the list.</p>
+    <div class="filter"><input type="search" id="docFilter" placeholder="Filter by keyword…" autocomplete="off" /></div>
+    <table class="doc-table" id="docTable">
+      <thead><tr><th>Document</th><th>Audience</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr data-q="judge guide runbook verify" data-priority="1"><td><a href="../JUDGE_GUIDE.md">JUDGE_GUIDE.md</a></td><td><span class="pill judge">Judge</span></td><td>Primary 5–10 min runbook</td></tr>
+        <tr data-q="submission brief walrus track" data-priority="1"><td><a href="../SUBMISSION.md">SUBMISSION.md</a></td><td><span class="pill judge">Judge</span></td><td>Hackathon submission brief</td></tr>
+        <tr data-q="summary what why one page" data-priority="1"><td><a href="../SUMMARY.md">SUMMARY.md</a></td><td><span class="pill judge">Judge</span></td><td>Role and benefits (1 page)</td></tr>
+        <tr data-q="workshop walrus memory official map" data-priority="1"><td><a href="judge-walrus-memory-workshop.md">judge-walrus-memory-workshop.md</a></td><td><span class="pill judge">Judge</span></td><td>Official workshop → this repo</td></tr>
+        <tr data-q="final checklist smoke log" data-priority="1"><td><a href="judge-final-checklist.md">judge-final-checklist.md</a></td><td><span class="pill judge">Judge</span></td><td>Maintainer verification log</td></tr>
+        <tr data-q="architecture layers flows canonical" data-priority="1"><td><a href="ARCHITECTURE.md">ARCHITECTURE.md</a></td><td><span class="pill judge">Judge</span></td><td>Canonical system design + Mermaid</td></tr>
+        <tr data-q="deploy mainnet package objects" data-priority="1"><td><a href="deploy.md">deploy.md</a></td><td><span class="pill judge">Judge</span></td><td>Mainnet IDs and PTBs</td></tr>
+        <tr data-q="demo slides presentation html deck" data-priority="1"><td><a href="memwalpp-slides.html">memwalpp-slides.html</a></td><td><span class="pill judge">Judge</span></td><td>10-slide demo deck</td></tr>
+        <tr data-q="project structure tree package dag" data-priority="2"><td><a href="PROJECT-STRUCTURE.md">PROJECT-STRUCTURE.md</a></td><td>Contributor</td><td>Repo tree and package rules</td></tr>
+        <tr data-q="openspec master memwal agent memory" data-priority="2"><td><a href="specs/openspec-memwal-agent-memory.md">specs/openspec-memwal-agent-memory.md</a></td><td>Contributor</td><td>Master OpenSpec</td></tr>
+        <tr data-q="mcp setup cursor claude" data-priority="2"><td><a href="mcp-setup.md">mcp-setup.md</a></td><td>Product</td><td>MCP install guide</td></tr>
+        <tr data-q="roadmap phases status" data-priority="2"><td><a href="../ROADMAP.md">ROADMAP.md</a></td><td>All</td><td>Phase completion status</td></tr>
+        <tr data-q="changelog notable changes" data-priority="2"><td><a href="../CHANGELOG.md">CHANGELOG.md</a></td><td>All</td><td>Release notes</td></tr>
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:36px;">Other readers</h2>
+    <p class="section-desc">Contributor and product paths — not required for core Walrus scoring.</p>
+    <div class="secondary-grid">
+      <div class="mini-card">
+        <h4>Contributors</h4>
+        <ul>
+          <li><a href="../README.md">README.md</a></li>
+          <li><a href="decisions/ADR-013.md">ADR-013</a> — package boundaries</li>
+          <li><a href="walrus-memory-alignment.md">walrus-memory-alignment.md</a></li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <h4>On-chain detail</h4>
+        <ul>
+          <li><a href="../packages/sui-contracts/README.md">sui-contracts README</a></li>
+          <li><a href="specs/openspec-move-contracts-refactor.md">Move v2 OpenSpec</a></li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <h4>MCP product</h4>
+        <ul>
+          <li><a href="product/README.md">product/README.md</a></li>
+          <li><a href="specs/openspec-mcp-server.md">MCP OpenSpec</a></li>
+          <li><a href="product/landing.html">Product landing</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Judge presentation (10 slides) -->
+<div class="deck-overlay" id="deck" aria-hidden="true">
+  <div class="deck-progress"><div class="deck-progress-fill" id="deckFill" style="width:10%"></div></div>
+
+  <div class="deck-slide active">
+    <div class="label">Slide 1 — Title</div>
+    <h2>MemWal Agent Memory</h2>
+    <p style="color:var(--muted);text-align:center;max-width:560px;">Hybrid verifiable memory for autonomous agents<br>Walrus Track · Sui Overflow 2026</p>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 2 — Problem</div>
+    <h2>Why this exists</h2>
+    <ul>
+      <li><strong>Agents lose context</strong> across sessions and tools</li>
+      <li><strong>Opaque cloud memory</strong> cannot be verified or traded</li>
+      <li><strong>Network latency</strong> should not block every recall</li>
+    </ul>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 3 — Solution</div>
+    <h2>Three-layer hybrid</h2>
+    <ul>
+      <li><strong>Local</strong> — SQLite, quality scoring, PII redaction (fast, private)</li>
+      <li><strong>MemWal + Walrus</strong> — encrypted durable blobs, semantic recall, <code>walrusBlobId</code></li>
+      <li><strong>Sui Move</strong> — marketplace, bounty escrow, royalties on mainnet</li>
+    </ul>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 4 — Official stack</div>
+    <h2>Built on Walrus Memory</h2>
+    <ul>
+      <li><strong>Wraps</strong> <code>@mysten-incubation/memwal</code> — not a fork</li>
+      <li><strong>We add</strong> hybrid gates, MCP access, mainnet marketplace</li>
+      <li><strong>Judges verify this repo</strong> — workshop kit is optional context</li>
+    </ul>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 5 — Verify</div>
+    <h2>Five-minute judge path</h2>
+    <p class="cmd">pnpm install && pnpm mcp:build && pnpm mcp:e2e
+pnpm agent:demo && pnpm agent:bounty-hunt</p>
+    <p style="color:var(--muted);text-align:center;margin-top:16px;font-size:0.9rem;">All commands exit 0 · No API keys · No wallet</p>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 6 — Walrus critical path</div>
+    <h2>Where Walrus matters</h2>
+    <ul>
+      <li><strong>pushOne</strong> — <code>memory-sync-service.ts</code> sets <code>walrusBlobId</code></li>
+      <li><strong>Bounty</strong> — <code>submit_fulfillment(blob_id)</code> on Sui Move</li>
+      <li><strong>Restore</strong> — SDK rebuilds relayer index from Walrus (optional proof)</li>
+    </ul>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 7 — Scoring lens</div>
+    <h2>Five questions, five answers</h2>
+    <ul>
+      <li><strong>Walrus critical?</strong> Yes — promotion + bounty proof</li>
+      <li><strong>Easy to run?</strong> Yes — copy-paste commands, exit 0</li>
+      <li><strong>Real integration?</strong> Yes — memwal-client + MCP + sync service</li>
+      <li><strong>On-chain?</strong> Yes — mainnet package in deploy.md</li>
+      <li><strong>Universal access?</strong> Yes — stdio MCP</li>
+    </ul>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 8 — Demo narrative</div>
+    <h2>Bounty → acquire → improve → payout</h2>
+    <ul>
+      <li><strong>Poster</strong> creates bounty with WAL escrow</li>
+      <li><strong>Hunter</strong> recalls hybrid memory, improves content</li>
+      <li><strong>Promotion</strong> produces Walrus blob ID</li>
+      <li><strong>Fulfillment</strong> ties blob to on-chain payout</li>
+    </ul>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 9 — Resources</div>
+    <h2>Where to go next</h2>
+    <ul>
+      <li><strong>Runbook</strong> — JUDGE_GUIDE.md</li>
+      <li><strong>Live demo</strong> — memwalpp-dashboard.vercel.app</li>
+      <li><strong>Architecture</strong> — docs/ARCHITECTURE.md</li>
+      <li><strong>This hub</strong> — docs/doc-map.html</li>
+    </ul>
+  </div>
+  <div class="deck-slide">
+    <div class="label">Slide 10 — Close</div>
+    <h2>Thank you</h2>
+    <p style="color:var(--muted);text-align:center;">github.com/Olympusxvn/memwal-agent-memory<br><span style="color:var(--dim);font-size:0.85rem;">Press Esc to exit · Arrow keys to navigate</span></p>
+  </div>
+
+  <footer class="deck-footer">
+    <button type="button" id="deckPrev">Previous</button>
+    <span id="deckNum" style="font-family:var(--mono);">1 / 10</span>
+    <button type="button" id="deckNext">Next</button>
+    <button type="button" id="deckClose">Close</button>
+  </footer>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#1a1a2e',
+      primaryTextColor: '#f4f2ff',
+      primaryBorderColor: '#6b678a',
+      lineColor: '#9b97b8',
+      secondaryColor: '#0f0f1a',
+      tertiaryColor: '#16162a',
+    },
+    sequence: { actorMargin: 48, messageMargin: 36 },
+  });
+
+  document.querySelectorAll('.tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+      document.querySelectorAll('.diagram-panel').forEach((p) => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  const filter = document.getElementById('docFilter');
+  const rows = [...document.querySelectorAll('#docTable tbody tr')];
+  filter?.addEventListener('input', () => {
+    const q = filter.value.toLowerCase();
+    rows.forEach((row) => {
+      const text = (row.dataset.q || '') + row.textContent.toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    });
+  });
+
+  const deck = document.getElementById('deck');
+  const slides = document.querySelectorAll('.deck-slide');
+  const fill = document.getElementById('deckFill');
+  const num = document.getElementById('deckNum');
+  let cur = 0;
+  const total = slides.length;
+
+  function showSlide(i) {
+    cur = Math.max(0, Math.min(total - 1, i));
+    slides.forEach((s, j) => s.classList.toggle('active', j === cur));
+    fill.style.width = ((cur + 1) / total * 100) + '%';
+    num.textContent = (cur + 1) + ' / ' + total;
+  }
+
+  document.getElementById('openDeck').addEventListener('click', () => {
+    deck.classList.add('open');
+    deck.setAttribute('aria-hidden', 'false');
+    showSlide(0);
+    document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('deckClose').addEventListener('click', () => {
+    deck.classList.remove('open');
+    deck.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  });
+  document.getElementById('deckPrev').addEventListener('click', () => showSlide(cur - 1));
+  document.getElementById('deckNext').addEventListener('click', () => showSlide(cur + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (!deck.classList.contains('open')) return;
+    if (e.key === 'Escape') document.getElementById('deckClose').click();
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); showSlide(cur + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); showSlide(cur - 1); }
+  });
+</script>
+</body>
+</html>

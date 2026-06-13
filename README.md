@@ -27,6 +27,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 
 | | |
 |---|---|
+| **Documentation hub (HTML)** | Live: [memwalpp-dashboard.vercel.app/doc-hub](https://memwalpp-dashboard.vercel.app/doc-hub/) · Repo: [`docs/doc-map.html`](docs/doc-map.html) |
 | **Live demo (dashboard)** | https://memwalpp-dashboard.vercel.app/ |
 | **Summary (live)** | https://memwalpp-dashboard.vercel.app/summary |
 | **Runbook** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) |
@@ -305,6 +306,7 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 
 | Path | Content |
 |------|---------|
+| [`docs/doc-map.html`](docs/doc-map.html) | **Judge documentation hub** — live: [/doc-hub](https://memwalpp-dashboard.vercel.app/doc-hub/) · verify, scoring lens, diagrams |
 | [`SUMMARY.md`](SUMMARY.md) | Role, benefits, who it’s for |
 | [`PROJECT.md`](PROJECT.md) | Vision, goals, non-goals |
 | [`ROADMAP.md`](ROADMAP.md) | Phased milestones + current status |

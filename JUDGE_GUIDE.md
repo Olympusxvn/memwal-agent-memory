@@ -6,6 +6,7 @@
 
 | Resource | Link |
 |----------|------|
+| **Judge documentation hub (HTML)** | Live: [memwalpp-dashboard.vercel.app/doc-hub](https://memwalpp-dashboard.vercel.app/doc-hub/) · Repo: [`docs/doc-map.html`](docs/doc-map.html) |
 | Repository | https://github.com/Olympusxvn/memwal-agent-memory |
 | **Summary (what & why)** | https://memwalpp-dashboard.vercel.app/summary · [`SUMMARY.md`](SUMMARY.md) |
 | Live demo (dashboard) | https://memwalpp-dashboard.vercel.app/ |
@@ -47,6 +48,15 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 | `pnpm agent:bounty-hunt` | Poster + Hunter agents; recall injects context |
 
 Optional live Walrus blob: [Path B](#path-b--live-walrus-blob-id-2-min-optional). Optional **restore proof**: [Path B+](#path-b-restore-proof-1-min-optional).
+
+### Open the documentation hub
+
+| Where | Command or URL |
+|-------|----------------|
+| **Live (recommended)** | [https://memwalpp-dashboard.vercel.app/doc-hub/](https://memwalpp-dashboard.vercel.app/doc-hub/) |
+| **Windows** (after clone) | `start docs\doc-map.html` |
+| **macOS** (after clone) | `open docs/doc-map.html` |
+| **Repo file** | [`docs/doc-map.html`](docs/doc-map.html) |
 
 ---
 

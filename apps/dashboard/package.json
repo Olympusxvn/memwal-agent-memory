@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node ../../scripts/sync-doc-hub.mjs && next build",
     "build:monorepo": "cd ../.. && pnpm exec turbo run build --filter=@memwalpp/dashboard --filter=!memwalpp-cli",
     "start": "next start",
     "check": "tsc --noEmit",
