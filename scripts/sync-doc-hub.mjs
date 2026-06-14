@@ -50,7 +50,7 @@ function adaptForDashboard(html) {
     out = out.replaceAll(`href="${from}"`, `href="${to}"`);
   }
 
-  out = out.replaceAll('href="memwalpp-slides.html"', 'href="slides.html"');
+  out = out.replaceAll('href="memwalpp-slides.html"', 'href="/memwalpp-slides.html"');
   out = out.replaceAll('href="product/landing.html"', 'href="https://memwalpp-dashboard.vercel.app/product"');
 
   // Same-origin nav when served from Vercel /doc-hub/
@@ -85,8 +85,13 @@ copyFile(
   path.join(outDir, "slides.html"),
 );
 copyFile(
+  path.join(ROOT, "docs/memwalpp-slides.html"),
+  path.join(ROOT, "apps/dashboard/public/memwalpp-slides.html"),
+);
+copyFile(
   path.join(ROOT, "docs/diagrams/memwalpp-merged-architecture.svg"),
   path.join(outDir, "diagrams/memwalpp-merged-architecture.svg"),
 );
 
 console.log(`doc-hub synced → ${path.relative(ROOT, outDir)}/`);
+console.log(`slides synced → apps/dashboard/public/memwalpp-slides.html`);

@@ -4,6 +4,20 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@mysten/dapp-kit", "@memwalpp/shared", "@memwalpp/ui"],
   reactStrictMode: true,
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/doc-hub/slides.html",
+        destination: "/memwalpp-slides.html",
+        permanent: true,
+      },
+      {
+        source: "/docs/memwalpp-slides.html",
+        destination: "/memwalpp-slides.html",
+        permanent: true,
+      },
+    ];
+  },
   // Vercel runs `next build` natively; do not use `output: "standalone"` unless self-hosting Docker.
   webpack: (config) => {
     // @memwalpp/shared uses TS ESM `.js` import specifiers; map to `.ts` for Next/webpack.
