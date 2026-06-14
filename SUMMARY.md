@@ -138,6 +138,21 @@ The [Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement
 
 ---
 
+## Companion MVP — Mr. Toxic Special One
+
+Production app built in parallel — proves MemWal in the wild while this repo supplies **platform + economy**.
+
+| | |
+|---|---|
+| **Live** | https://special-one-agent.vercel.app |
+| **Repo** | https://github.com/Olympusxvn/special-one-agent |
+| **Events** | Walrus Sessions 4 Memory World Cup |
+| **Map** | [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) |
+
+**Overflow judges:** score **this repo** for infrastructure. Open Special One for **Product Experience** — wallet memory ledger, cross-session predictions, MemWal mainnet LIVE badge (~30 s, browser only).
+
+---
+
 ## Verify in 5 minutes (judges)
 
 ```bash

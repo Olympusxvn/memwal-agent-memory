@@ -48,6 +48,7 @@ Optional restore proof (with `MEMWAL_*` in `.env`): `pnpm memwal:restore-smoke`.
 |-----|---------|
 | [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md) | 5–10 min runbook |
 | [`SUBMISSION.md`](../SUBMISSION.md) | Walrus value + why win |
+| [`docs/companion-mvp-special-one-agent.md`](companion-mvp-special-one-agent.md) | Production MVP (Special One) |
 | [`docs/judge-walrus-memory-workshop.md`](judge-walrus-memory-workshop.md) | Official workshop → this repo |
 | [`docs/deploy.md`](deploy.md) | Mainnet package + v2 object IDs |
 | [`docs/mcp-setup.md`](mcp-setup.md) | Cursor / Claude MCP |
@@ -59,6 +60,7 @@ Optional restore proof (with `MEMWAL_*` in `.env`): `pnpm memwal:restore-smoke`.
 | Asset | URL / path |
 |-------|------------|
 | Dashboard | https://memwalpp-dashboard.vercel.app/ |
+| **Companion MVP** | https://special-one-agent.vercel.app/chat |
 | MCP product | https://memwalpp-dashboard.vercel.app/product |
 | Demo video | [`docs/memwalpp-demo.mp4`](../docs/memwalpp-demo.mp4) |
 | Repository | https://github.com/Olympusxvn/memwal-agent-memory |

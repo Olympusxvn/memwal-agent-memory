@@ -39,6 +39,20 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 
 No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PASS`. Optional live Walrus: [`.env.example`](.env.example) + `MEMWAL_AUTO_PUSH=1` (mainnet relayer).
 
+### Companion MVP — Mr. Toxic Special One (production)
+
+**User-facing agent** on mainnet MemWal — sibling to this Overflow repo. Shows long-term memory, cross-session ledger, and judge-visible Walrus proof in a live app (not CLI-only).
+
+| | |
+|---|---|
+| **Live app** | https://special-one-agent.vercel.app |
+| **Press Room** | https://special-one-agent.vercel.app/chat |
+| **Repository** | https://github.com/Olympusxvn/special-one-agent |
+| **Also submitted to** | [Walrus Sessions 4 — Memory World Cup](https://thewalrussessions.wal.app/memory-world-cup) |
+| **Map (platform ↔ MVP)** | [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) |
+
+**Judge (~30 s):** connect wallet → Gemini key in Settings → send a prediction → see **Walrus Memory Ledger** + **MemWal 🟢 LIVE**.
+
 ### Product — Cursor & Claude (post-hackathon)
 
 **Project memory via MCP** — local-first, optional Walrus sync. Not the judge path.
@@ -55,6 +69,7 @@ No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PAS
 
 - [SUMMARY — role & benefits](SUMMARY.md)
 - [For judges](#for-judges-5–10-min)
+- [Companion MVP — Mr. Toxic Special One](#companion-mvp--mr-toxic-special-one-production)
 - [Product — Cursor & Claude](#product--cursor--claude-post-hackathon)
 - [Overview](#overview)
 - [Quick start](#quick-start)
@@ -325,6 +340,7 @@ Copy [`.env.example`](.env.example) → `.env` / `.env.local`. Package ID is pre
 | [`.cursor/rules/memory-marketplace-rules.mdc`](.cursor/rules/memory-marketplace-rules.mdc) | Primary Cursor project rules |
 | [`openspec/README.md`](openspec/README.md) | Pointer: specs live under `docs/specs/` |
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | **5–10 min judge runbook** |
+| [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) | **Production MVP** — special-one-agent ↔ this repo |
 | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Official workshop → this submission (judge map) |
 | [`docs/judge-final-checklist.md`](docs/judge-final-checklist.md) | Maintainer verification log (smoke tests) |
 | [`SUBMISSION.md`](SUBMISSION.md) | **Final submission brief** (Walrus value + why win) |
@@ -363,6 +379,9 @@ External links and key in-repo docs for hackathon citation, judges, product MCP,
 |----------|-----|
 | Dashboard (live demo) | https://memwalpp-dashboard.vercel.app/ |
 | **MCP product intro** | https://memwalpp-dashboard.vercel.app/product |
+| **Companion MVP (production agent)** | https://special-one-agent.vercel.app/ |
+| **Mr. Toxic — Press Room** | https://special-one-agent.vercel.app/chat |
+| **Companion repo** | https://github.com/Olympusxvn/special-one-agent |
 | GitHub repository | https://github.com/Olympusxvn/memwal-agent-memory |
 | Demo video (repo) | [`docs/memwalpp-demo.mp4`](docs/memwalpp-demo.mp4) |
 

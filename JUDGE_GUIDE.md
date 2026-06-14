@@ -11,6 +11,7 @@
 | **Summary (what & why)** | https://memwalpp-dashboard.vercel.app/summary · [`SUMMARY.md`](SUMMARY.md) |
 | Live demo (dashboard) | https://memwalpp-dashboard.vercel.app/ |
 | **Workshop → submission map** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
+| **Companion MVP (production)** | [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) · [special-one-agent.vercel.app/chat](https://special-one-agent.vercel.app/chat) |
 | **Final smoke log** | [`docs/judge-final-checklist.md`](docs/judge-final-checklist.md) |
 | Submission brief | [`SUBMISSION.md`](SUBMISSION.md) |
 | Architecture | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
@@ -222,6 +223,28 @@ pnpm mcp:e2e            # MCP stdio integration
 ## Path E — MCP Server
 
 See **[Judge MCP quickstart](#judge-mcp-quickstart-2-min)** above.
+
+---
+
+## Path F — Production MVP (~30 s, browser)
+
+**Mr. Toxic Special One** — sibling repo; same MemWal mainnet, user-facing World Cup roast agent.
+
+| Step | Action |
+|------|--------|
+| 1 | Open [special-one-agent.vercel.app/chat](https://special-one-agent.vercel.app/chat) |
+| 2 | Connect Sui wallet → sign |
+| 3 | Settings → paste free [Gemini key](https://aistudio.google.com/apikey) |
+| 4 | Send a team + score prediction |
+| 5 | Confirm **Walrus Memory Ledger** + **MemWal 🟢 LIVE** + [MemWalAccount](https://suiscan.xyz/mainnet/object/0x73b07979a6712f54283c02ddf70e2bdfb3ec729627c9ef0e0d8a214015066a99) |
+
+| Resource | Link |
+|----------|------|
+| Repo | https://github.com/Olympusxvn/special-one-agent |
+| Platform map | [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) |
+| Submission packet | [special-one-agent/SUBMISSION.md](https://github.com/Olympusxvn/special-one-agent/blob/main/SUBMISSION.md) |
+
+**Why Path F matters:** Path A–D prove **platform + MCP + Move**. Path F proves **memory as product** on production Vercel — long-term recall, judge-visible ledger, cross-session wallet namespaces.
 
 ---
 

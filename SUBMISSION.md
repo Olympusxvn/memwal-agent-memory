@@ -107,16 +107,32 @@ Look for `✓ Promoted — blob …` in poster step 3.
 
 **One line:** Judges verify **memory + Walrus + MCP** without keys; **on-chain IDs and Move tests are real**; CLI bounty escrow is a **labeled stub**, not a hidden mock of Walrus.
 
+### Companion MVP — production proof (Mr. Toxic Special One)
+
+Separate repo, same MemWal mainnet stack — **user-facing agent** where memory drives the product (not infrastructure demos).
+
+| | |
+|---|---|
+| **Live** | https://special-one-agent.vercel.app/chat |
+| **Repo** | https://github.com/Olympusxvn/special-one-agent |
+| **Also for** | Walrus Sessions 4 Memory World Cup |
+| **Map** | [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) |
+
+**Why cite it in Overflow:** closes the gap on **Product Experience** and **live Walrus proof** — per-wallet namespaces, prediction ledger (PENDING/CORRECT/WRONG), MemWal 🟢 LIVE on Vercel, [MemWalAccount on mainnet](https://suiscan.xyz/mainnet/object/0x73b07979a6712f54283c02ddf70e2bdfb3ec729627c9ef0e0d8a214015066a99). Platform repo = **how to build**; Special One = **what users get**.
+
+**Judge (~30 s):** wallet → Settings → Gemini key → prediction → **Walrus Memory Ledger** sidebar.
+
 ---
 
 ## 5. Why this deserves to win Walrus Track
 
 1. **End-to-end Walrus narrative** — from agent hook to `walrusBlobId` to Move bounty fulfillment id.  
-2. **Judge-first UX** — strongest demos run **without secrets**; live blob ids are one env block away.  
-3. **Hybrid architecture done right** — ADR-010 durable-wins on sealed content; not “sync everything.”  
-4. **Economy + storage** — mainnet Move package (marketplace, escrow bounty, NFT pack) **plus** Walrus durability.  
-5. **Engineering depth** — OpenSpecs, ADRs, Vitest, `sui move test`, CI — not a slide deck repo.  
-6. **Clear roadmap forward** — MCP universal access ✓, Move v2 **bootstrapped on mainnet** ✓, live chain PTBs (v1 + v2).
+2. **Production MVP in the wild** — [Mr. Toxic Special One](https://special-one-agent.vercel.app/chat) proves MemWal on Vercel mainnet (companion repo).  
+3. **Judge-first UX** — strongest demos run **without secrets**; live blob ids are one env block away.  
+4. **Hybrid architecture done right** — ADR-010 durable-wins on sealed content; not “sync everything.”  
+5. **Economy + storage** — mainnet Move package (marketplace, escrow bounty, NFT pack) **plus** Walrus durability.  
+6. **Engineering depth** — OpenSpecs, ADRs, Vitest, `sui move test`, CI — not a slide deck repo.  
+7. **Clear roadmap forward** — MCP universal access ✓, Move v2 **bootstrapped on mainnet** ✓, live chain PTBs (v1 + v2).
 
 ---
 
@@ -191,6 +207,7 @@ Built with AI assistants (Cursor, Claude) per **ADR-012**. All material decision
 |----------|-----|
 | [`SUMMARY.md`](SUMMARY.md) | Role, benefits, one-page overview |
 | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) | Step-by-step judge path |
+| [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) | Production MVP (Special One) ↔ platform |
 | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Workshop kit vs submission (judge map) |
 | [`README.md`](README.md) | Contributor setup |
 | [`PROJECT.md`](PROJECT.md) | Vision and goals |
