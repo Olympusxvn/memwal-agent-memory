@@ -17,6 +17,8 @@ Universal [Model Context Protocol](https://modelcontextprotocol.io/) front door 
 | `@memwalpp/memwal-client` | Walrus durable store + read-only Sui `ChainReader` |
 
 **Canonical spec:** [`docs/specs/openspec-mcp-server.md`](../../docs/specs/openspec-mcp-server.md)  
+**Official vs hybrid comparison:** [`Comparison.md`](../../Comparison.md)  
+**Agent setup skill:** [`curl -sL https://memwalpp-dashboard.vercel.app/skills/setup`](https://memwalpp-dashboard.vercel.app/skills/setup) · [`docs/skills/setup.md`](../../docs/skills/setup.md)  
 **Technical feedback (MemWal integrators):** [`FINAL_FEEDBACK.md`](../../FINAL_FEEDBACK.md)  
 **Package design:** [`PROJECT.md`](./PROJECT.md)
 

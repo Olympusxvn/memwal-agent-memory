@@ -30,7 +30,15 @@ Chain marketplace tools are **not** part of this product guide — see [`docs/de
 | **Hybrid project memory** (local SQLite + optional promote + redact gate) | **`@memwalpp/mcp`** (this repo) | `pnpm mcp:build` + [`.cursor/mcp.json`](../../.cursor/mcp.json) |
 | **Hackathon judges (no keys)** | **`@memwalpp/mcp`** | `pnpm mcp:e2e` |
 
-They complement each other — not replacements. Post-hackathon alignment notes: [`walrus-memory-alignment.md`](../walrus-memory-alignment.md).
+They complement each other — not replacements. Full comparison: [`Comparison.md`](../../Comparison.md). Post-hackathon alignment notes: [`walrus-memory-alignment.md`](../walrus-memory-alignment.md).
+
+**Agent setup skill (Pro Local vs Walrus Sync):**
+
+```bash
+curl -sL https://memwalpp-dashboard.vercel.app/skills/setup
+```
+
+Source: [`docs/skills/setup.md`](../skills/setup.md)
 
 ---
 

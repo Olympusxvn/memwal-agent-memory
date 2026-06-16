@@ -6,6 +6,8 @@ Connect **Cursor**, **Claude Desktop**, or any MCP client to the hybrid memory l
 
 **Product users (Cursor / Claude):** [`product/README.md`](product/README.md) — Pro Local vs + Walrus Sync.
 
+**Agent setup skill:** `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup` · [`docs/skills/setup.md`](skills/setup.md) · **Comparison:** [`Comparison.md`](../Comparison.md)
+
 **Package docs:** [`packages/mcp/README.md`](../packages/mcp/README.md) · **Technical feedback:** [`FINAL_FEEDBACK.md`](../FINAL_FEEDBACK.md)
 
 ## Prerequisites

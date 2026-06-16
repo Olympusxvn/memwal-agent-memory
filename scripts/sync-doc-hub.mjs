@@ -93,5 +93,11 @@ copyFile(
   path.join(outDir, "diagrams/memwalpp-merged-architecture.svg"),
 );
 
+copyFile(
+  path.join(ROOT, "docs/skills/setup.md"),
+  path.join(ROOT, "apps/dashboard/public/skills/setup"),
+);
+
 console.log(`doc-hub synced → ${path.relative(ROOT, outDir)}/`);
 console.log(`slides synced → apps/dashboard/public/memwalpp-slides.html`);
+console.log(`skills/setup synced → apps/dashboard/public/skills/setup`);
