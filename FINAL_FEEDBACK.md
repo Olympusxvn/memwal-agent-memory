@@ -120,6 +120,196 @@ OpenSpec status: [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-s
 
 ---
 
+## Draft GitHub issues for MystenLabs/MemWal (not filed yet)
+
+Two issues below are **ready to paste** into [MystenLabs/MemWal/issues/new](https://github.com/MystenLabs/MemWal/issues/new). Search the tracker first for duplicates (`blob verify`, `jobId`, `durable-complete`).
+
+| Draft | Target repo | Labels (suggested) | Status |
+|-------|-------------|-------------------|--------|
+| [Issue A — Blob verify / job status](#issue-a--document-or-expose-blob-verification--job--blob-status) | `MystenLabs/MemWal` | `documentation`, `enhancement` | **Draft — do not file until reviewed** |
+| [Issue B — Async promotion semantics](#issue-b--clarify-durable-complete-vs-accepted-async) | `MystenLabs/MemWal` | `documentation` | **Draft — do not file until reviewed** |
+
+**Reference commit:** [`1cb25d9`](https://github.com/Olympusxvn/memwal-agent-memory/commit/1cb25d9) · **Repro:** `pnpm mcp:e2e` (mock: `MEMWAL_MCP_MOCK_DURABLE=1`)
+
+---
+
+### Issue A — Document or expose blob verification + job → blob status
+
+**Title:** `Document supported blob verification and job→blob status for integrators`
+
+**Labels:** `documentation`, `enhancement`
+
+**Body:**
+
+```markdown
+## Summary
+
+Integrators building hybrid wrappers (local cache + MemWal durable layer) need a **supported, documented way** to confirm that a Walrus blob exists after `remember()`, or to poll from `jobId` → final `blobId`. Without this, verify/trust UIs must use heuristics or skip the Walrus layer entirely.
+
+## Context
+
+We wrap MemWal in [memwal-agent-memory](https://github.com/Olympusxvn/memwal-agent-memory) (`@memwalpp/memwal-client` → `DurableMemoryStore`). Our MCP `verify` tool exposes a three-layer check: local proof → Walrus blob → optional Sui on-chain refs.
+
+Reference: [FINAL_FEEDBACK.md § Blob verification](https://github.com/Olympusxvn/memwal-agent-memory/blob/main/FINAL_FEEDBACK.md) · commit `1cb25d9`
+
+## Problem
+
+1. After `remember()` / relayer push, we often receive a **`jobId` before `blobId`** is known.
+2. There is no documented **read API** to confirm blob existence by id on Walrus (or via MemWal) from the SDK/relayer.
+3. Our wrapper returns `verifyBlob()` with `found: false` and reason `walrus_index_unavailable` when we cannot confirm upstream — even when local state says `synced: true`.
+
+This forces integrators to either:
+- Treat “synced” as “trust me”, or
+- Re-implement undocumented relayer endpoints, or
+- Weaken verify UX.
+
+## Expected
+
+One of (or a documented combination of):
+
+- [ ] **Document** the supported path to verify a blob id exists (relayer endpoint, SDK method, or Walrus read pattern blessed by MemWal).
+- [ ] **Document** job status polling: `jobId` → `{ pending | complete | failed }` → `blobId`.
+- [ ] Clarify **SLA / timing**: typical latency from `remember()` accept to `blobId` availability.
+
+## Actual (our workaround)
+
+In `packages/memwal-client/src/durable/durable-memory-store.ts`:
+
+- `LiveDurableMemoryStore.verifyBlob()` checks relayer health but cannot confirm blob presence without an index → `reasons: ["walrus_index_unavailable"]`.
+- Layered verify in `packages/core/src/memory/verify-memory.ts` may still report `valid: true` when local proof + `synced` align, but **`walrus.found` stays false** — confusing for “verifiable memory” product copy.
+
+## Minimal repro (wrapper repo)
+
+```bash
+git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
+pnpm install && pnpm mcp:build
+
+# Offline-safe (mock durable):
+MEMWAL_MCP_MOCK_DURABLE=1 pnpm --filter @memwalpp/mcp test -t "verify"
+
+# Live (requires MEMWAL_PRIVATE_KEY + MEMWAL_ACCOUNT_ID + relayer):
+# remember → sync → verify({ memoryId, checkWalrus: true })
+```
+
+## Suggested SDK surface (optional)
+
+Not prescriptive — examples only:
+
+```ts
+// Option A: poll job
+await memwal.waitForJob(jobId): { status, blobId?, error? }
+
+// Option B: verify blob
+await memwal.verifyBlob(blobId): { exists: boolean, ... }
+
+// Option C: document relayer GET /jobs/:id and /blobs/:id semantics
+```
+
+## Environment
+
+- Package: `@mysten-incubation/memwal` (via our `@memwalpp/memwal-client`)
+- Relayer: mainnet (`MEMWAL_SERVER_URL` / workshop defaults)
+- SDK consumer: hybrid MCP server + `MemorySyncService.pushOne()`
+
+## Why this matters
+
+Hackathon/judge flows and production agents advertise **“verifiable Walrus memory”**. Without a blessed verify path, every integrator reinvents partial solutions and users cannot distinguish “accepted by relayer” from “durable on Walrus”.
+```
+
+---
+
+### Issue B — Clarify durable-complete vs accepted-async
+
+**Title:** `Clarify when a remember() result is durable-complete vs accepted-async (jobId vs blobId)`
+
+**Labels:** `documentation`
+
+**Body:**
+
+```markdown
+## Summary
+
+The SDK/relayer response from `remember()` can indicate success with **`jobId` only** (no `blobId` yet). Integrators need an official **state machine** so hybrid layers know when to set `synced`, when to expose `walrusBlobId`, and when it is honest to label a memory **verifiable**.
+
+## Context
+
+[memwal-agent-memory](https://github.com/Olympusxvn/memwal-agent-memory) implements hybrid sync in `MemorySyncService.pushOne()` and exposes MCP tools `sync`, `search`, `getVersionHistory`, and `verify`.
+
+Reference: [FINAL_FEEDBACK.md § Async promotion](https://github.com/Olympusxvn/memwal-agent-memory/blob/main/FINAL_FEEDBACK.md) · commit `1cb25d9`
+
+## Problem
+
+Today we infer:
+
+```ts
+synced = Boolean(durableResult.blobId || durableResult.jobId)
+```
+
+That avoids duplicate pushes on the next `syncPending()`, but it collapses two different states:
+
+| State | Meaning (integrator view) | What we have today |
+|-------|---------------------------|-------------------|
+| **Accepted-async** | Relayer queued work; blob id unknown | `jobId` set, `synced: true` |
+| **Durable-complete** | Blob id known; Walrus path complete | `blobId` set, `synced: true` |
+
+Downstream effects in our wrapper:
+
+- `search` → `verifiable: true` only when `synced && walrusBlobId` (we had to add this rule ourselves).
+- `getVersionHistory` → `promoted` event may fire before `blobId` is stable.
+- `verify` → Walrus layer ambiguous when `checkWalrus: true` but blob id missing.
+- UX copy: agents say “synced to Walrus” when we only have a job handle.
+
+## Expected
+
+Official documentation (README or SDK types) defining:
+
+1. **Fields returned** from `remember()` — always/ sometimes `jobId`, `blobId`, both?
+2. **Terminal states** — when is the write safe to treat as durable for recall/verify?
+3. **Idempotency** — if client retries `remember()` with same content/namespace, what happens?
+4. **Recommended integrator pattern** — e.g. poll until `blobId`, or subscribe, or fire-and-forget with explicit “pending” flag.
+
+A small state diagram in docs would be enough to align wrappers like ours and `@mysten-incubation/oc-memwal`.
+
+## Our workaround (may diverge from intent)
+
+In `@memwalpp/core`:
+
+- `synced: true` when `blobId || jobId` (handoff to durable pipeline).
+- `verifiable: true` only when `synced && walrusBlobId` (stricter, user-facing).
+- `metadata.walrusPending: "1"` when job accepted but blob id absent.
+- Version history records `promoted` at push time with optional `jobId`.
+
+Document whether this matches MemWal’s intended contract or we should keep `synced: false` until `blobId`.
+
+## Minimal repro
+
+```bash
+git clone https://github.com/Olympusxvn/memwal-agent-memory.git
+cd memwal-agent-memory
+pnpm install && pnpm mcp:build
+pnpm mcp:e2e
+# With live MEMWAL_* env: inspect row after sync — jobId set, blobId may lag
+```
+
+Relevant code paths:
+
+- `packages/core/src/memory/memory-sync-service.ts` — `pushOne()`
+- `packages/mcp/docs/VERIFY.md` — layered verify expectations
+
+## Questions for maintainers
+
+1. Should integrators **block** until `blobId`, or is job-only accept intentional for latency?
+2. Is there a **canonical pending flag** in SDK responses we should map instead of inventing `walrusPending`?
+3. Does `recall()` against durable layer require `blobId`, or can it resolve from `jobId`?
+
+## Why this matters
+
+Hybrid local+Walrus products (MCP, OpenClaw plugin, serverless agents) need one shared vocabulary for “saved locally” vs “durable on Walrus” vs “verifiable”. Without it, every wrapper guesses differently and judges/users see inconsistent behavior.
+```
+
+---
+
 ## Privacy and security (what we enforced)
 
 | Control | Implementation |
@@ -192,4 +382,4 @@ pnpm --filter @memwalpp/memwal-client test
 
 Built for **Sui Overflow 2026 (Walrus track)** and **Walrus Sessions 4 — Memory World Cup** companion apps. We **wrap** [MystenLabs/MemWal](https://github.com/MystenLabs/MemWal); we do not fork the SDK.
 
-For MemWal product feedback, we file issues on [MystenLabs/MemWal](https://github.com/MystenLabs/MemWal/issues) with reproduction steps from this monorepo where applicable.
+For MemWal product feedback, draft issues live in [§ Draft GitHub issues](#draft-github-issues-for-mystenlabsmemwal-not-filed-yet) above. File on [MystenLabs/MemWal](https://github.com/MystenLabs/MemWal/issues) after review, with reproduction steps from this monorepo.
