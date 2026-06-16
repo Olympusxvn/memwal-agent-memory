@@ -8,7 +8,7 @@ import {
   MARKETPLACE_PACKAGE_PUBLISHED_AT,
   moveTarget,
   walCoinType,
-} from "@memwalpp/shared";
+} from "@memwalpp/shared/deployed-package";
 import { useCallback, useState } from "react";
 
 const PUBLISHED_PACKAGE_ID =
