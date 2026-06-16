@@ -1,8 +1,8 @@
 import type { ToolSession } from "../types.js";
 
-export type ToolKind = "read" | "mutate" | "durable" | "chain";
+export type ToolKind = "read" | "mutate" | "durable";
 
-const MUTATING: ToolKind[] = ["mutate", "durable", "chain"];
+const MUTATING: ToolKind[] = ["mutate", "durable"];
 
 export function toolKind(name: string): ToolKind {
   switch (name) {
@@ -10,23 +10,21 @@ export function toolKind(name: string): ToolKind {
     case "search":
     case "verify":
     case "getLineage":
+    case "getVersionHistory":
     case "getStats":
       return "read";
     case "remember":
     case "softDelete":
-    case "forkMemory":
       return "mutate";
     case "sync":
-    case "promote":
-    case "fulfillBounty":
       return "durable";
     default:
-      return "chain";
+      return "read";
   }
 }
 
 export function requiresAuth(kind: ToolKind): boolean {
-  return MUTATING.includes(kind) || kind === "durable" || kind === "chain";
+  return MUTATING.includes(kind);
 }
 
 export function assertAuthorized(session: ToolSession, toolName: string): void {
@@ -35,7 +33,7 @@ export function assertAuthorized(session: ToolSession, toolName: string): void {
     return;
   }
   if (requiresAuth(kind) && !session.authorized) {
-    throw new McpAuthError("Mutating or chain tools require Authorization bearer token");
+    throw new McpAuthError("Mutating or durable tools require Authorization bearer token");
   }
 }
 

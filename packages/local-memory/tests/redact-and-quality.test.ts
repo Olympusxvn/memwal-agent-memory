@@ -22,6 +22,51 @@ describe("redactForUpstream", () => {
     expect(r.piiFlags).toContain("api_key_sk");
   });
 
+  it("redacts formatted US phone numbers", () => {
+    const r = redactForUpstream("call 555-123-4567 or (555) 123-4567 today");
+    expect(r.text).not.toContain("555-123-4567");
+    expect(r.text).not.toContain("(555) 123-4567");
+    expect(r.piiFlags).toContain("phone");
+  });
+
+  it("redacts bare 10-digit phone when not an id suffix", () => {
+    const r = redactForUpstream("support line 5551234567 available");
+    expect(r.text).toContain("[redacted-phone]");
+    expect(r.text).not.toContain("5551234567");
+    expect(r.piiFlags).toContain("phone");
+  });
+
+  it("does not redact slug-id with UUID suffix (MCP markers)", () => {
+    const uuid = "550e8400-e29b-41d4-a716-446655440000";
+    const r = redactForUpstream(`e2e-sync-${uuid}: hybrid memory marker.`);
+    expect(r.text).toContain(uuid);
+    expect(r.text).not.toContain("[redacted-phone]");
+    expect(r.piiFlags).not.toContain("phone");
+  });
+
+  it("does not redact slug-id with millisecond timestamp suffix", () => {
+    const r = redactForUpstream(
+      "sync-roundtrip-1739723871234: enough content for sync and recall after durable push.",
+    );
+    expect(r.text).toContain("sync-roundtrip-1739723871234");
+    expect(r.text).not.toContain("[redacted-phone]");
+    expect(r.piiFlags).not.toContain("phone");
+  });
+
+  it("does not redact hex hash suffix after hyphen", () => {
+    const hash = "a1b2c3d4e5f6789012345678abcdef01";
+    const r = redactForUpstream(`blob-${hash} stored on Walrus.`);
+    expect(r.text).toContain(`blob-${hash}`);
+    expect(r.piiFlags).not.toContain("phone");
+  });
+
+  it("does not redact digits inside a UUID", () => {
+    const uuid = "12345678-1234-5678-9abc-123456789012";
+    const r = redactForUpstream(`record id ${uuid} synced.`);
+    expect(r.text).toContain(uuid);
+    expect(r.piiFlags).not.toContain("phone");
+  });
+
   it("leaves benign text unchanged", () => {
     const r = redactForUpstream("no secrets here");
     expect(r.text).toBe("no secrets here");

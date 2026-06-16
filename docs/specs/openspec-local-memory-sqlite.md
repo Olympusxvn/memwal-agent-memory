@@ -49,9 +49,9 @@
 | Class | Strategy |
 |-------|-----------|
 | Email | Regex replace → `[redacted-email]` |
-| Phone (loose) | Digit runs 10–15 with separators → `[redacted-phone]` |
-| High-entropy secrets | Lines matching `sk-[A-Za-z0-9]{20,}`, Bearer tokens, `BEGIN PRIVATE KEY`, hex runs ≥64 chars → `[redacted-secret]` |
-| Flags | Return `piiFlags` string array for logging/metrics (e.g. `email`, `phone`, `secret_pattern`) |
+| Phone | Formatted NANP (`555-123-4567`, `(555) 123-4567`) always redacted; bare 10–11 digit runs redacted **unless** inside a UUID, slug-id timestamp suffix (`sync-roundtrip-1739…`), or hex hash suffix (`blob-deadbeef…`) |
+| High-entropy secrets | Lines matching `sk-[A-Za-z0-9]{20,}`, Bearer tokens, `BEGIN PRIVATE KEY`, hex runs ≥96 chars → redacted placeholders |
+| Flags | Return `piiFlags` string array for logging/metrics (e.g. `email`, `phone`, `api_key_sk`) |
 
 **Guarantees:** best-effort only — not GDPR-grade; document in UI copy for hackathon.
 

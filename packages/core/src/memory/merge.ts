@@ -1,5 +1,11 @@
 import type { ObjectId } from "@memwalpp/shared";
 import type { MemoryRecord } from "@memwalpp/shared";
+import {
+  appendLineageEvent,
+  MEMORY_METADATA_KEYS,
+  readLineageParentId,
+  readLineageRootId,
+} from "@memwalpp/shared";
 
 import type { DurableRecallHit } from "@memwalpp/memwal-client";
 import type { ConflictStrategy } from "./sync-config.js";
@@ -42,6 +48,7 @@ export function mergeDurableHitIntoRecord(
   const now = Date.now();
   const id = existing?.id ?? stableIdFromHit(hit, namespace, index);
   const walrusBlobId = hit.blobId ? (hit.blobId as ObjectId) : existing?.walrusBlobId;
+  const parentFromHit = hit.metadata?.[MEMORY_METADATA_KEYS.lineageParentId] ?? hit.metadata?.parentId;
 
   // local_wins keeps the local copy (including unsynced local edits); every
   // other strategy takes the durable text. `content` already defaults to hit.text.
@@ -50,11 +57,28 @@ export function mergeDurableHitIntoRecord(
     content = existing.content;
   }
 
-  const metadata = mergeMetadata(existing?.metadata, {
+  const mergedMetadata = mergeMetadata(existing?.metadata, {
     ...(hit.metadata ?? {}),
     mergedFrom: "durable",
     mergedAtMs: String(now),
+    ...(parentFromHit ? { [MEMORY_METADATA_KEYS.lineageParentId]: parentFromHit } : {}),
   }, strategy);
+
+  const lineageHistory = appendLineageEvent(mergedMetadata, {
+    memoryId: id,
+    event: "merged",
+    atMs: now,
+    parentMemoryId: readLineageParentId(mergedMetadata) ?? parentFromHit,
+    rootMemoryId: readLineageRootId(mergedMetadata) ?? readLineageRootId(existing?.metadata) ?? id,
+    walrusBlobId,
+    detail: "durable",
+  });
+
+  const metadata = {
+    ...mergedMetadata,
+    [MEMORY_METADATA_KEYS.lineageHistory]: lineageHistory,
+    ...(readLineageRootId(mergedMetadata) ? {} : { [MEMORY_METADATA_KEYS.lineageRootId]: id }),
+  };
 
   return {
     id,

@@ -24,6 +24,8 @@ export type {
   DurableMemoryStore,
   DurableRememberResult,
   DurableRecallHit,
+  ListVersionsOpts,
+  DurableVerifyBlobResult,
   MemoryVersion,
   RememberOpts,
   RecallOpts,
@@ -54,12 +56,20 @@ export {
   buildSubmitFulfillmentTx,
   chainUsesV2,
   createChainClient,
+  createChainReader,
   DEFAULT_BOUNTY_AMOUNT_MIST,
   descriptionHashBytes,
   loadChainConfigFromEnv,
   SUI_CLOCK_OBJECT_ID,
   tryCreateChainClientFromEnv,
+  tryCreateChainReaderFromEnv,
   walrusBlobIdFromString,
+} from "./chain/index.js";
+export type {
+  ChainReader,
+  OnChainVerifyInput,
+  OnChainVerifyResult,
+  PackLineageResult,
 } from "./chain/index.js";
 
 export type {

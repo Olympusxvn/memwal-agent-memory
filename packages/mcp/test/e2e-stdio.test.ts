@@ -1,6 +1,8 @@
 /**
- * End-to-end stdio MCP test — spawns the real server process and exercises
- * initialize → tools/list → remember → recall → getStats (OpenSpec §13).
+ * E2E stdio MCP — v1 core flows (OpenSpec §13 subset):
+ * 1. remember → recall
+ * 2. remember → sync → recall (mock durable)
+ * 3. sync enforces server-side redaction (S-1)
  */
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,13 +14,22 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 const repoRoot = path.resolve(fileURLToPath(new URL("../../..", import.meta.url)));
 const pnpmCmd = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 
+const E2E_ENV = {
+  ...process.env,
+  MEMWAL_NAMESPACE: "mcp-e2e",
+  MCP_TRANSPORT: "stdio",
+  MEMWAL_MCP_USE_MEMORY: "1",
+  MEMWAL_MCP_MOCK_DURABLE: "1",
+  MEMWAL_SYNC_QUALITY_MIN: "0",
+};
+
 function parseToolJson(result: { content?: Array<{ type: string; text?: string }> }): Record<string, unknown> {
   const block = result.content?.find((c) => c.type === "text");
   if (!block?.text) throw new Error("tool result missing text content");
   return JSON.parse(block.text) as Record<string, unknown>;
 }
 
-describe("MCP stdio E2E", () => {
+describe("MCP stdio E2E — v1 core flows", () => {
   let client: Client;
   let transport: StdioClientTransport;
 
@@ -27,12 +38,7 @@ describe("MCP stdio E2E", () => {
       command: pnpmCmd,
       args: ["exec", "tsx", "packages/mcp/src/cli.ts", "--transport", "stdio"],
       cwd: repoRoot,
-      env: {
-        ...process.env,
-        MEMWAL_NAMESPACE: "mcp-e2e",
-        MCP_TRANSPORT: "stdio",
-        MEMWAL_MCP_USE_MEMORY: "1",
-      },
+      env: E2E_ENV,
       stderr: "pipe",
     });
 
@@ -45,55 +51,125 @@ describe("MCP stdio E2E", () => {
     await transport.close();
   });
 
-  it("serverInfo is memwal-agent-memory", () => {
-    const version = client.getServerVersion();
-    expect(version?.name).toBe("memwal-agent-memory");
-  });
-
-  it("tools/list includes core memory tools", async () => {
+  it("exposes exactly 9 v1 tools", async () => {
+    expect(client.getServerVersion()?.name).toBe("memwal-agent-memory");
     const { tools } = await client.listTools();
-    const names = tools.map((t) => t.name);
-    for (const tool of ["remember", "recall", "search", "sync", "getStats"]) {
-      expect(names).toContain(tool);
-    }
+    expect(tools).toHaveLength(9);
+    const names = tools.map((t) => t.name).sort();
+    expect(names).toEqual(
+      [
+        "getLineage",
+        "getStats",
+        "getVersionHistory",
+        "recall",
+        "remember",
+        "search",
+        "softDelete",
+        "sync",
+        "verify",
+      ].sort(),
+    );
   });
 
-  it("remember → recall round-trip", async () => {
-    const unique = `e2e-walrus-bounty-${Date.now()}`;
-    const rememberResult = await client.callTool({
-      name: "remember",
-      arguments: {
-        content: `${unique}: hybrid memory MCP integration test with enough length for quality.`,
-        tags: ["e2e", "mcp"],
-      },
-    });
-    const remembered = parseToolJson(rememberResult);
-    expect(remembered.stored).toBe(true);
-    expect(typeof remembered.recordId).toBe("string");
+  describe("flow 1: remember → recall", () => {
+    it("stores locally and recalls by keyword", async () => {
+      const unique = `e2e-recall-${crypto.randomUUID()}`;
+      const remembered = parseToolJson(
+        await client.callTool({
+          name: "remember",
+          arguments: {
+            content: `${unique}: hybrid MCP remember recall flow with sufficient length.`,
+            metadata: { source: "e2e" },
+          },
+        }),
+      );
+      expect(remembered.stored).toBe(true);
+      expect(typeof remembered.recordId).toBe("string");
+      expect(typeof remembered.proof).toBe("string");
 
-    const recallResult = await client.callTool({
-      name: "recall",
-      arguments: { query: unique, limit: 5 },
+      const recalled = parseToolJson(
+        await client.callTool({
+          name: "recall",
+          arguments: { query: unique, options: { limit: 5 } },
+        }),
+      );
+      const hits = recalled.hits as Array<{ content?: string }>;
+      expect(hits.some((h) => h.content?.includes(unique))).toBe(true);
+
+      const verified = parseToolJson(
+        await client.callTool({
+          name: "verify",
+          arguments: { proof: remembered.proof as string },
+        }),
+      );
+      expect(verified.valid).toBe(true);
     });
-    const recalled = parseToolJson(recallResult);
-    const hits = recalled.hits as Array<{ content?: string }>;
-    expect(Array.isArray(hits)).toBe(true);
-    expect(hits.some((h) => h.content?.includes(unique))).toBe(true);
   });
 
-  it("getStats reports local rows", async () => {
-    const statsResult = await client.callTool({ name: "getStats", arguments: {} });
-    const stats = parseToolJson(statsResult);
-    expect(stats.namespace).toBe("mcp-e2e");
-    expect(Number(stats.localRows)).toBeGreaterThan(0);
+  describe("flow 2: remember → sync → recall", () => {
+    it("promotes to mock durable and remains recallable", async () => {
+      const unique = `e2e-sync-${crypto.randomUUID()}`;
+      const remembered = parseToolJson(
+        await client.callTool({
+          name: "remember",
+          arguments: {
+            content: `${unique}: durable sync e2e memory with enough text for quality gate.`,
+          },
+        }),
+      );
+      expect(remembered.stored).toBe(true);
+
+      const synced = parseToolJson(
+        await client.callTool({
+          name: "sync",
+          arguments: { forceDurable: false },
+        }),
+      );
+      expect(synced.durableLive).toBe(true);
+      const metrics = synced.metrics as { pushed?: number };
+      expect(Number(metrics.pushed)).toBeGreaterThanOrEqual(1);
+
+      const recalled = parseToolJson(
+        await client.callTool({
+          name: "recall",
+          arguments: { query: unique, options: { limit: 5 } },
+        }),
+      );
+      const hits = recalled.hits as Array<{ id?: string; content?: string; synced?: boolean; walrusBlobId?: string }>;
+      const hit = hits.find((h) => h.content?.includes(unique));
+      expect(hit).toBeDefined();
+      expect(hit?.synced).toBe(true);
+      expect(typeof hit?.walrusBlobId).toBe("string");
+
+      const stats = parseToolJson(await client.callTool({ name: "getStats", arguments: {} }));
+      expect(Number(stats.syncedRows)).toBeGreaterThan(0);
+    });
   });
 
-  it("createBounty returns chain_not_configured without delegate env", async () => {
-    const result = await client.callTool({
-      name: "createBounty",
-      arguments: { description: "E2E chain skip test bounty description." },
+  describe("flow 3: sync redaction (S-1)", () => {
+    it("strips PII before durable write — content redacted in recall", async () => {
+      const unique = `e2e-redact-${crypto.randomUUID()}`;
+      const email = "pii-user@example.com";
+      await client.callTool({
+        name: "remember",
+        arguments: {
+          content: `${unique}: contact ${email} for Walrus sync redaction validation with enough length.`,
+        },
+      });
+
+      await client.callTool({ name: "sync", arguments: {} });
+
+      const recalled = parseToolJson(
+        await client.callTool({
+          name: "recall",
+          arguments: { query: unique, options: { limit: 3 } },
+        }),
+      );
+      const hits = recalled.hits as Array<{ content?: string }>;
+      const row = hits.find((h) => h.content?.includes(unique));
+      expect(row).toBeDefined();
+      expect(row?.content).not.toContain(email);
+      expect(row?.content).toContain("[redacted-email]");
     });
-    const body = parseToolJson(result);
-    expect(body.skipReason).toBe("chain_not_configured");
   });
 });

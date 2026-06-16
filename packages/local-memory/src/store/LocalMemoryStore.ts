@@ -1,11 +1,14 @@
-import type { MemoryRecord } from "@memwalpp/shared";
+import type { MemoryRecord, RememberOptions } from "@memwalpp/shared";
 
+import { prepareRememberRecord } from "../apply-redaction.js";
 import { LocalMemoryError } from "../errors.js";
 import { redactForUpstream as runRedactForUpstream } from "../redact.js";
 import type { RedactForUpstreamResult } from "../redact.js";
 import { scoreQuality as defaultScoreQuality } from "../quality-scorer.js";
 
 export const LOCAL_MEMORY_RECALL_MAX = 500;
+
+export type { RememberOptions };
 
 export interface RecallParams {
   namespace: string;
@@ -26,9 +29,9 @@ export interface PruneParams {
 export abstract class LocalMemoryStore {
   /**
    * Upsert a memory row (same `id` replaces).
-   * Implementations should validate `record.id` and `record.namespace` non-empty.
+   * When `opts.redactLocal` is true, content is redacted before persistence.
    */
-  abstract remember(record: MemoryRecord): Promise<void>;
+  abstract remember(record: MemoryRecord, opts?: RememberOptions): Promise<void>;
 
   abstract recall(params: RecallParams): Promise<MemoryRecord[]>;
 
@@ -45,6 +48,11 @@ export abstract class LocalMemoryStore {
   /** PII / secret pipeline; override to compose custom redacters. */
   redactForUpstream(text: string): RedactForUpstreamResult {
     return runRedactForUpstream(text);
+  }
+
+  /** Shared redaction prep for remember + upstream callers. */
+  prepareRememberRecord(record: MemoryRecord, opts?: RememberOptions): MemoryRecord {
+    return prepareRememberRecord((t) => this.redactForUpstream(t), record, opts);
   }
 
   protected static assertNonEmptyId(id: string): void {

@@ -14,11 +14,11 @@ export class RateLimiter {
   private readonly durableMax: number;
   private readonly disabled: boolean;
 
-  constructor(config?: RateLimitConfig, disabled = false) {
+  constructor(config?: RateLimitConfig, disableLimiter = false) {
     this.maxPerMinute = config?.maxPerMinute ?? 60;
     this.burst = config?.burst ?? 10;
     this.durableMax = config?.durableMaxPerMinute ?? 10;
-    this.disabled = disabled || config?.disabled === true;
+    this.disabled = disableLimiter ? true : config?.disabled === true;
     const now = Date.now();
     this.general = { tokens: this.burst, lastRefillMs: now };
     this.durable = { tokens: this.burst, lastRefillMs: now };
@@ -28,8 +28,8 @@ export class RateLimiter {
     if (this.disabled) return { ok: true };
 
     const kind = toolKind(toolName);
-    const bucket = kind === "durable" || kind === "chain" ? this.durable : this.general;
-    const max = kind === "durable" || kind === "chain" ? this.durableMax : this.maxPerMinute;
+    const bucket = kind === "durable" ? this.durable : this.general;
+    const max = kind === "durable" ? this.durableMax : this.maxPerMinute;
 
     this.refill(bucket, max);
     if (bucket.tokens < 1) {

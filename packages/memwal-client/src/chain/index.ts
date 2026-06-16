@@ -7,6 +7,23 @@ export {
 } from "./constants.js";
 export type { ChainClient, ChainExecuteResult } from "./chain-client.js";
 export { createChainClient, tryCreateChainClientFromEnv } from "./chain-client.js";
+export type {
+  ChainReader,
+  ChainReaderConfig,
+  OnChainVerifyInput,
+  OnChainVerifyResult,
+  PackLineageResult,
+} from "./chain-reader-types.js";
+export {
+  createChainReader,
+  tryCreateChainReaderFromEnv,
+  normalizeObjectId,
+  extractIdVector,
+  extractOptionId,
+  collectSubmissionBlobIds,
+  parsePackExtLineage,
+  packLineageFromParsed,
+} from "./chain-reader.js";
 export {
   buildBootstrapV2Tx,
   buildBuyPackTx,

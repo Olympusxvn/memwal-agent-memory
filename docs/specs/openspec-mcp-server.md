@@ -102,7 +102,7 @@ On `initialize`, the server declares:
 |------|------|------|--------------|-------------|
 | `remember` | W (+ optional D) | yes if promoted | `LocalMemoryStore.remember` → optional `sync.pushOne` | Store a memory. Local write always; if `promote: true`, runs gate + durable push. |
 | `recall` | R | no | `MemorySyncService.pullQuery` | Hybrid recall: local vector recall + optional durable hydrate; returns ranked `MemoryRecord[]`. |
-| `search` | R | no | `LocalMemoryStore.recall` (local-only) | Fast local-only semantic/keyword search (no network). |
+| `search` | R | no | `MemorySyncService.searchQuery` | Hybrid ranked search: local semantic score + optional Walrus hydrate; returns scores, hitSource, verifiable flag (1.1b). |
 | `sync` | D | yes | `MemorySyncService.syncPending` / `fullSync` | Promote pending local rows to Walrus (redact + gate per row). Returns `SyncMetrics`. |
 | `promote` | D | yes | `MemorySyncService.pushOne` | Force gate + redaction + durable write for one `recordId`. Returns `blobId` or skip reason. |
 | `verify` | R | no | `memwal-client` + `shared` | Return PoA / `walrusBlobId` / on-chain refs for a memory (verifiability surface). |
@@ -390,7 +390,25 @@ Root scripts:
 
 ---
 
-## 15. Related specs
+## 15. v1.1 implementation status
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| **1.1a** | ✅ | Phone regex false-positive fix (`local-memory/redact.ts`) |
+| **1.1g** | ✅ | `remember.redactLocal` optional pre-persist redaction |
+| **1.1f** | ✅ | HTTP hardening: per-session registry, bearer auth on W/D tools, RL-4/RL-5, startup validation, security headers, body limit |
+| **1.1b** | ✅ | Hybrid ranked search — local semantic rank + Walrus hydrate, scores + verifiable hits |
+| **1.1e** | ✅ | Real version history — `versionHistory` metadata index + merged timeline |
+| **1.1c** | ✅ | Layered verify — `verifyMemory` + `ChainReader` (pack/bounty/tx) + Walrus blob check |
+| **1.1d** | ✅ | Lineage indexer — `lineageHistory` metadata + `getLineage` graph (local + on-chain pack) |
+
+**v1 tool subset**: §5 marketplace/chain tools are registered in v2; v1 ships 9 hybrid/privacy tools only.
+
+Package docs: `packages/mcp/README.md`, `packages/mcp/PROJECT.md`, `packages/mcp/docs/`.
+
+---
+
+## 16. Related specs
 
 - [`openspec-memwal-agent-memory.md`](openspec-memwal-agent-memory.md) — master spec §7
 - [`openspec-memory-sync-service.md`](openspec-memory-sync-service.md) — `MemorySyncService` API

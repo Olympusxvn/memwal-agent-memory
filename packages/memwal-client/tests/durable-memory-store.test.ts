@@ -85,6 +85,34 @@ describe("DurableMemoryStore", () => {
     expect(versions).toHaveLength(0);
   });
 
+  it("listVersions reads versionHistory metadata index (1.1e)", async () => {
+    const store = createDurableMemoryStore(mockService());
+    const versions = await store.listVersions("rec-1", {
+      namespace: "ns1",
+      synced: true,
+      walrusBlobId: "0x" + "d".repeat(64),
+      metadata: {
+        versionHistory: JSON.stringify([
+          { version: "1", source: "local", atMs: 1, event: "created" },
+          {
+            version: "2",
+            source: "durable",
+            atMs: 2,
+            blobId: "0x" + "d".repeat(64),
+            jobId: "job-2",
+            event: "promoted",
+            synced: true,
+          },
+        ]),
+        contentVersion: "2",
+      },
+    });
+    expect(versions).toHaveLength(1);
+    expect(versions[0]?.version).toBe("2");
+    expect(versions[0]?.blobId).toBeDefined();
+    expect(versions[0]?.source).toBe("durable");
+  });
+
   it("applyRememberResult sets synced and blob", () => {
     const updated = applyRememberResult(sampleRecord(), {
       recordId: "rec-1",

@@ -1,5 +1,9 @@
 #!/usr/bin/env node
-import { createMemWalMcpDepsFromEnv, resolveMcpConfig } from "./runtime/create-deps.js";
+import {
+  createMemWalMcpDepsFromEnv,
+  resolveMcpConfig,
+  validateHttpStartupConfig,
+} from "./runtime/create-deps.js";
 import { createMemWalMcpServer } from "./server.js";
 
 function parseArgs(argv: string[]): { transport?: "stdio" | "http" } {
@@ -21,6 +25,7 @@ async function main(): Promise<void> {
     args.transport ? { transport: args.transport } : undefined,
   );
   const config = resolveMcpConfig(deps.config);
+  validateHttpStartupConfig(config);
   const server = createMemWalMcpServer(deps);
 
   if (config.transport === "http") {

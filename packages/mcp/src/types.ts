@@ -21,6 +21,10 @@ export interface MemWalMcpHttpConfig {
   requireAuth: boolean;
   /** Expected bearer token when requireAuth is true. */
   bearerToken?: string;
+  /** Max JSON body size for POST /mcp (default 256 KiB). */
+  maxBodyBytes?: number;
+  /** Allowed Host header values when binding to 0.0.0.0 (DNS rebinding protection). */
+  allowedHosts?: string[];
 }
 
 export interface MemWalMcpConfig {
@@ -49,3 +53,12 @@ export interface ToolSession {
 export const MCP_SERVER_NAME = "memwal-agent-memory";
 export const MCP_SERVER_VERSION = "0.1.0";
 export const MAX_CONTENT_LENGTH = 8000;
+
+export interface MemoryProof {
+  version: "1";
+  memoryId: string;
+  namespace: string;
+  contentHash: string;
+  walrusBlobId?: string;
+  issuedAtMs?: number;
+}

@@ -1,4 +1,5 @@
 import type { MemoryRecord, ObjectId } from "@memwalpp/shared";
+import { parseContentVersion, parseVersionHistory } from "@memwalpp/shared";
 
 import type { MemWalClientConfig } from "../config.js";
 import {
@@ -12,6 +13,8 @@ import type {
   DurableMemoryStore,
   DurableRecallHit,
   DurableRememberResult,
+  DurableVerifyBlobResult,
+  ListVersionsOpts,
   MemoryVersion,
   NamespaceOpts,
   RecallOpts,
@@ -25,12 +28,12 @@ export interface DurableMemoryStoreOptions {
   minRequestIntervalMs?: number;
 }
 
-function parseContentVersion(metadata?: Record<string, string>): string {
-  return metadata?.contentVersion?.trim() || "1";
+function parseContentVersionMeta(metadata?: Record<string, string>): string {
+  return parseContentVersion(metadata);
 }
 
-function bumpContentVersion(metadata?: Record<string, string>): string {
-  const current = Number.parseInt(parseContentVersion(metadata), 10);
+function bumpContentVersionMeta(metadata?: Record<string, string>): string {
+  const current = Number.parseInt(parseContentVersionMeta(metadata), 10);
   const next = Number.isFinite(current) ? current + 1 : 1;
   return String(next);
 }
@@ -60,6 +63,15 @@ class OfflineDurableMemoryStore implements DurableMemoryStore {
 
   listVersions(): Promise<MemoryVersion[]> {
     return Promise.reject(new MemWalConfigError("DurableMemoryStore offline."));
+  }
+
+  verifyBlob(): Promise<DurableVerifyBlobResult> {
+    return Promise.resolve({
+      checked: false,
+      live: false,
+      found: false,
+      reasons: ["durable_offline"],
+    });
   }
 
   health(): Promise<{ ok: boolean }> {
@@ -107,7 +119,7 @@ class LiveDurableMemoryStore implements DurableMemoryStore {
         metadata: {
           ...record.metadata,
           recordId: record.id,
-          contentVersion: bumpContentVersion(record.metadata),
+          contentVersion: bumpContentVersionMeta(record.metadata),
         },
       });
       return {
@@ -148,7 +160,7 @@ class LiveDurableMemoryStore implements DurableMemoryStore {
     // Remote delete not exposed by @mysten-incubation/memwal — tombstone only.
   }
 
-  async listVersions(recordId: string, opts?: NamespaceOpts): Promise<MemoryVersion[]> {
+  async listVersions(recordId: string, opts?: ListVersionsOpts): Promise<MemoryVersion[]> {
     if (!recordId.trim()) {
       throw new RangeError("listVersions: recordId must be non-empty");
     }
@@ -156,14 +168,57 @@ class LiveDurableMemoryStore implements DurableMemoryStore {
     if (this.tombstones.has(`${ns}:${recordId}`)) {
       return [];
     }
-    // Without a durable index API, expose a single logical version placeholder.
-    // Wave 2 sync will populate metadata keys on the local record.
-    return [
-      {
-        version: "1",
-        source: "metadata",
-      },
-    ];
+
+    const history = parseVersionHistory(opts?.metadata?.versionHistory);
+    const durableEntries = history
+      .filter((entry) => entry.source === "durable" || entry.blobId)
+      .map((entry) => ({
+        version: entry.version,
+        blobId: entry.blobId,
+        jobId: entry.jobId,
+        promotedAtMs: entry.atMs,
+        source: entry.source === "durable" ? ("durable" as const) : ("metadata" as const),
+      }));
+
+    if (durableEntries.length > 0) {
+      return durableEntries;
+    }
+
+    const md = opts?.metadata ?? {};
+    const version = parseContentVersionMeta(md);
+    const blobId = opts?.walrusBlobId ?? md.walrusBlobId;
+    const jobId = md.jobId || md.lastJobId;
+    const promotedRaw = md.promotedAtMs ?? md.syncedAtMs;
+
+    if (opts?.synced && (blobId || jobId)) {
+      return [
+        {
+          version,
+          blobId,
+          jobId: jobId || undefined,
+          promotedAtMs: promotedRaw ? Number(promotedRaw) : undefined,
+          source: blobId ? "durable" : "metadata",
+        },
+      ];
+    }
+
+    return [{ version: "1", source: "metadata" }];
+  }
+
+  async verifyBlob(blobId: string, opts?: NamespaceOpts & { recordId?: string }): Promise<DurableVerifyBlobResult> {
+    if (!blobId.trim()) {
+      throw new RangeError("verifyBlob: blobId must be non-empty");
+    }
+    const health = await this.health();
+    return {
+      checked: true,
+      live: health.ok,
+      found: false,
+      blobId: blobId.trim(),
+      recordId: opts?.recordId,
+      namespace: opts?.namespace ?? this.defaultNamespace,
+      reasons: health.ok ? ["walrus_index_unavailable"] : ["durable_offline"],
+    };
   }
 
   async health(): Promise<{ ok: boolean; version?: string }> {
@@ -251,7 +306,7 @@ export function applyRememberResult(
       // "1" until the blob id is known (async remember without wait).
       walrusPending: result.blobId ? "0" : "1",
       promotedAtMs: String(Date.now()),
-      contentVersion: bumpContentVersion(record.metadata),
+      contentVersion: bumpContentVersionMeta(record.metadata),
     },
   };
 }

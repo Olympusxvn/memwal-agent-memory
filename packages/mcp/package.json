@@ -22,6 +22,7 @@
     "@memwalpp/memwal-client": "workspace:*",
     "@memwalpp/shared": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "express": "^5.0.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {

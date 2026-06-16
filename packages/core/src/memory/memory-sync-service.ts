@@ -1,15 +1,51 @@
-import type { DurableMemoryStore } from "@memwalpp/memwal-client";
+import type { ChainReader, DurableMemoryStore } from "@memwalpp/memwal-client";
 import { MemWalConfigError } from "@memwalpp/memwal-client";
-import { LOCAL_MEMORY_RECALL_MAX, type LocalMemoryStore } from "@memwalpp/local-memory";
-import type { MemoryRecord, ObjectId } from "@memwalpp/shared";
+import {
+  applyRedactionToRecord,
+  isLocallyRedacted,
+  LOCAL_MEMORY_RECALL_MAX,
+  type LocalMemoryStore,
+  scoreSemanticMatch,
+} from "@memwalpp/local-memory";
+import type { MemoryRecord, ObjectId, RememberOptions } from "@memwalpp/shared";
+import {
+  appendVersionHistory,
+  bumpContentVersion,
+  hashMemoryContent,
+  MEMORY_METADATA_KEYS,
+  parseContentVersion,
+  appendLineageEvent,
+  readLineageParentId,
+  readLineageRootId,
+} from "@memwalpp/shared";
 
 import { allowUpstream, isTombstone, mergeDurableHitIntoRecord } from "./merge.js";
+import {
+  blendDurableScore,
+  classifySearchHit,
+  type SearchHit,
+  type SearchQueryOpts,
+} from "./search-query.js";
+import {
+  buildVersionHistoryFromRecord,
+  mergeVersionEntries,
+  type VersionHistoryResult,
+} from "./version-history.js";
+import {
+  resolveLineageForRecord,
+  type LineageResult,
+} from "./lineage-index.js";
 import type { MemorySyncConfig, PullQueryOpts } from "./sync-config.js";
 import { resolveSyncConfig } from "./sync-config.js";
 import { SyncError } from "./sync-errors.js";
 import type { SyncLogger } from "./sync-logger.js";
 import { noopSyncLogger } from "./sync-logger.js";
 import { emptySyncMetrics, mergeSyncMetrics, type SyncMetrics } from "./sync-metrics.js";
+import {
+  verifyMemoryLayers,
+  type VerifyMemoryInput,
+  type VerifyMemoryResult,
+} from "./verify-memory.js";
 
 export type PushSkipReason =
   | "offline"
@@ -30,13 +66,22 @@ export interface PushOneResult {
 export interface MemorySyncServiceDeps {
   local: LocalMemoryStore;
   durable: DurableMemoryStore;
+  chainReader?: ChainReader | null;
   config?: MemorySyncConfig;
   logger?: SyncLogger;
 }
 
 export interface MemorySyncService {
+  remember(record: MemoryRecord, opts?: RememberOptions): Promise<MemoryRecord>;
   pushOne(recordId: string, opts?: { namespace?: string }): Promise<PushOneResult>;
   pullQuery(query: string, opts?: PullQueryOpts): Promise<MemoryRecord[]>;
+  searchQuery(query: string, opts?: SearchQueryOpts): Promise<SearchHit[]>;
+  getVersionHistory(memoryId: string, opts?: { namespace?: string }): Promise<VersionHistoryResult>;
+  getLineage(
+    memoryId: string,
+    opts?: { namespace?: string; includeOnChain?: boolean; maxDepth?: number },
+  ): Promise<LineageResult | { found: false; memoryId: string; durableLive: boolean }>;
+  verifyMemory(input: VerifyMemoryInput): Promise<VerifyMemoryResult | { valid: false; reasons: string[] }>;
   syncPending(opts?: { namespace?: string }): Promise<SyncMetrics>;
   fullSync(opts?: { namespace?: string }): Promise<SyncMetrics>;
   softDelete(recordId: string, opts?: { namespace?: string }): Promise<void>;
@@ -49,11 +94,75 @@ class MemorySyncServiceImpl implements MemorySyncService {
   constructor(
     private readonly local: LocalMemoryStore,
     private readonly durable: DurableMemoryStore,
+    private readonly chainReader: ChainReader | null | undefined,
     config?: MemorySyncConfig,
     logger?: SyncLogger,
   ) {
     this.cfg = resolveSyncConfig(config);
     this.log = logger ?? noopSyncLogger;
+  }
+
+  async remember(record: MemoryRecord, opts?: RememberOptions): Promise<MemoryRecord> {
+    const existing = await this.local.getById(record.id);
+    let toSave = record;
+
+    if (existing) {
+      const contentChanged = hashMemoryContent(existing.content) !== hashMemoryContent(record.content);
+      if (contentChanged) {
+        const nextVersion = bumpContentVersion(existing.metadata?.contentVersion);
+        const versionHistory = appendVersionHistory(existing.metadata, {
+          version: nextVersion,
+          source: "local",
+          atMs: Date.now(),
+          contentHash: hashMemoryContent(record.content),
+          event: "edited",
+        });
+        toSave = {
+          ...record,
+          metadata: {
+            ...(record.metadata ?? {}),
+            contentVersion: nextVersion,
+            versionHistory,
+            [MEMORY_METADATA_KEYS.lineageHistory]: appendLineageEvent(existing.metadata, {
+              memoryId: record.id,
+              event: "edited",
+              atMs: Date.now(),
+              parentMemoryId: readLineageParentId(existing.metadata),
+              rootMemoryId: readLineageRootId(existing.metadata) ?? record.id,
+            }),
+          },
+        };
+      }
+    } else {
+      const versionHistory = appendVersionHistory(record.metadata, {
+        version: "1",
+        source: "local",
+        atMs: record.createdAtMs,
+        contentHash: hashMemoryContent(record.content),
+        event: "created",
+      });
+      toSave = {
+        ...record,
+        metadata: {
+          ...(record.metadata ?? {}),
+          contentVersion: "1",
+          versionHistory,
+          [MEMORY_METADATA_KEYS.lineageRootId]: record.id,
+          [MEMORY_METADATA_KEYS.forkDepth]: "0",
+          [MEMORY_METADATA_KEYS.lineageHistory]: appendLineageEvent(record.metadata, {
+            memoryId: record.id,
+            event: "created",
+            atMs: record.createdAtMs,
+            rootMemoryId: record.id,
+            forkDepth: 0,
+          }),
+        },
+      };
+    }
+
+    await this.local.remember(toSave, opts);
+    const saved = await this.local.getById(record.id);
+    return saved ?? toSave;
   }
 
   async pushOne(
@@ -93,32 +202,53 @@ class MemorySyncServiceImpl implements MemorySyncService {
     }
 
     const now = Date.now();
-    const prePush: MemoryRecord = {
-      ...existing,
+    const nextVersion = bumpContentVersion(existing.metadata?.contentVersion);
+    const prePush = applyRedactionToRecord(existing, redacted, {
+      contentVersion: nextVersion,
+      pushedAtMs: String(now),
+      ...(isLocallyRedacted(existing)
+        ? { [MEMORY_METADATA_KEYS.redactLocal]: "1" }
+        : {}),
+    });
+    const prePushRecord: MemoryRecord = {
+      ...prePush,
       namespace,
-      content: redacted.text,
       updatedAtMs: now,
       localQualityScore: score,
       synced: false,
-      metadata: {
-        ...(existing.metadata ?? {}),
-        redacted: redacted.piiFlags.length > 0 ? "1" : "0",
-        piiFlags: redacted.piiFlags.join(","),
-        contentVersion: bumpVersion(existing.metadata?.contentVersion),
-        pushedAtMs: String(now),
-      },
     };
 
-    await this.local.remember(prePush);
+    await this.local.remember(prePushRecord);
 
     try {
-      const durableResult = await this.durable.remember(prePush, {
+      const durableResult = await this.durable.remember(prePushRecord, {
         namespace,
         wait: this.cfg.waitForPush,
       });
 
+      const promotedAtMs = Date.now();
+      const lineageHistory = appendLineageEvent(prePush.metadata, {
+        memoryId: id,
+        event: "promoted",
+        atMs: promotedAtMs,
+        parentMemoryId: readLineageParentId(prePush.metadata),
+        rootMemoryId: readLineageRootId(prePush.metadata) ?? id,
+        walrusBlobId: durableResult.blobId,
+        forkDepth: readLineageParentId(prePush.metadata) ? 1 : 0,
+      });
+      const versionHistory = appendVersionHistory(prePush.metadata, {
+        version: nextVersion,
+        source: "durable",
+        atMs: promotedAtMs,
+        contentHash: hashMemoryContent(prePush.content),
+        blobId: durableResult.blobId,
+        jobId: durableResult.jobId,
+        event: "promoted",
+        synced: true,
+      });
+
       const synced: MemoryRecord = {
-        ...prePush,
+        ...prePushRecord,
         // Durable layer accepted (jobId) or finished (blobId) the write; either
         // way the record is handed off, so don't re-push it on the next sync.
         synced: Boolean(durableResult.blobId || durableResult.jobId),
@@ -130,8 +260,18 @@ class MemorySyncServiceImpl implements MemorySyncService {
           ...(prePush.metadata ?? {}),
           durableNamespace: durableResult.namespace,
           jobId: durableResult.jobId ?? "",
+          [MEMORY_METADATA_KEYS.lastJobId]: durableResult.jobId ?? "",
           walrusPending: durableResult.blobId ? "0" : "1",
-          syncedAtMs: String(Date.now()),
+          [MEMORY_METADATA_KEYS.syncedAtMs]: String(promotedAtMs),
+          [MEMORY_METADATA_KEYS.promotedAtMs]: String(promotedAtMs),
+          [MEMORY_METADATA_KEYS.contentVersion]: nextVersion,
+          [MEMORY_METADATA_KEYS.versionHistory]: versionHistory,
+          [MEMORY_METADATA_KEYS.lineageHistory]: lineageHistory,
+          [MEMORY_METADATA_KEYS.lineageRootId]:
+            readLineageRootId(prePush.metadata) ?? id,
+          [MEMORY_METADATA_KEYS.forkDepth]: readLineageParentId(prePush.metadata)
+            ? "1"
+            : "0",
         },
       };
       await this.local.remember(synced);
@@ -212,6 +352,102 @@ class MemorySyncServiceImpl implements MemorySyncService {
     return this.local.recall({ namespace, query: q, limit });
   }
 
+  async searchQuery(query: string, opts?: SearchQueryOpts): Promise<SearchHit[]> {
+    const namespace = opts?.namespace ?? this.cfg.defaultNamespace;
+    const limit = Math.min(50, Math.max(1, opts?.limit ?? 8));
+    const minScore = opts?.minScore ?? 0.05;
+    const q = query.trim();
+    if (!q) return [];
+
+    const ranked = await this.rankLocalSemantic(namespace, q, minScore);
+    const shouldHydrate =
+      this.durable.isLive &&
+      (opts?.forceDurable === true || ranked.length < limit);
+
+    if (!shouldHydrate) {
+      return ranked.slice(0, limit);
+    }
+
+    try {
+      await this.mergeDurableSearchHits(namespace, q, minScore, limit, ranked);
+    } catch (err) {
+      if (err instanceof MemWalConfigError) {
+        this.log.warn("search durable offline", { namespace });
+        return ranked.slice(0, limit);
+      }
+      throw err;
+    }
+
+    ranked.sort((a, b) => b.score - a.score);
+    return ranked.slice(0, limit);
+  }
+
+  private async rankLocalSemantic(
+    namespace: string,
+    query: string,
+    minScore: number,
+  ): Promise<SearchHit[]> {
+    const rows = await this.local.recall({
+      namespace,
+      query: "",
+      limit: LOCAL_MEMORY_RECALL_MAX,
+    });
+    const hits: SearchHit[] = [];
+    for (const row of rows) {
+      if (isTombstone(row)) continue;
+      const score = scoreSemanticMatch(query, row.content);
+      if (score < minScore) continue;
+      const { source, verifiable } = classifySearchHit(row);
+      hits.push({ record: row, score, source, verifiable });
+    }
+    hits.sort((a, b) => b.score - a.score);
+    return hits;
+  }
+
+  private async mergeDurableSearchHits(
+    namespace: string,
+    query: string,
+    minScore: number,
+    fetchLimit: number,
+    ranked: SearchHit[],
+  ): Promise<void> {
+    const durableHits = await this.durable.search(query, { namespace, limit: fetchLimit });
+    const byBlobId = await this.indexLocalByBlobId(namespace);
+    const byId = new Map(ranked.map((h) => [h.record.id, h]));
+
+    for (let i = 0; i < durableHits.length; i++) {
+      const hit = durableHits[i]!;
+      const recordId = hit.metadata?.recordId;
+      const existing =
+        (recordId ? await this.local.getById(recordId) : undefined) ??
+        (hit.blobId ? byBlobId.get(hit.blobId) : undefined);
+
+      if (existing && isTombstone(existing)) continue;
+
+      const merged = mergeDurableHitIntoRecord(
+        hit,
+        namespace,
+        existing,
+        this.cfg.conflictStrategy,
+        i,
+      );
+      await this.local.remember(merged);
+
+      const score = blendDurableScore(scoreSemanticMatch(query, merged.content), hit.distance);
+      if (score < minScore) continue;
+
+      const { source, verifiable } = classifySearchHit(merged);
+      const next: SearchHit = { record: merged, score, source, verifiable };
+      const prior = byId.get(merged.id);
+      if (!prior || score > prior.score) {
+        byId.set(merged.id, next);
+      }
+    }
+
+    ranked.length = 0;
+    ranked.push(...byId.values());
+  }
+
   /** Map walrusBlobId → local record for a namespace (best-effort, bounded). */
   private async indexLocalByBlobId(
     namespace: string,
@@ -228,6 +464,121 @@ class MemorySyncServiceImpl implements MemorySyncService {
       }
     }
     return byBlobId;
+  }
+
+  async getVersionHistory(
+    memoryId: string,
+    opts?: { namespace?: string },
+  ): Promise<VersionHistoryResult> {
+    const id = memoryId.trim();
+    if (!id) {
+      return { found: false, memoryId: id, versions: [], durableLive: this.durable.isLive };
+    }
+
+    const row = await this.local.getById(id);
+    if (!row) {
+      return { found: false, memoryId: id, versions: [], durableLive: this.durable.isLive };
+    }
+
+    const namespace = opts?.namespace ?? row.namespace;
+    const localVersions = buildVersionHistoryFromRecord(row);
+    let durableOffline = false;
+    let durableVersions: ReturnType<typeof buildVersionHistoryFromRecord> = [];
+
+    if (this.durable.isLive) {
+      try {
+        const durableList = await this.durable.listVersions(id, {
+          namespace,
+          metadata: row.metadata,
+          walrusBlobId: row.walrusBlobId,
+          synced: row.synced,
+        });
+        durableVersions = durableList.map((v) => ({
+          version: v.version,
+          source: v.source === "durable" ? ("durable" as const) : ("metadata" as const),
+          blobId: v.blobId,
+          walrusBlobId: v.blobId,
+          jobId: v.jobId,
+          promotedAtMs: v.promotedAtMs,
+          updatedAtMs: v.promotedAtMs,
+          synced: Boolean(v.blobId || v.jobId),
+          event: "promoted",
+        }));
+      } catch (err) {
+        if (err instanceof MemWalConfigError) {
+          durableOffline = true;
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    const versions = mergeVersionEntries(localVersions, durableVersions);
+    const currentVersion = parseContentVersion(row.metadata);
+    const latestBlobId = row.walrusBlobId ?? versions.at(-1)?.walrusBlobId;
+
+    return {
+      found: true,
+      memoryId: id,
+      namespace,
+      currentVersion,
+      latestBlobId,
+      verifiable: Boolean(row.synced && latestBlobId),
+      versions,
+      durableLive: this.durable.isLive,
+      ...(durableOffline ? { durableOffline: true } : {}),
+    };
+  }
+
+  async getLineage(
+    memoryId: string,
+    opts?: { namespace?: string; includeOnChain?: boolean; maxDepth?: number },
+  ): Promise<LineageResult | { found: false; memoryId: string; durableLive: boolean }> {
+    const id = memoryId.trim();
+    if (!id) {
+      return { found: false, memoryId: id, durableLive: this.durable.isLive };
+    }
+
+    const row = await this.local.getById(id);
+    if (!row) {
+      return { found: false, memoryId: id, durableLive: this.durable.isLive };
+    }
+
+    return resolveLineageForRecord({
+      local: this.local,
+      row,
+      namespace: opts?.namespace ?? row.namespace,
+      maxDepth: opts?.maxDepth,
+      includeOnChain: opts?.includeOnChain,
+      durableLive: this.durable.isLive,
+      readPackLineage: this.chainReader?.isLive
+        ? async (packId) => {
+            const chain = await this.chainReader!.readPackLineage(packId);
+            return {
+              checked: chain.checked,
+              live: chain.live,
+              packId: chain.packId,
+              parentPackId: chain.parentPackId,
+              rootPackId: chain.rootPackId,
+              forkDepth: chain.forkDepth,
+              ancestors: chain.ancestors,
+              version: chain.version,
+              reasons: chain.reasons,
+            };
+          }
+        : undefined,
+    });
+  }
+
+  async verifyMemory(
+    input: VerifyMemoryInput,
+  ): Promise<VerifyMemoryResult | { valid: false; reasons: string[] }> {
+    return verifyMemoryLayers({
+      local: this.local,
+      durable: this.durable,
+      chainReader: this.chainReader,
+      input,
+    });
   }
 
   async syncPending(opts?: { namespace?: string }): Promise<SyncMetrics> {
@@ -307,15 +658,11 @@ class MemorySyncServiceImpl implements MemorySyncService {
   }
 }
 
-function bumpVersion(current?: string): string {
-  const n = Number.parseInt(current?.trim() ?? "0", 10);
-  return String(Number.isFinite(n) && n >= 0 ? n + 1 : 1);
-}
-
 export function createMemorySyncService(deps: MemorySyncServiceDeps): MemorySyncService {
   return new MemorySyncServiceImpl(
     deps.local,
     deps.durable,
+    deps.chainReader,
     deps.config,
     deps.logger,
   );

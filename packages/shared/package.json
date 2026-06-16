@@ -8,9 +8,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json --noEmit",
     "check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
     "lint": "echo \"no lint yet\""
   },
   "devDependencies": {
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
   }
 }

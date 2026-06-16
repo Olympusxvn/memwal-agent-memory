@@ -19,6 +19,12 @@ function offlineDurable(): DurableMemoryStore {
     search: vi.fn(),
     delete: vi.fn(),
     listVersions: vi.fn(),
+    verifyBlob: vi.fn(async () => ({
+      checked: false,
+      live: false,
+      found: false,
+      reasons: ["durable_offline"],
+    })),
     health: vi.fn(async () => ({ ok: false })),
     destroy: vi.fn(),
   };

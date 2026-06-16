@@ -2,7 +2,7 @@ import SqliteDatabase from "better-sqlite3";
 import fs from "node:fs";
 import path from "node:path";
 
-import type { MemoryRecord, ObjectId } from "@memwalpp/shared";
+import type { MemoryRecord, ObjectId, RememberOptions } from "@memwalpp/shared";
 
 import { SqliteLocalStoreError } from "../../errors.js";
 import {
@@ -94,13 +94,14 @@ export class SqliteLocalStore extends LocalMemoryStore {
     }
   }
 
-  async remember(record: MemoryRecord): Promise<void> {
+  async remember(record: MemoryRecord, opts?: RememberOptions): Promise<void> {
     LocalMemoryStore.assertNonEmptyId(record.id);
     LocalMemoryStore.assertNonEmptyNamespace(record.namespace);
-    const metadataJson = JSON.stringify(record.metadata ?? {});
-    const syncedInt = record.synced ? 1 : 0;
-    const walrus = record.walrusBlobId ?? null;
-    const score = record.localQualityScore ?? null;
+    const row = this.prepareRememberRecord(record, opts);
+    const metadataJson = JSON.stringify(row.metadata ?? {});
+    const syncedInt = row.synced ? 1 : 0;
+    const walrus = row.walrusBlobId ?? null;
+    const score = row.localQualityScore ?? null;
     try {
       this.db
         .prepare(
@@ -120,11 +121,11 @@ export class SqliteLocalStore extends LocalMemoryStore {
             metadata_json = excluded.metadata_json`,
         )
         .run({
-          id: record.id,
-          namespace: record.namespace,
-          content: record.content,
-          created_at_ms: record.createdAtMs,
-          updated_at_ms: record.updatedAtMs,
+          id: row.id,
+          namespace: row.namespace,
+          content: row.content,
+          created_at_ms: row.createdAtMs,
+          updated_at_ms: row.updatedAtMs,
           walrus_blob_id: walrus,
           synced: syncedInt,
           local_quality_score: score,

@@ -1,75 +1,142 @@
+import type { Server } from "node:http";
+
+import express from "express";
 import type { Request, Response } from "express";
-import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import {
+  hostHeaderValidation,
+  localhostHostValidation,
+} from "@modelcontextprotocol/sdk/server/middleware/hostHeaderValidation.js";
 
 import { resolveBearerToken } from "../middleware/auth.js";
-import { resolveMcpConfig } from "../runtime/create-deps.js";
-import type { MemWalMcpDeps, ToolSession } from "../types.js";
-import { createMemWalMcpServer } from "../server.js";
+import { sendJsonRpcError } from "../middleware/http-errors.js";
+import { applySecurityHeaders } from "../middleware/http-security.js";
+import { resolveMcpConfig, validateHttpStartupConfig } from "../runtime/create-deps.js";
+import type { MemWalMcpDeps } from "../types.js";
+import { HttpSessionRegistry } from "./http-sessions.js";
 
-const transports = new Map<string, SSEServerTransport>();
+const LOCALHOST_HOSTS = ["127.0.0.1", "localhost", "::1"];
 
-export async function startHttpTransport(
-  deps: MemWalMcpDeps,
-  session: ToolSession,
-): Promise<void> {
+export interface HttpTransportHandle {
+  readonly port: number;
+  readonly host: string;
+  close(): Promise<void>;
+}
+
+function createHttpApp(
+  host: string,
+  maxBodyBytes: number,
+  allowedHosts?: string[],
+): express.Application {
+  const app = express();
+  app.use(express.json({ limit: maxBodyBytes }));
+
+  if (allowedHosts && allowedHosts.length > 0) {
+    app.use(hostHeaderValidation(allowedHosts));
+  } else if (LOCALHOST_HOSTS.includes(host)) {
+    app.use(localhostHostValidation());
+  } else if (host === "0.0.0.0" || host === "::") {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `Warning: MCP HTTP binding to ${host} without allowedHosts — set MCP_HTTP_ALLOWED_HOSTS`,
+    );
+  }
+
+  return app;
+}
+
+export async function startHttpTransport(deps: MemWalMcpDeps): Promise<HttpTransportHandle> {
   const config = resolveMcpConfig(deps.config);
-  const http = config.http ?? { host: "127.0.0.1", port: 8787, requireAuth: true };
+  validateHttpStartupConfig(config);
+
+  const http = config.http ?? {
+    host: "127.0.0.1",
+    port: 8787,
+    requireAuth: true,
+    maxBodyBytes: 262_144,
+  };
   const host = http.host ?? "127.0.0.1";
   const port = http.port ?? 8787;
-  const app = createMcpExpressApp({ host, allowedHosts: [host, "localhost"] });
+  const maxBodyBytes = http.maxBodyBytes ?? 262_144;
+  const allowedHosts =
+    http.allowedHosts ?? (host === "0.0.0.0" ? undefined : [host, "localhost"]);
 
-  app.get("/mcp", async (_req: Request, res: Response) => {
-    const instance = createMemWalMcpServer(deps);
-    const transport = new SSEServerTransport("/mcp/messages", res);
-    transports.set(transport.sessionId, transport);
-    transport.onclose = () => {
-      transports.delete(transport.sessionId);
-      void instance.mcp.close();
-    };
-    await instance.mcp.connect(transport);
-    await transport.start();
-  });
+  const app = createHttpApp(host, maxBodyBytes, allowedHosts);
+  const registry = new HttpSessionRegistry();
 
-  app.post("/mcp/messages", async (req: Request, res: Response) => {
-    const sessionId = req.query.sessionId as string | undefined;
-    if (!sessionId) {
-      res.status(400).json({ error: "sessionId required" });
+  app.all("/mcp", async (req: Request, res: Response) => {
+    applySecurityHeaders(res);
+
+    const authorized =
+      !http.requireAuth ||
+      resolveBearerToken(req.headers.authorization, http.bearerToken);
+
+    const headerSessionId =
+      typeof req.headers["mcp-session-id"] === "string"
+        ? req.headers["mcp-session-id"]
+        : undefined;
+
+    const resolved = await registry.resolveForRequest(
+      deps,
+      authorized,
+      headerSessionId,
+      req.body,
+    );
+
+    if (!resolved.ok) {
+      sendJsonRpcError(res, resolved.httpStatus, resolved.code, resolved.message);
       return;
     }
-    const transport = transports.get(sessionId);
-    if (!transport) {
-      res.status(404).json({ error: "session not found" });
-      return;
-    }
 
-    if (http.requireAuth) {
-      const ok = resolveBearerToken(req.headers.authorization, http.bearerToken);
-      session.authorized = ok;
-      if (!ok) {
-        res.status(401).json({ error: "unauthorized" });
-        return;
-      }
-    } else {
-      session.authorized = true;
-    }
-
-    await transport.handlePostMessage(req, res, req.body);
+    await resolved.entry.transport.handleRequest(req, res, req.body);
   });
 
   app.get("/health", (_req: Request, res: Response) => {
-    res.json({ ok: true, server: "memwal-agent-memory" });
-  });
-
-  await new Promise<void>((resolve) => {
-    app.listen(port, host, () => {
-      // eslint-disable-next-line no-console
-      console.error(
-        `memwal-agent-memory MCP HTTP listening on http://${host}:${port}/mcp`,
-      );
-      resolve();
+    applySecurityHeaders(res);
+    res.json({
+      ok: true,
+      server: "memwal-agent-memory",
+      transport: "streamable-http",
+      sessions: registry.size(),
     });
   });
+
+  app.get("/ready", (_req: Request, res: Response) => {
+    applySecurityHeaders(res);
+    res.json({ ready: true });
+  });
+
+  let httpServer: Server | undefined;
+
+  const listenPort = await new Promise<number>((resolve, reject) => {
+    httpServer = app.listen(port, host, () => {
+      const addr = httpServer?.address();
+      const actualPort =
+        typeof addr === "object" && addr ? addr.port : port;
+      // eslint-disable-next-line no-console
+      console.error(
+        `memwal-agent-memory MCP Streamable HTTP on http://${host}:${actualPort}/mcp`,
+      );
+      resolve(actualPort);
+    });
+    httpServer.on("error", reject);
+  });
+
+  return {
+    port: listenPort,
+    host,
+    async close() {
+      if (httpServer && "closeAllConnections" in httpServer) {
+        (httpServer as Server & { closeAllConnections: () => void }).closeAllConnections();
+      }
+      await new Promise<void>((resolve, reject) => {
+        if (!httpServer) {
+          resolve();
+          return;
+        }
+        httpServer.close((err) => (err ? reject(err) : resolve()));
+      });
+    },
+  };
 }
 
 export type { MemWalMcpDeps };

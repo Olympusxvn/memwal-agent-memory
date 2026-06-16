@@ -2,13 +2,15 @@
 
 **One line:** A **hybrid, verifiable memory layer** and **memory economy** for AI agents — fast and private locally, durable and provable on **Walrus**, tradeable on **Sui**.
 
-| | |
-|---|---|
-| **Repository** | https://github.com/Olympusxvn/memwal-agent-memory |
-| **Hackathon** | [Sui Overflow 2026](https://overflow.sui.io) · [Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement) |
-| **Live demo** | https://memwalpp-dashboard.vercel.app/ |
-| **Summary (this page, live)** | https://memwalpp-dashboard.vercel.app/summary |
-| **Judge quickstart** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) (5–10 min, no keys) |
+
+|                               |                                                                                                                              |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Repository**                | [https://github.com/Olympusxvn/memwal-agent-memory](https://github.com/Olympusxvn/memwal-agent-memory)                       |
+| **Hackathon**                 | [Sui Overflow 2026](https://overflow.sui.io) · [Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement) |
+| **Live demo**                 | [https://memwalpp-dashboard.vercel.app/](https://memwalpp-dashboard.vercel.app/)                                             |
+| **Summary (this page, live)** | [https://memwalpp-dashboard.vercel.app/summary](https://memwalpp-dashboard.vercel.app/summary)                               |
+| **Judge quickstart**          | `[JUDGE_GUIDE.md](JUDGE_GUIDE.md)` (5–10 min, no keys)                                                                       |
+
 
 ---
 
@@ -23,7 +25,7 @@ It **wraps** the official [Walrus Memory](https://docs.wal.app) SDK (`@mysten-in
 - **Sui Move** marketplace, bounties, and royalties
 - **MCP** so Cursor, Claude, OpenClaw, or any MCP client can use the same layer
 
-Display name **MemWal++** appears in some UI copy; the repository and package scope use **memwal-agent-memory** / `@memwalpp/*`.
+Display name **MemWal++** appears in some UI copy; the repository and package scope use **memwal-agent-memory** / `@memwalpp/`*.
 
 ---
 
@@ -43,12 +45,14 @@ Think of three layers:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-| Layer | Role |
-|-------|------|
-| **Local memory** | Sub-millisecond recall, offline work, PII stays local until policy allows upload |
-| **MemWal + Walrus** | Encrypted durable blobs, semantic recall, portable proof (`walrusBlobId`) |
-| **Move contracts** | On-chain economy: list, buy, fork memory packs; post bounties; pay fulfillment tied to a Walrus blob |
-| **MCP** | Universal API for external agents — no need to import monorepo packages |
+
+| Layer               | Role                                                                                                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Local memory**    | Sub-millisecond recall, offline work, PII stays local until policy allows upload                     |
+| **MemWal + Walrus** | Encrypted durable blobs, semantic recall, portable proof (`walrusBlobId`)                            |
+| **Move contracts**  | On-chain economy: list, buy, fork memory packs; post bounties; pay fulfillment tied to a Walrus blob |
+| **MCP**             | Universal API for external agents — no need to import monorepo packages                              |
+
 
 **North-star story:** *bounty posted → hunter acquires memory → improves → forks → payout* — each step traceable to **local policy**, a **Walrus blob**, or an **on-chain event**.
 
@@ -67,14 +71,14 @@ Think of three layers:
 
 - **Drop-in MCP** — `pnpm mcp:e2e` proves stdio tools without wallet setup
 - **Hybrid sync** — `MemorySyncService` handles redact → gate → promote in one place
-- **Mainnet Move** — marketplace and bounty modules already published (see [`docs/deploy.md`](docs/deploy.md))
+- **Mainnet Move** — marketplace and bounty modules already published (see `[docs/deploy.md](docs/deploy.md)`)
 - **Built on official workshop curriculum** — same `remember` / `recall` / namespaces as [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e)
 
 ### Judges and reviewers
 
 - **Runnable in minutes** — no API keys required for core path
 - **Walrus on the critical path** — promotion → MemWal relayer → Walrus blob id on records and bounties
-- **Clear docs** — this file, [`SUBMISSION.md`](SUBMISSION.md), [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md)
+- **Clear docs** — this file, `[SUBMISSION.md](SUBMISSION.md)`, `[docs/judge-walrus-memory-workshop.md](docs/judge-walrus-memory-workshop.md)`
 
 ### Ecosystem (Walrus / Sui)
 
@@ -85,15 +89,17 @@ Think of three layers:
 
 ## Core benefits (why it matters)
 
-| Benefit | What you get |
-|---------|----------------|
-| **Speed** | Local SQLite recall for day-to-day agent turns |
-| **Privacy** | PII redaction and quality gate **before** anything hits Walrus |
-| **Verifiability** | `walrusBlobId` on memory records; bounty fulfillment references on-chain blob ids |
-| **Portability** | MemWal namespaces and Walrus blobs — not trapped in one vendor DB |
-| **Economy** | Discover, buy, fork, and improve memories; royalties to original creators |
-| **Accessibility** | MCP tools (`remember`, `recall`, `search`, `sync`, …) for any compatible client |
-| **Judge-friendly** | Offline demos exit `0`; live Walrus is one `.env` block away |
+
+| Benefit            | What you get                                                                      |
+| ------------------ | --------------------------------------------------------------------------------- |
+| **Speed**          | Local SQLite recall for day-to-day agent turns                                    |
+| **Privacy**        | PII redaction and quality gate **before** anything hits Walrus                    |
+| **Verifiability**  | `walrusBlobId` on memory records; bounty fulfillment references on-chain blob ids |
+| **Portability**    | MemWal namespaces and Walrus blobs — not trapped in one vendor DB                 |
+| **Economy**        | Discover, buy, fork, and improve memories; royalties to original creators         |
+| **Accessibility**  | MCP tools — 9 hybrid/privacy tools; v1.1 adds ranked search, verify, lineage, version history |
+| **Judge-friendly** | Offline demos exit `0`; live Walrus is one `.env` block away                      |
+
 
 **Priority order (project values):** Verifiability › Privacy › Performance › Agent autonomy.
 
@@ -107,19 +113,21 @@ Think of three layers:
 4. **Recall** — hybrid `pullQuery`: local hits first, durable semantic recall when online.
 5. **Trade / bounty** — Move contracts link packs and escrow to Walrus-backed fulfillment.
 
-Optional: OpenClaw-style hooks (`beforeRemember`, `afterThink`, `onTaskComplete`) inject and capture context in [`pnpm agent:demo`](package.json) and [`pnpm agent:bounty-hunt`](package.json).
+Optional: OpenClaw-style hooks (`beforeRemember`, `afterThink`, `onTaskComplete`) inject and capture context in `[pnpm agent:demo](package.json)` and `[pnpm agent:bounty-hunt](package.json)`.
 
 ---
 
 ## vs official MemWal alone
 
-| | Official MemWal | MemWal Agent Memory |
-|---|-----------------|---------------------|
-| Storage | Walrus-centric | **Local + Walrus** hybrid |
-| Before upload | Encryption | Encryption **+ redaction + quality gate** |
-| Economy | None | **Marketplace, bounty, royalty** on Sui |
-| Any agent | SDK / OpenClaw plugin | **+ MCP server** (stdio E2E) |
-| Offline | Limited | **Offline-first** with deferred sync |
+
+|               | Official MemWal       | MemWal Agent Memory                       |
+| ------------- | --------------------- | ----------------------------------------- |
+| Storage       | Walrus-centric        | **Local + Walrus** hybrid                 |
+| Before upload | Encryption            | Encryption **+ redaction + quality gate** |
+| Economy       | None                  | **Marketplace, bounty, royalty** on Sui   |
+| Any agent     | SDK / OpenClaw plugin | **+ MCP server** (stdio E2E)              |
+| Offline       | Limited               | **Offline-first** with deferred sync      |
+
 
 We are an **extension and economy layer**, not a replacement for [MystenLabs/MemWal](https://github.com/MystenLabs/MemWal).
 
@@ -138,16 +146,18 @@ The [Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement
 
 ---
 
-## Companion MVP — Mr. Toxic Special One
+## Companion MVP — Mr. Toxic Special One - Walrus Sessions 4 - World Cup 2026
 
 Production app built in parallel — proves MemWal in the wild while this repo supplies **platform + economy**.
 
-| | |
-|---|---|
-| **Live** | https://special-one-agent.vercel.app |
-| **Repo** | https://github.com/Olympusxvn/special-one-agent |
-| **Events** | Walrus Sessions 4 Memory World Cup |
-| **Map** | [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) |
+
+|            |                                                                                                    |
+| ---------- | -------------------------------------------------------------------------------------------------- |
+| **Live**   | [https://special-one-agent.vercel.app](https://special-one-agent.vercel.app)                       |
+| **Repo**   | [https://github.com/Olympusxvn/special-one-agent](https://github.com/Olympusxvn/special-one-agent) |
+| **Events** | Walrus Sessions 4 Memory World Cup                                                                 |
+| **Map**    | `[docs/companion-mvp-special-one-agent.md](docs/companion-mvp-special-one-agent.md)`               |
+
 
 **Overflow judges:** score **this repo** for infrastructure. Open Special One for **Product Experience** — wallet memory ledger, cross-session predictions, MemWal mainnet LIVE badge (~30 s, browser only).
 
@@ -161,29 +171,34 @@ cd memwal-agent-memory
 pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
 ```
 
-| Result | Meaning |
-|--------|---------|
-| All commands exit `0` | Core integration works |
-| `Not promoted (offline)` | Normal without MemWal credentials — **not a failure** |
-| `✓ Promoted — blob 0x…` | Optional: set `MEMWAL_*` in [`.env.example`](.env.example) and `MEMWAL_AUTO_PUSH=1` |
 
-Last maintainer smoke log: [`docs/judge-final-checklist.md`](docs/judge-final-checklist.md).
+| Result                   | Meaning                                                                             |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| All commands exit `0`    | Core integration works                                                              |
+| `Not promoted (offline)` | Normal without MemWal credentials — **not a failure**                               |
+| `✓ Promoted — blob 0x…`  | Optional: set `MEMWAL_`* in `[.env.example](.env.example)` and `MEMWAL_AUTO_PUSH=1` |
+
+
+Last maintainer smoke log: `[docs/judge-final-checklist.md](docs/judge-final-checklist.md)`.
 
 ---
 
 ## Where to read next
 
-| Audience | Document |
-|----------|----------|
-| **Judges** | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) · [`SUBMISSION.md`](SUBMISSION.md) |
-| **Workshop alignment** | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) |
-| **Repo layout** | [`docs/PROJECT-STRUCTURE.md`](docs/PROJECT-STRUCTURE.md) |
-| **Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [diagram SVG](docs/diagrams/memwalpp-merged-architecture.svg) |
-| **Vision & goals** | [`PROJECT.md`](PROJECT.md) |
-| **On-chain IDs** | [`docs/deploy.md`](docs/deploy.md) |
-| **MCP setup** | [`docs/mcp-setup.md`](docs/mcp-setup.md) |
-| **Product (Cursor/Claude)** | [`docs/product/README.md`](docs/product/README.md) |
-| **Full README** | [`README.md`](README.md) |
+
+| Audience                    | Document                                                                                                       |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Judges**                  | `[JUDGE_GUIDE.md](JUDGE_GUIDE.md)` · `[SUBMISSION.md](SUBMISSION.md)`                                          |
+| **Workshop alignment**      | `[docs/judge-walrus-memory-workshop.md](docs/judge-walrus-memory-workshop.md)`                                 |
+| **Repo layout**             | `[docs/PROJECT-STRUCTURE.md](docs/PROJECT-STRUCTURE.md)`                                                       |
+| **Architecture**            | `[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)` · [diagram SVG](docs/diagrams/memwalpp-merged-architecture.svg) |
+| **Vision & goals**          | `[PROJECT.md](PROJECT.md)`                                                                                     |
+| **On-chain IDs**            | `[docs/deploy.md](docs/deploy.md)`                                                                             |
+| **MCP setup**               | `[docs/mcp-setup.md](docs/mcp-setup.md)` · `[packages/mcp/README.md](packages/mcp/README.md)` |
+| **MCP technical feedback**  | `[FINAL_FEEDBACK.md](FINAL_FEEDBACK.md)`                                                       |
+| **Product (Cursor/Claude)** | `[docs/product/README.md](docs/product/README.md)`                                                             |
+| **Full README**             | `[README.md](README.md)`                                                                                       |
+
 
 ---
 

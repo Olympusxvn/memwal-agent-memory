@@ -4,7 +4,9 @@ Connect **Cursor**, **Claude Desktop**, or any MCP client to the hybrid memory l
 
 **Judges:** fastest path is [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md#judge-mcp-quickstart-2-min) (`pnpm mcp:e2e`). Workshop context: [`judge-walrus-memory-workshop.md`](judge-walrus-memory-workshop.md).
 
-**Product users (Cursor / Claude):** start at [`product/README.md`](product/README.md) — Pro Local vs + Walrus Sync, smoke test, deeplink.
+**Product users (Cursor / Claude):** [`product/README.md`](product/README.md) — Pro Local vs + Walrus Sync.
+
+**Package docs:** [`packages/mcp/README.md`](../packages/mcp/README.md) · **Technical feedback:** [`FINAL_FEEDBACK.md`](../FINAL_FEEDBACK.md)
 
 ## Prerequisites
 
@@ -17,9 +19,13 @@ Optional (Walrus promote): set in `.env` or MCP server env:
 
 - `MEMWAL_PRIVATE_KEY` — delegate key only (ADR-002)
 - `MEMWAL_ACCOUNT_ID`
-- `MEMWAL_SERVER_URL` (if required by your MemWal deployment)
+- `MEMWAL_SERVER_URL` / `MEMWAL_RELAYER_URL` (see [`.env.example`](../.env.example))
 
-Without keys, **local tools still work** (`remember`, `recall`, `search`); durable tools return `skipReason: "offline"`.
+Optional (on-chain read layers for `verify` / `getLineage`):
+
+- `SUI_NETWORK=mainnet` — read-only Sui RPC; no signing key required
+
+Without MemWal keys, **local tools still work** (`remember`, `recall`, `search`, `getLineage`, `verify` local layer); `sync` returns `skipReason: "offline"`.
 
 ## Cursor (project config)
 
@@ -44,7 +50,7 @@ This repo ships [`.cursor/mcp.json`](../.cursor/mcp.json):
 
 1. Run `pnpm mcp:build` once (or after MCP code changes).
 2. In Cursor: **Settings → MCP** → reload servers (or restart Cursor).
-3. Confirm **memwal-agent-memory** shows green / tools listed.
+3. Confirm **memwal-agent-memory** shows green / nine tools listed.
 4. In chat, ask the agent to call `remember` then `recall` for a test phrase.
 
 **Dev mode** (no build, uses tsx):
@@ -65,25 +71,38 @@ MCP_TRANSPORT=http MCP_HTTP_PORT=8787 MCP_HTTP_TOKEN=your-secret pnpm mcp:start
 
 Connect to `http://127.0.0.1:8787/mcp` with header `Authorization: Bearer your-secret`.
 
+See [`packages/mcp/docs/HTTP.md`](../packages/mcp/docs/HTTP.md) for sessions, rate limits, and deployment.
+
 ## Verify E2E (CI / local)
 
 ```bash
 pnpm mcp:e2e
+pnpm --filter @memwalpp/mcp test
 ```
 
-Runs `packages/mcp/test/e2e-stdio.test.ts`: spawns stdio server, `tools/list`, `remember` → `recall`, `getStats`.
+Runs stdio integration: `tools/list`, `remember` → `recall` → `sync` → redaction checks.
 
-## Tool quick reference
+## Tool quick reference (v1 — 9 tools)
 
-| Tool | Layer | Notes |
-|------|-------|-------|
-| `remember` | local (+ optional Walrus) | `promote: true` runs redaction + quality gate |
-| `recall` | hybrid | Uses `MemorySyncService.pullQuery` |
-| `search` | local only | Fast, no network |
-| `sync` | durable | Promotes all pending rows |
-| `getStats` | read | Row counts + `durableLive` |
+| Tool | Kind | HTTP auth | Notes |
+|------|------|-----------|-------|
+| `remember` | W | Required | Optional `redactLocal`; returns `proof` |
+| `recall` | R | Optional | Hybrid `pullQuery` |
+| `search` | R | Optional | Ranked hybrid search — `score`, `hitSource`, `verifiable` |
+| `sync` | D | Required | Unskippable redaction + quality gate |
+| `getVersionHistory` | R | Optional | Timeline from `metadata.versionHistory` |
+| `getLineage` | R | Optional | Local graph + optional Sui pack lineage (metadata only) |
+| `verify` | R | Optional | Layered: local / Walrus / on-chain |
+| `softDelete` | W | Required | Tombstone row |
+| `getStats` | R | Optional | Counts + `durableLive` |
 
-Chain tools (`createBounty`, `fulfillBounty`, `listMemoryPack`, `buyMemoryPack`, `forkMemory`) need a **delegate** key. Without it they return `{ skipReason: "chain_not_configured" }` — expected for judges.
+Full schemas: [`packages/mcp/docs/TOOLS.md`](../packages/mcp/docs/TOOLS.md)
+
+Deep dives:
+
+- [`packages/mcp/docs/HYBRID-SEARCH.md`](../packages/mcp/docs/HYBRID-SEARCH.md)
+- [`packages/mcp/docs/VERIFY.md`](../packages/mcp/docs/VERIFY.md)
+- [`packages/mcp/docs/LINEAGE.md`](../packages/mcp/docs/LINEAGE.md)
 
 ## Mainnet object IDs (v1 + v2)
 
@@ -101,22 +120,7 @@ Canonical source: [`packages/shared/src/deployed-package.ts`](../packages/shared
 
 **Dual package-id rule:** PTBs use **published-at**; WAL coin type uses **original** package id.
 
-MCP chain client **defaults** v1/v2 object IDs from `deployed-package.ts` when env vars are omitted. Override only for another network.
-
-## Chain tools (optional)
-
-```bash
-# .env or MCP server env — delegate only (ADR-002); never commit
-SUI_DELEGATE_PRIVATE_KEY=   # ed25519 hex
-SUI_NETWORK=mainnet
-
-# Optional overrides (defaults match mainnet bootstrap above)
-MARKETPLACE_PACKAGE_PUBLISHED_AT=0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711
-MARKETPLACE_OBJECT_ID=0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548
-WAL_TREASURY_CAP_ID=0xb9ee4a8bab47624f8ec343fd079c51fb54be60a8671affc7961da6e45badc41e
-CONFIG_OBJECT_ID=0x52ea5aa40b38de760c3faa08bd83cd047e4d63023091f14774a8a87609f0ecd1
-MARKETPLACE_V2_OBJECT_ID=0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4268566c488f
-```
+Chain write tools (`createBounty`, …) are **not registered in MCP v1**. They remain in `apps/agent-swarm` / CLI for demos.
 
 ## Troubleshooting
 
@@ -124,7 +128,8 @@ MARKETPLACE_V2_OBJECT_ID=0xfaddc1f4fe0f82a84d885b47a1202e37dc8f0a87040a7df7ff3e4
 |---------|-----|
 | MCP server fails to start | Run `pnpm mcp:build`; check `node packages/mcp/dist/cli.js` exists |
 | No tools in Cursor | Reload MCP; check stderr in Cursor MCP logs |
-| `skipReason: offline` on promote | Expected without MemWal env keys |
+| `skipReason: offline` on sync | Expected without MemWal env keys |
 | Owner key error at startup | Remove `MEMWAL_OWNER_KEY` / `SUI_OWNER_PRIVATE_KEY`; use delegate only |
+| HTTP 401 on remember/sync | Set `Authorization: Bearer` matching `MCP_HTTP_TOKEN` |
 
 Spec: [`openspec-mcp-server.md`](specs/openspec-mcp-server.md)

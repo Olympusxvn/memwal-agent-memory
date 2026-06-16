@@ -3,6 +3,35 @@ import type { ObjectId, SuiAddress } from "./sui.js";
 /** Single-namespace pack semantics (ADR-006). */
 export type MemoryNamespace = string;
 
+/** Options for local remember / MCP remember tool. */
+export interface RememberOptions {
+  /**
+   * When true, apply server-side PII redaction before persisting to SQLite.
+   * Default false — redaction runs on durable sync only (ADR-010).
+   */
+  redactLocal?: boolean;
+}
+
+/** Well-known `MemoryRecord.metadata` keys (string values). */
+export const MEMORY_METADATA_KEYS = {
+  redactLocal: "redactLocal",
+  redacted: "redacted",
+  piiFlags: "piiFlags",
+  contentVersion: "contentVersion",
+  versionHistory: "versionHistory",
+  syncedAtMs: "syncedAtMs",
+  promotedAtMs: "promotedAtMs",
+  lastJobId: "lastJobId",
+  packId: "packId",
+  bountyId: "bountyId",
+  txDigest: "txDigest",
+  fulfillmentTxDigest: "fulfillmentTxDigest",
+  lineageParentId: "lineageParentId",
+  lineageRootId: "lineageRootId",
+  forkDepth: "forkDepth",
+  lineageHistory: "lineageHistory",
+} as const;
+
 /** Local or hydrated memory unit before/after sync to MemWal. */
 export interface MemoryRecord {
   id: string;

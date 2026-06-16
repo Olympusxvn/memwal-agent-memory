@@ -1,33 +1,29 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-import type { ChainClient } from "@memwalpp/memwal-client";
-
 import { assertAuthorized, type ToolKind, toolKind } from "./middleware/auth.js";
-import { createMcpLogger, logToolCall, nextCorrelationId } from "./middleware/logger.js";
+import {
+  createMcpLogger,
+  logToolCall,
+  nextCorrelationId,
+  safeToolMeta,
+} from "./middleware/logger.js";
 import { McpRateLimitError, RateLimiter } from "./middleware/rate-limit.js";
+import { assertNoBypassFlags, McpValidationError } from "./middleware/validate.js";
 import { resolveMcpConfig } from "./runtime/create-deps.js";
 import type { MemWalMcpDeps, ToolSession } from "./types.js";
 import { MCP_SERVER_NAME, MCP_SERVER_VERSION } from "./types.js";
 import {
-  handleBuyMemoryPack,
-  handleCreateBounty,
-  handleForkMemory,
-  handleFulfillBounty,
-  handleListMemoryPack,
-} from "./tools/chain-handlers.js";
-import {
   handleGetLineage,
   handleGetStats,
-  handlePromote,
+  handleGetVersionHistory,
   handleRecall,
   handleRemember,
   handleSearch,
-  handleSoftDelete,
-  handleSync,
   handleVerify,
   type ToolRuntime,
-} from "./tools/handlers.js";
+} from "./tools/memory.js";
+import { handleSoftDelete, handleSync } from "./tools/sync.js";
 
 function toolText(payload: Record<string, unknown>): { content: Array<{ type: "text"; text: string }> } {
   return { content: [{ type: "text", text: JSON.stringify(payload, null, 2) }] };
@@ -37,6 +33,13 @@ function readOnlyHint(kind: ToolKind): boolean {
   return kind === "read";
 }
 
+export interface CreateMcpServerOptions {
+  /** Override session context (HTTP uses one per MCP session). */
+  session?: ToolSession;
+  /** HTTP sessions always rate-limit; stdio may disable via config (RL-4). */
+  forceRateLimit?: boolean;
+}
+
 export interface MemWalMcpServer {
   readonly mcp: McpServer;
   readonly session: ToolSession;
@@ -44,26 +47,32 @@ export interface MemWalMcpServer {
   startHttp(): Promise<void>;
 }
 
-export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
+export function createMemWalMcpServer(
+  deps: MemWalMcpDeps,
+  options?: CreateMcpServerOptions,
+): MemWalMcpServer {
   const config = resolveMcpConfig(deps.config);
-  const session: ToolSession = {
+  const session: ToolSession = options?.session ?? {
     id: config.transport === "stdio" ? "stdio" : "http",
     authorized: config.transport === "stdio",
     transport: config.transport ?? "stdio",
   };
 
-  const rt: ToolRuntime & { chain: ChainClient | null } = {
+  const rt: ToolRuntime = {
     sync: deps.sync,
     local: deps.local,
     durable: deps.durable,
     config,
-    chain: deps.chain ?? null,
   };
 
   const logger = createMcpLogger("mcp");
+  const disableRateLimit =
+    !options?.forceRateLimit &&
+    config.transport === "stdio" &&
+    config.rateLimit?.disabled !== false;
   const limiter = new RateLimiter(
-    config.rateLimit,
-    config.transport === "stdio" && config.rateLimit?.disabled !== false,
+    options?.forceRateLimit ? { ...config.rateLimit, disabled: false } : config.rateLimit,
+    disableRateLimit,
   );
 
   const mcp = new McpServer(
@@ -79,7 +88,7 @@ export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
   function wrapTool(
     name: string,
     description: string,
-    inputSchema: z.ZodRawShape,
+    inputSchema: z.ZodRawShape | undefined,
     handler: (args: Record<string, unknown>) => Promise<Record<string, unknown>>,
   ): void {
     const kind = toolKind(name);
@@ -87,7 +96,7 @@ export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
       name,
       {
         description,
-        inputSchema,
+        ...(inputSchema ? { inputSchema } : {}),
         annotations: {
           readOnlyHint: readOnlyHint(kind),
           destructiveHint: name === "softDelete",
@@ -100,8 +109,28 @@ export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
           throw new McpRateLimitError(rate.retryAfterMs);
         }
         const cid = nextCorrelationId();
-        logToolCall(logger, name, { correlationId: cid, session: session.id });
-        const result = await handler(args as Record<string, unknown>);
+        const rawArgs = args as Record<string, unknown>;
+        try {
+          assertNoBypassFlags(rawArgs);
+        } catch (err) {
+          if (err instanceof McpValidationError) {
+            throw err;
+          }
+          throw err;
+        }
+        logToolCall(logger, name, {
+          correlationId: cid,
+          session: session.id,
+          ...safeToolMeta(rawArgs),
+        });
+        const result = await handler(rawArgs);
+        if (typeof result.recordId === "string") {
+          logToolCall(logger, `${name}:done`, {
+            correlationId: cid,
+            recordId: result.recordId,
+            skipReason: typeof result.skipReason === "string" ? result.skipReason : undefined,
+          });
+        }
         return toolText(result);
       },
     );
@@ -109,12 +138,12 @@ export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
 
   wrapTool(
     "remember",
-    "[W] Store memory locally; optional promote runs redaction + quality gate + Walrus push (Gate: yes if promote).",
+    "[W] Store memory locally (SQLite). Optional redactLocal applies PII redaction before persist; otherwise redaction runs on sync (Gate: on sync).",
     {
       content: z.string().max(8000),
       namespace: z.string().optional(),
-      tags: z.array(z.string()).optional(),
-      promote: z.boolean().optional(),
+      metadata: z.record(z.string()).optional(),
+      redactLocal: z.boolean().optional(),
     },
     (args) => handleRemember(rt, args as Parameters<typeof handleRemember>[1]),
   );
@@ -124,126 +153,85 @@ export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
     "[R] Hybrid recall via MemorySyncService.pullQuery (local + optional durable hydrate).",
     {
       query: z.string(),
-      namespace: z.string().optional(),
-      limit: z.number().int().min(1).max(50).optional(),
-      forceDurable: z.boolean().optional(),
+      options: z
+        .object({
+          namespace: z.string().optional(),
+          limit: z.number().int().min(1).max(50).optional(),
+          forceDurable: z.boolean().optional(),
+        })
+        .optional(),
     },
     (args) => handleRecall(rt, args as Parameters<typeof handleRecall>[1]),
   );
 
   wrapTool(
     "search",
-    "[R] Fast local-only recall (no network).",
+    "[R] Hybrid ranked search — local semantic rank + optional Walrus hydrate (1.1b). Returns scores, hitSource (local|durable|hybrid), verifiable flag.",
     {
-      query: z.string(),
-      namespace: z.string().optional(),
+      semantic_query: z.string().min(1),
       limit: z.number().int().min(1).max(50).optional(),
+      namespace: z.string().optional(),
+      forceDurable: z.boolean().optional(),
+      includeProof: z.boolean().optional(),
     },
     (args) => handleSearch(rt, args as Parameters<typeof handleSearch>[1]),
   );
 
   wrapTool(
-    "sync",
-    "[D] Promote pending local rows — redaction + quality gate per row (Gate: yes).",
+    "getLineage",
+    "[R] Layered lineage graph — local ancestry + optional Sui pack lineage (1.1d). Metadata only, no raw content.",
     {
+      memoryId: z.string().min(1),
+      includeOnChain: z.boolean().optional(),
+      maxDepth: z.number().int().min(1).max(32).optional(),
+    },
+    (args) => handleGetLineage(rt, args as Parameters<typeof handleGetLineage>[1]),
+  );
+
+  wrapTool(
+    "getVersionHistory",
+    "[R] Real version timeline — local edits + Walrus promotions from metadata index (1.1e).",
+    {
+      memoryId: z.string().min(1),
+      includeProof: z.boolean().optional(),
+    },
+    (args) => handleGetVersionHistory(rt, args as Parameters<typeof handleGetVersionHistory>[1]),
+  );
+
+  wrapTool(
+    "sync",
+    "[D] Promote pending local rows — redaction + quality gate per row (Gate: yes, unskippable).",
+    {
+      forceDurable: z.boolean().optional(),
       namespace: z.string().optional(),
-      mode: z.enum(["pending", "full"]).optional(),
     },
     (args) => handleSync(rt, args as Parameters<typeof handleSync>[1]),
   );
 
   wrapTool(
-    "promote",
-    "[D] Force gate + redaction + durable write for one recordId (Gate: yes).",
-    {
-      recordId: z.string(),
-      namespace: z.string().optional(),
-    },
-    (args) => handlePromote(rt, args as Parameters<typeof handlePromote>[1]),
-  );
-
-  wrapTool(
     "softDelete",
     "[W] Tombstone a memory (metadata.deleted=1).",
-    { recordId: z.string(), namespace: z.string().optional() },
+    { memoryId: z.string().min(1), namespace: z.string().optional() },
     (args) => handleSoftDelete(rt, args as Parameters<typeof handleSoftDelete>[1]),
-  );
-
-  wrapTool(
-    "verify",
-    "[R] Return walrusBlobId + sync status for verifiability.",
-    { recordId: z.string() },
-    (args) => handleVerify(rt, args as Parameters<typeof handleVerify>[1]),
   );
 
   wrapTool(
     "getStats",
     "[R] Local row counts + durable connectivity.",
-    {},
+    undefined,
     () => handleGetStats(rt),
   );
 
   wrapTool(
-    "getLineage",
-    "[R] Fork/version graph — on-chain index when Move v2 objects are bootstrapped.",
-    { recordId: z.string().optional(), packId: z.string().optional() },
-    () => Promise.resolve(handleGetLineage()),
-  );
-
-  wrapTool(
-    "createBounty",
-    "[C] Post WAL escrow bounty (v1 or v2 when bootstrapped). Requires delegate key + treasury cap env.",
+    "verify",
+    "[R] Layered verify: local proof, optional Walrus blob check, optional Sui on-chain refs (packId/bountyId/txDigest).",
     {
-      description: z.string().min(1).max(4000),
-      amountMist: z.string().optional(),
-      deadlineHours: z.number().int().min(1).max(720).optional(),
-      minScore: z.number().int().min(0).max(100).optional(),
+      proof: z.string().optional(),
+      memoryId: z.string().optional(),
+      checkWalrus: z.boolean().optional(),
+      checkOnChain: z.boolean().optional(),
     },
-    (args) => handleCreateBounty(rt, args as Parameters<typeof handleCreateBounty>[1]),
-  );
-
-  wrapTool(
-    "fulfillBounty",
-    "[C+D] Promote record → Walrus blob id → submit_fulfillment on-chain (Gate: yes).",
-    {
-      bountyId: z.string(),
-      recordId: z.string(),
-      namespace: z.string().optional(),
-    },
-    (args) => handleFulfillBounty(rt, args as Parameters<typeof handleFulfillBounty>[1]),
-  );
-
-  wrapTool(
-    "listMemoryPack",
-    "[C] List owned MemoryPack on marketplace (v1 or v2).",
-    {
-      packObjectId: z.string(),
-      priceMist: z.string(),
-    },
-    (args) => handleListMemoryPack(rt, args as Parameters<typeof handleListMemoryPack>[1]),
-  );
-
-  wrapTool(
-    "buyMemoryPack",
-    "[C] Buy listed pack by pack id; mints demo WAL from treasury if needed.",
-    {
-      packId: z.string(),
-      priceMist: z.string(),
-    },
-    (args) => handleBuyMemoryPack(rt, args as Parameters<typeof handleBuyMemoryPack>[1]),
-  );
-
-  wrapTool(
-    "forkMemory",
-    "[C+D] Promote improved memory then fork_pack on-chain (v2 only).",
-    {
-      parentPackObjectId: z.string(),
-      recordId: z.string(),
-      newBlobIds: z.array(z.string()).optional(),
-      royaltyBps: z.number().int().min(0).max(1000).optional(),
-      namespace: z.string().optional(),
-    },
-    (args) => handleForkMemory(rt, args as Parameters<typeof handleForkMemory>[1]),
+    (args) => handleVerify(rt, args as Parameters<typeof handleVerify>[1]),
   );
 
   return {
@@ -255,7 +243,7 @@ export function createMemWalMcpServer(deps: MemWalMcpDeps): MemWalMcpServer {
     },
     async startHttp() {
       const { startHttpTransport } = await import("./transport/http.js");
-      await startHttpTransport(deps, session);
+      await startHttpTransport(deps);
     },
   };
 }

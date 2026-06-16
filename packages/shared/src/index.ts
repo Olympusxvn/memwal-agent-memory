@@ -1,7 +1,38 @@
 export type { ObjectId, SuiAddress } from "./sui.js";
 export { isObjectId } from "./sui.js";
 
-export type { MemoryNamespace, MemoryRecord, MemoryPackPreview, MemorySpace } from "./memory.js";
+export type { MemoryNamespace, MemoryRecord, MemoryPackPreview, MemorySpace, RememberOptions } from "./memory.js";
+export { MEMORY_METADATA_KEYS } from "./memory.js";
+
+export {
+  VERSION_HISTORY_METADATA_KEY,
+  appendVersionHistory,
+  bumpContentVersion,
+  hashMemoryContent,
+  parseContentVersion,
+  parseVersionHistory,
+  serializeVersionHistory,
+} from "./version-history.js";
+export type {
+  StoredVersionEntry,
+  StoredVersionEvent,
+  StoredVersionSource,
+} from "./version-history.js";
+export {
+  LINEAGE_HISTORY_METADATA_KEY,
+  appendLineageEvent,
+  parseLineageHistory,
+  readForkDepth,
+  readLineageParentId,
+  readLineageRootId,
+  serializeLineageHistory,
+} from "./lineage.js";
+export type {
+  LineageEdgeRef,
+  LineageNodeRef,
+  StoredLineageEntry,
+  StoredLineageEvent,
+} from "./lineage.js";
 
 export type { Bounty, BountyLifecycle, BountyPostedEvent } from "./bounty.js";
 

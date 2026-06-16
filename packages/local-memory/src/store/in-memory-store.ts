@@ -4,15 +4,17 @@ import {
   LocalMemoryStore,
   type PruneParams,
   type RecallParams,
+  type RememberOptions,
 } from "./LocalMemoryStore.js";
 
 export class InMemoryLocalMemoryStore extends LocalMemoryStore {
   private readonly rows = new Map<string, MemoryRecord>();
 
-  async remember(record: MemoryRecord): Promise<void> {
+  async remember(record: MemoryRecord, opts?: RememberOptions): Promise<void> {
     LocalMemoryStore.assertNonEmptyId(record.id);
     LocalMemoryStore.assertNonEmptyNamespace(record.namespace);
-    this.rows.set(record.id, { ...record });
+    const row = this.prepareRememberRecord(record, opts);
+    this.rows.set(record.id, { ...row });
   }
 
   async getById(id: string): Promise<MemoryRecord | undefined> {

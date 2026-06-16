@@ -38,6 +38,11 @@
 | Case | Expectation |
 |------|-------------|
 | Email | Replaced + `piiFlags` contains `email` |
+| Formatted phone | `555-123-4567`, `(555) 123-4567` redacted + `phone` flag |
+| Bare phone | Standalone `5551234567` redacted when not an id suffix |
+| UUID marker | `e2e-sync-<uuid>` unchanged — no false `phone` flag |
+| Timestamp suffix | `sync-roundtrip-<13-digit-ms>` unchanged |
+| Hash suffix | `blob-<32+ hex>` unchanged |
 | Bearer / sk- / PEM / long hex | At least one representative pattern produces redaction + flag (see implementation) |
 | Clean text | No flags, unchanged |
 

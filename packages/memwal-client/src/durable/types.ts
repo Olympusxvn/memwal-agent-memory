@@ -15,6 +15,13 @@ export interface NamespaceOpts {
   namespace?: string;
 }
 
+export interface ListVersionsOpts extends NamespaceOpts {
+  /** Local metadata index — primary source until remote version API exists. */
+  metadata?: Record<string, string>;
+  walrusBlobId?: string;
+  synced?: boolean;
+}
+
 export interface MemoryVersion {
   version: string;
   blobId?: string;
@@ -37,6 +44,16 @@ export interface DurableRecallHit {
   metadata?: Record<string, string>;
 }
 
+export interface DurableVerifyBlobResult {
+  checked: boolean;
+  live: boolean;
+  found: boolean;
+  blobId?: string;
+  recordId?: string;
+  namespace?: string;
+  reasons: string[];
+}
+
 export interface DurableMemoryStore {
   readonly isLive: boolean;
 
@@ -44,7 +61,8 @@ export interface DurableMemoryStore {
   recall(query: string, opts?: RecallOpts): Promise<DurableRecallHit[]>;
   search(query: string, opts?: RecallOpts): Promise<DurableRecallHit[]>;
   delete(recordId: string, opts?: NamespaceOpts): Promise<void>;
-  listVersions(recordId: string, opts?: NamespaceOpts): Promise<MemoryVersion[]>;
+  listVersions(recordId: string, opts?: ListVersionsOpts): Promise<MemoryVersion[]>;
+  verifyBlob(blobId: string, opts?: NamespaceOpts & { recordId?: string }): Promise<DurableVerifyBlobResult>;
 
   health(): Promise<{ ok: boolean; version?: string }>;
   destroy(): void;
