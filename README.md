@@ -66,6 +66,7 @@ No API keys required. Expect colored `[1/N]` steps and `── RESULT ── PAS
 | ---------------------------- | ------------------------------------------------------------------------------------------------------ |
 | **Live intro (MCP product)** | [https://memwalpp-dashboard.vercel.app/product](https://memwalpp-dashboard.vercel.app/product)         |
 | **Product guide**            | `[docs/product/README.md](docs/product/README.md)`                                                     |
+| **Agent setup skill**        | `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup`                                          |
 | **Landing (repo copy)**      | `[docs/product/landing.html](docs/product/landing.html)`                                               |
 | **MVP spec**                 | `[docs/specs/openspec-product-mvp-cursor-claude.md](docs/specs/openspec-product-mvp-cursor-claude.md)` |
 | **Claude instructions**      | `[docs/product/claude-instructions.md](docs/product/claude-instructions.md)`                           |
@@ -83,6 +84,8 @@ Nine tools over **stdio** (primary) and **Streamable HTTP**: hybrid remember/rec
 | **Package README**           | [`packages/mcp/README.md`](packages/mcp/README.md)                                                     |
 | **Tool reference**           | [`packages/mcp/docs/TOOLS.md`](packages/mcp/docs/TOOLS.md)                                             |
 | **Setup (Cursor / Claude)**  | [`docs/mcp-setup.md`](docs/mcp-setup.md)                                                                |
+| **Agent setup skill**        | `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup` · [`docs/skills/setup.md`](docs/skills/setup.md) |
+| **Official vs hybrid**       | [`Comparison.md`](Comparison.md)                                                                        |
 | **OpenSpec**                 | [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md)                              |
 | **Technical feedback**       | [`FINAL_FEEDBACK.md`](FINAL_FEEDBACK.md) — MemWal integration lessons, limits, recommendations         |
 | **Verify in 2 min**          | `pnpm mcp:build && pnpm mcp:e2e`                                                                       |
@@ -475,7 +478,7 @@ External links and key in-repo docs for hackathon citation, judges, product MCP,
 | Cursor MCP docs             | [https://cursor.com/docs/mcp](https://cursor.com/docs/mcp)                             |
 | Cursor MCP install links    | [https://cursor.com/docs/mcp/install-links](https://cursor.com/docs/mcp/install-links) |
 | NVIDIA NemoClaw             | [https://github.com/NVIDIA/NemoClaw](https://github.com/NVIDIA/NemoClaw)               |
-| MCP setup (this repo)       | `[docs/mcp-setup.md](docs/mcp-setup.md)` · `[packages/mcp/README.md](packages/mcp/README.md)` |
+| MCP setup (this repo)       | `[docs/mcp-setup.md](docs/mcp-setup.md)` · `[packages/mcp/README.md](packages/mcp/README.md)` · `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup` |
 | MCP OpenSpec                | `[docs/specs/openspec-mcp-server.md](docs/specs/openspec-mcp-server.md)`               |
 | MCP technical feedback      | `[FINAL_FEEDBACK.md](FINAL_FEEDBACK.md)`                                               |
 | Claude project instructions | `[docs/product/claude-instructions.md](docs/product/claude-instructions.md)`           |
