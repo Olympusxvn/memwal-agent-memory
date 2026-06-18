@@ -1,4 +1,4 @@
-<div align="center">
+
 
 # 🧠 MemWal Agent Memory
 
@@ -6,74 +6,81 @@
 
 **Local speed · Walrus truth · On-chain economy**
 
-<br />
+  
 
-[![Sui Overflow 2026](https://img.shields.io/badge/Sui_Overflow-2026-6fbcff?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzAwMCIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNOCAwTDE2IDhMOCAxNiAwIDh6Ii8+PC9zdmc+)](https://overflow.sui.io)
-[![Walrus Track](https://img.shields.io/badge/Walrus-Track-7C3AED?style=for-the-badge)](https://mystenlabs.notion.site/walrus-track-problem-statement)
-[![Agentic Web](https://img.shields.io/badge/Agentic-Web-4ade80?style=for-the-badge)](https://overflow.sui.io)
-[![Submission Ready](https://img.shields.io/badge/Submission-Ready-brightgreen?style=for-the-badge)](SUBMISSION.md)
 
-<br />
+[Sui Overflow 2026](https://overflow.sui.io)
+[Walrus Track](https://mystenlabs.notion.site/walrus-track-problem-statement)
+[Agentic Web](https://overflow.sui.io)
+[Submission Ready](SUBMISSION.md)
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Vercel-000?style=for-the-badge&logo=vercel&logoColor=white)](https://memwalpp-dashboard.vercel.app/)
-[![Doc Hub](https://img.shields.io/badge/📚_Doc_Hub-Judges-00f5ff?style=for-the-badge)](https://memwalpp-dashboard.vercel.app/doc-hub/)
-[![Judge Guide](https://img.shields.io/badge/⚖️_Judge_Guide-5--10_min-4ade80?style=for-the-badge)](JUDGE_GUIDE.md)
-[![GitHub](https://img.shields.io/badge/GitHub-memwal--agent--memory-181717?style=for-the-badge&logo=github)](https://github.com/Olympusxvn/memwal-agent-memory)
+  
 
-<br />
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-≥20-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![pnpm](https://img.shields.io/badge/pnpm-10-f69220?style=flat-square&logo=pnpm&logoColor=white)](https://pnpm.io/)
-[![Sui](https://img.shields.io/badge/Sui-Mainnet-4DA2FF?style=flat-square)](https://sui.io/)
-[![Walrus](https://img.shields.io/badge/Walrus-Memory-7C3AED?style=flat-square)](https://docs.wal.app/)
-[![MCP](https://img.shields.io/badge/MCP-v1.1-6366f1?style=flat-square)](packages/mcp/README.md)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+[Live Demo](https://memwalpp-dashboard.vercel.app/)
+[Doc Hub](https://memwalpp-dashboard.vercel.app/doc-hub/)
+[Judge Guide](JUDGE_GUIDE.md)
+[GitHub](https://github.com/Olympusxvn/memwal-agent-memory)
 
-<br />
+  
+
+
+[TypeScript](https://www.typescriptlang.org/)
+[Node.js](https://nodejs.org/)
+[pnpm](https://pnpm.io/)
+[Sui](https://sui.io/)
+[Walrus](https://docs.wal.app/)
+[MCP](packages/mcp/README.md)
+[License](LICENSE)
+
+  
+
 
 > **New here?** Start with **[SUMMARY.md](SUMMARY.md)** — role, benefits, and judge path in one page.  
 > Built on official **[Walrus Memory (MemWal)](https://docs.wal.app)** · wraps `@mysten-incubation/memwal`, does **not** fork it.
 
-<br />
+  
+
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  🏠 Local-first  ──►  🛡️ Redact + Gate  ──►  🐋 Walrus blob       │
+│  🏠 Local-first  ──►  🛡️ Redact + Gate  ──►  🦭 Walrus blob       │
 │                              │                                      │
 │                              ▼                                      │
 │                    ⛓️ Sui Move · Marketplace · Bounties             │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-</div>
+
 
 ---
 
 ## 📑 Contents
 
-| | |
-|:---|:---|
-| ⚖️ | [For judges — 5 min verify](#-for-judges--5-min-verify) |
-| 🎬 | [Demo slides & Doc Hub](#-demo-slides--doc-hub) |
-| 🔌 | [MCP Server `@memwalpp/mcp`](#-mcp-server--memwalppmcp) |
-| 🚀 | [Companion MVP — Mr. Toxic Special One](#-companion-mvp--mr-toxic-special-one) |
-| 🛠️ | [Product — Cursor & Claude](#-product--cursor--claude) |
-| 🏗️ | [Overview & architecture](#-overview) |
-| ⚡ | [Quick start](#-quick-start) |
-| ⛓️ | [Move contracts (mainnet)](#-move-contracts-sui-mainnet) |
-| 📚 | [Documentation](#-documentation) |
-| 🔗 | [References](#-references) |
+
+|     |                                                                                |
+| --- | ------------------------------------------------------------------------------ |
+| ⚖️  | [For judges — 5 min verify](#-for-judges--5-min-verify)                        |
+| 🎬  | [Demo slides & Doc Hub](#-demo-slides--doc-hub)                                |
+| 🔌  | [MCP Server `@memwalpp/mcp](#-mcp-server--memwalppmcp)`                        |
+| 🚀  | [Companion MVP — Mr. Toxic Special One](#-companion-mvp--mr-toxic-special-one) |
+| 🛠️ | [Product — Cursor & Claude](#-product--cursor--claude)                         |
+| 🏗️ | [Overview & architecture](#-overview)                                          |
+| ⚡   | [Quick start](#-quick-start)                                                   |
+| ⛓️  | [Move contracts (mainnet)](#-move-contracts-sui-mainnet)                       |
+| 📚  | [Documentation](#-documentation)                                               |
+| 🔗  | [References](#-references)                                                     |
+
 
 ---
 
-<div align="center">
+
 
 ## ⚖️ For judges — 5 min verify
 
 **No wallet · No MemWal keys · No Sui CLI · Exit `0` on every step**
 
-</div>
+
 
 ```bash
 git clone https://github.com/Olympusxvn/memwal-agent-memory.git
@@ -81,26 +88,29 @@ cd memwal-agent-memory
 pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
 ```
 
-| 🔗 Resource | 📍 Link |
-|:------------|:--------|
+
+| 🔗 Resource              | 📍 Link                                                                                                                                        |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | **📚 Documentation hub** | Live → [memwalpp-dashboard.vercel.app/doc-hub](https://memwalpp-dashboard.vercel.app/doc-hub/) · Repo → [docs/doc-map.html](docs/doc-map.html) |
-| **🌐 Live dashboard** | [memwalpp-dashboard.vercel.app](https://memwalpp-dashboard.vercel.app/) |
-| **📄 Summary (live)** | [memwalpp-dashboard.vercel.app/summary](https://memwalpp-dashboard.vercel.app/summary) |
-| **⚖️ Runbook** | [JUDGE_GUIDE.md](JUDGE_GUIDE.md) |
-| **🎓 Workshop → repo** | [docs/judge-walrus-memory-workshop.md](docs/judge-walrus-memory-workshop.md) |
-| **📋 Submission brief** | [SUBMISSION.md](SUBMISSION.md) |
-| **🐋 Walrus code path** | `packages/core/src/memory/memory-sync-service.ts` |
+| **🌐 Live dashboard**    | [memwalpp-dashboard.vercel.app](https://memwalpp-dashboard.vercel.app/)                                                                        |
+| **📄 Summary (live)**    | [memwalpp-dashboard.vercel.app/summary](https://memwalpp-dashboard.vercel.app/summary)                                                         |
+| **⚖️ Runbook**           | [JUDGE_GUIDE.md](JUDGE_GUIDE.md)                                                                                                               |
+| **🎓 Workshop → repo**   | [docs/judge-walrus-memory-workshop.md](docs/judge-walrus-memory-workshop.md)                                                                   |
+| **📋 Submission brief**  | [SUBMISSION.md](SUBMISSION.md)                                                                                                                 |
+| **🐋 Walrus code path**  | `packages/core/src/memory/memory-sync-service.ts`                                                                                              |
 
-<details>
-<summary><strong>📖 Open Doc Hub locally (Windows / macOS)</strong></summary>
 
-| Platform | Command |
-|:---------|:--------|
+**📖 Open Doc Hub locally (Windows / macOS)**
+
+
+| Platform                  | Command                                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------------------------ |
 | **🌐 Live (recommended)** | [https://memwalpp-dashboard.vercel.app/doc-hub/](https://memwalpp-dashboard.vercel.app/doc-hub/) |
-| **🪟 Windows** | `start docs\doc-map.html` |
-| **🍎 macOS** | `open docs/doc-map.html` |
+| **🪟 Windows**            | `start docs\doc-map.html`                                                                        |
+| **🍎 macOS**              | `open docs/doc-map.html`                                                                         |
 
-</details>
+
+
 
 > ✨ Built on the official [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e).  
 > You do **not** need the [workshop kit](https://github.com/DionisisLougaris/walrus-memory-workshop-kit) to score us.  
@@ -108,82 +118,95 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 
 ---
 
-<div align="center">
+
 
 ## 🎬 Demo slides & Doc Hub
 
-</div>
 
-| | |
-|:--|:--|
+
+
+|                          |                                                                                                                                                                                         |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **🎞️ Demo deck (HTML)** | Live → [memwalpp-dashboard.vercel.app/memwalpp-slides.html](https://memwalpp-dashboard.vercel.app/memwalpp-slides.html) · Repo → [docs/memwalpp-slides.html](docs/memwalpp-slides.html) |
-| **📊 Architecture SVG** | [docs/diagrams/memwalpp-merged-architecture.svg](docs/diagrams/memwalpp-merged-architecture.svg) |
+| **📊 Architecture SVG**  | [docs/diagrams/memwalpp-merged-architecture.svg](docs/diagrams/memwalpp-merged-architecture.svg)                                                                                        |
+
 
 ---
 
-<div align="center">
+
 
 ## 🔌 MCP Server — `@memwalpp/mcp`
 
 *A fast, private, verifiable hybrid memory layer that any MCP-compatible agent can use.*
 
-[![MCP Package](https://img.shields.io/badge/@memwalpp%2Fmcp-v1.1_complete-6366f1?style=flat-square)](packages/mcp/README.md)
-[![9 Tools](https://img.shields.io/badge/Tools-9-4ade80?style=flat-square)](packages/mcp/docs/TOOLS.md)
-[![42 Tests](https://img.shields.io/badge/Tests-42_passing-brightgreen?style=flat-square)](packages/mcp/README.md)
+[MCP Package](packages/mcp/README.md)
+[9 Tools](packages/mcp/docs/TOOLS.md)
+[42 Tests](packages/mcp/README.md)
 
-</div>
+
 
 **Hybrid flow:** `Local (fast + private)` → `Redaction` → `Quality Gate` → `Walrus (durable + verifiable)`
 
-| Resource | Link |
-|:---------|:-----|
-| **📦 Package README** | [packages/mcp/README.md](packages/mcp/README.md) |
-| **🔧 Tool reference** | [packages/mcp/docs/TOOLS.md](packages/mcp/docs/TOOLS.md) |
-| **⚙️ Setup (Cursor / Claude)** | [docs/mcp-setup.md](docs/mcp-setup.md) |
-| **🪄 Agent setup skill** | `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup` · [docs/skills/setup.md](docs/skills/setup.md) |
-| **📊 Official vs hybrid** | [Comparison.md](Comparison.md) |
-| **📐 OpenSpec** | [docs/specs/openspec-mcp-server.md](docs/specs/openspec-mcp-server.md) |
-| **💬 Technical feedback** | [FINAL_FEEDBACK.md](FINAL_FEEDBACK.md) |
-| **✅ Verify in 2 min** | `pnpm mcp:build && pnpm mcp:e2e` |
+
+| Resource                       | Link                                                                                                         |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| **📦 npm package**             | [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp) · `npx -y @memwalpp/mcp@0.1.0 --transport stdio` |
+| **🧩 Cursor plugin**           | [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) · Marketplace review pending |
+| **📦 Package README**          | [packages/mcp/README.md](packages/mcp/README.md)                                                             |
+| **🔧 Tool reference**          | [packages/mcp/docs/TOOLS.md](packages/mcp/docs/TOOLS.md)                                                     |
+| **⚙️ Setup (Cursor / Claude)** | [docs/mcp-setup.md](docs/mcp-setup.md)                                                                       |
+| **🪄 Agent setup skill**       | `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup` · [docs/skills/setup.md](docs/skills/setup.md) |
+| **📊 Official vs hybrid**      | [Comparison.md](Comparison.md)                                                                               |
+| **📐 OpenSpec**                | [docs/specs/openspec-mcp-server.md](docs/specs/openspec-mcp-server.md)                                       |
+| **💬 Technical feedback**      | [FINAL_FEEDBACK.md](FINAL_FEEDBACK.md)                                                                       |
+| **✅ Verify in 2 min**          | `pnpm mcp:build && pnpm mcp:e2e` · or `npx -y @memwalpp/mcp@0.1.0 --transport stdio`                         |
+
 
 ---
 
-<div align="center">
+
 
 ## 🚀 Companion MVP — Mr. Toxic Special One
 
 *Production agent on mainnet MemWal — sibling to this Overflow repo.*
 
-[![Live App](https://img.shields.io/badge/🤖_Live_App-special--one--agent.vercel.app-7C3AED?style=for-the-badge)](https://special-one-agent.vercel.app/)
-[![Memory World Cup](https://img.shields.io/badge/Walrus_Sessions_4-Memory_World_Cup-4ade80?style=for-the-badge)](https://thewalrussessions.wal.app/memory-world-cup)
+[Live App](https://special-one-agent.vercel.app/)
+[Memory World Cup](https://thewalrussessions.wal.app/memory-world-cup)
 
-</div>
 
-| | |
-|:--|:--|
-| **🌐 Live app** | [special-one-agent.vercel.app](https://special-one-agent.vercel.app) |
-| **📰 Press Room** | [special-one-agent.vercel.app/chat](https://special-one-agent.vercel.app/chat) |
-| **📦 Repository** | [github.com/Olympusxvn/special-one-agent](https://github.com/Olympusxvn/special-one-agent) |
-| **🗺️ Platform map** | [docs/companion-mvp-special-one-agent.md](docs/companion-mvp-special-one-agent.md) |
+
+
+|                      |                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------ |
+| **🌐 Live app**      | [special-one-agent.vercel.app](https://special-one-agent.vercel.app)                       |
+| **📰 Press Room**    | [special-one-agent.vercel.app/chat](https://special-one-agent.vercel.app/chat)             |
+| **📦 Repository**    | [github.com/Olympusxvn/special-one-agent](https://github.com/Olympusxvn/special-one-agent) |
+| **🗺️ Platform map** | [docs/companion-mvp-special-one-agent.md](docs/companion-mvp-special-one-agent.md)         |
+
 
 > **Judge (~30 s):** connect wallet → Gemini key in Settings → send a prediction → see **Walrus Memory Ledger** + **MemWal 🟢 LIVE**
 
 ---
 
-<div align="center">
+
 
 ## 🛠️ Product — Cursor & Claude
 
 *Post-hackathon · project memory via MCP · not the judge path*
 
-</div>
 
-| | |
-|:--|:--|
-| **🌐 Live intro** | [memwalpp-dashboard.vercel.app/product](https://memwalpp-dashboard.vercel.app/product) |
-| **📖 Product guide** | [docs/product/README.md](docs/product/README.md) |
-| **📄 MVP spec** | [docs/specs/openspec-product-mvp-cursor-claude.md](docs/specs/openspec-product-mvp-cursor-claude.md) |
-| **🤖 Claude instructions** | [docs/product/claude-instructions.md](docs/product/claude-instructions.md) |
+
+
+|                            |                                                                                                      |
+| -------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **🌐 Live intro**          | [memwalpp-dashboard.vercel.app/product](https://memwalpp-dashboard.vercel.app/product)               |
+| **📖 Product guide**       | [docs/product/README.md](docs/product/README.md)                                                     |
+| **🧩 Cursor plugin repo**  | [github.com/Olympusxvn/cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
+| **🏪 Cursor Marketplace**  | Application submitted · [publish portal](https://cursor.com/marketplace/publish) · listing pending review |
+| **📦 npm install**         | `npx -y @memwalpp/mcp@0.1.0 --transport stdio` · [npmjs.com/@memwalpp/mcp](https://www.npmjs.com/package/@memwalpp/mcp) |
+| **📄 MVP spec**            | [docs/specs/openspec-product-mvp-cursor-claude.md](docs/specs/openspec-product-mvp-cursor-claude.md) |
+| **🤖 Claude instructions** | [docs/product/claude-instructions.md](docs/product/claude-instructions.md)                           |
+
 
 ---
 
@@ -193,20 +216,24 @@ MemWal Agent Memory combines **Walrus + [Walrus Memory](https://docs.wal.app)** 
 
 A **hybrid memory plane** keeps work **local-first** (fast recall, quality gates, PII redaction) and syncs upward only when memories meet policy — then **Walrus** holds the cryptographic truth judges can verify.
 
-| 📄 Doc | 🔗 |
-|:-------|:---|
+
+| 📄 Doc                 | 🔗                                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
 | Canonical architecture | [docs/diagrams/memwalpp-merged-architecture.svg](docs/diagrams/memwalpp-merged-architecture.svg) |
-| Full system write-up | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
-| Cursor rules | [.cursor/rules/memory-marketplace-rules.mdc](.cursor/rules/memory-marketplace-rules.mdc) |
+| Full system write-up   | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                                                     |
+| Cursor rules           | [.cursor/rules/memory-marketplace-rules.mdc](.cursor/rules/memory-marketplace-rules.mdc)         |
+
 
 ### 🧱 Four layers
 
-| Layer | Responsibility |
-|:------|:---------------|
-| **🖥️ Experience** | Sui wallet, marketplace UI, dashboard |
+
+| Layer                | Responsibility                                                  |
+| -------------------- | --------------------------------------------------------------- |
+| **🖥️ Experience**   | Sui wallet, marketplace UI, dashboard                           |
 | **🤖 Orchestration** | NemoClaw / OpenClaw + MCP Server — hooks, skills, bounty agents |
-| **💾 Hybrid memory** | Local SQLite + vectors ↔ MemWal SDK, Seal, PoA, namespaces |
-| **⛓️ Sui + Walrus** | Move marketplace, bounty escrow, WAL · encrypted Walrus blobs |
+| **💾 Hybrid memory** | Local SQLite + vectors ↔ MemWal SDK, Seal, PoA, namespaces      |
+| **⛓️ Sui + Walrus**  | Move marketplace, bounty escrow, WAL · encrypted Walrus blobs   |
+
 
 ```mermaid
 flowchart TB
@@ -238,24 +265,30 @@ flowchart TB
   MV --> BO
 ```
 
+
+
 ### 🎯 Demo narrative (judge story)
 
-| Step | Flow |
-|:-----|:-----|
-| **1** | Agent turn → hooks → local scoring → MemWal → **Walrus** |
-| **2** | Marketplace listing → Sui object + Walrus metadata |
+
+| Step  | Flow                                                      |
+| ----- | --------------------------------------------------------- |
+| **1** | Agent turn → hooks → local scoring → MemWal → **Walrus**  |
+| **2** | Marketplace listing → Sui object + Walrus metadata        |
 | **3** | Bounty hunter → acquire → improve → **fork** with royalty |
-| **4** | Verification → Walrus proof + on-chain metrics (ADR-005) |
+| **4** | Verification → Walrus proof + on-chain metrics (ADR-005)  |
+
 
 ### 🧰 Technology stack
 
-| Layer | Technology | Role |
-|:------|:-----------|:-----|
-| Orchestration | [NemoClaw](https://github.com/NVIDIA/NemoClaw) + OpenClaw | Sandbox, swarm, MemWal plugin |
-| Durable memory | [MemWal](https://github.com/MystenLabs/MemWal) + Walrus | Verifiable encrypted memory |
-| Local layer | [agentmemory](https://github.com/rohitg00/agentmemory), [memoirs](https://github.com/misaelzapata/memoirs) | Quality gate, fast recall, redaction |
-| On-chain | Move `packages/sui-contracts` | Bounty, royalty, marketplace |
-| Frontend | Next.js + `@mysten/dapp-kit` | Dashboard, Kiosk, wallet |
+
+| Layer          | Technology                                                                                                 | Role                                 |
+| -------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| Orchestration  | [NemoClaw](https://github.com/NVIDIA/NemoClaw) + OpenClaw                                                  | Sandbox, swarm, MemWal plugin        |
+| Durable memory | [MemWal](https://github.com/MystenLabs/MemWal) + Walrus                                                    | Verifiable encrypted memory          |
+| Local layer    | [agentmemory](https://github.com/rohitg00/agentmemory), [memoirs](https://github.com/misaelzapata/memoirs) | Quality gate, fast recall, redaction |
+| On-chain       | Move `packages/sui-contracts`                                                                              | Bounty, royalty, marketplace         |
+| Frontend       | Next.js + `@mysten/dapp-kit`                                                                               | Dashboard, Kiosk, wallet             |
+
 
 ### 📁 Monorepo layout
 
@@ -322,29 +355,33 @@ pnpm --filter dashboard dev
 
 ## ⛓️ Move contracts (Sui Mainnet)
 
-<div align="center">
 
-[![Mainnet](https://img.shields.io/badge/Network-Sui_Mainnet-4DA2FF?style=for-the-badge)](https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050)
-[![Phase 3](https://img.shields.io/badge/Move-Phase_3_✓-brightgreen?style=for-the-badge)](docs/deploy.md)
 
-</div>
+[Mainnet](https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050)
+[Phase 3](docs/deploy.md)
 
-| Field | Value |
-|:------|:------|
-| **Package ID** | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
-| **Suiscan** | [View on mainnet](https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050) |
-| **Marketplace** | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
-| **Deploy guide** | [docs/deploy.md](docs/deploy.md) |
 
-| Module | Capabilities |
-|:-------|:-------------|
-| `memory_nft` | MemoryPack + Walrus `blob_ids`, royalty, delegate |
-| `marketplace` | List / buy / cancel — WAL + 2.5% fee |
-| `bounty` | WAL escrow · `submit_fulfillment(walrus_blob_id)` |
-| `delegate_bridge` | Rotate `memwal_delegate` |
-| `access_policy` | Delegate-only Seal approval |
-| `wal` | Demo WAL coin |
-| `royalty` | Basis-point helpers |
+
+
+| Field            | Value                                                                                                                    |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **Package ID**   | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`                                                     |
+| **Suiscan**      | [View on mainnet](https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050) |
+| **Marketplace**  | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548`                                                     |
+| **Deploy guide** | [docs/deploy.md](docs/deploy.md)                                                                                         |
+
+
+
+| Module            | Capabilities                                      |
+| ----------------- | ------------------------------------------------- |
+| `memory_nft`      | MemoryPack + Walrus `blob_ids`, royalty, delegate |
+| `marketplace`     | List / buy / cancel — WAL + 2.5% fee              |
+| `bounty`          | WAL escrow · `submit_fulfillment(walrus_blob_id)` |
+| `delegate_bridge` | Rotate `memwal_delegate`                          |
+| `access_policy`   | Delegate-only Seal approval                       |
+| `wal`             | Demo WAL coin                                     |
+| `royalty`         | Basis-point helpers                               |
+
 
 ```bash
 pnpm contracts:build && pnpm contracts:test && pnpm contracts:info
@@ -354,87 +391,109 @@ pnpm contracts:build && pnpm contracts:test && pnpm contracts:info
 
 ## 📜 Scripts
 
-| Command | Purpose |
-|:--------|:--------|
-| `pnpm mcp:build` | Build MCP server |
-| `pnpm mcp:e2e` | E2E stdio remember/recall |
-| `pnpm agent:demo` | Hybrid memory hook demo |
-| `pnpm agent:bounty-hunt` | Two-agent bounty flow |
-| `pnpm contracts:build` | `sui move build` |
-| `pnpm contracts:test` | `sui move test` |
-| `pnpm check` | Typecheck / lint |
-| `pnpm build` | Turborepo build |
-| `pnpm demo` | Full demo runner |
-| `pnpm doc-hub:sync` | Sync doc-map → dashboard `/doc-hub` |
+
+| Command                  | Purpose                             |
+| ------------------------ | ----------------------------------- |
+| `pnpm mcp:build`         | Build MCP server                    |
+| `pnpm mcp:e2e`           | E2E stdio remember/recall           |
+| `pnpm agent:demo`        | Hybrid memory hook demo             |
+| `pnpm agent:bounty-hunt` | Two-agent bounty flow               |
+| `pnpm contracts:build`   | `sui move build`                    |
+| `pnpm contracts:test`    | `sui move test`                     |
+| `pnpm check`             | Typecheck / lint                    |
+| `pnpm build`             | Turborepo build                     |
+| `pnpm demo`              | Full demo runner                    |
+| `pnpm doc-hub:sync`      | Sync doc-map → dashboard `/doc-hub` |
+
 
 ---
 
 ## 📚 Documentation
 
-| 📄 Document | 🎯 Purpose |
-|:------------|:-----------|
-| [docs/doc-map.html](docs/doc-map.html) | **Judge hub** — [live /doc-hub](https://memwalpp-dashboard.vercel.app/doc-hub/) |
-| [SUMMARY.md](SUMMARY.md) | Role & benefits (1 page) |
-| [JUDGE_GUIDE.md](JUDGE_GUIDE.md) | 5–10 min runbook |
-| [SUBMISSION.md](SUBMISSION.md) | Walrus track brief |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Canonical architecture |
-| [docs/PROJECT-STRUCTURE.md](docs/PROJECT-STRUCTURE.md) | Repo tree + CI |
-| [packages/mcp/README.md](packages/mcp/README.md) | MCP package |
-| [ROADMAP.md](ROADMAP.md) | Phase status |
-| [CHANGELOG.md](CHANGELOG.md) | Notable changes |
-| [docs/decisions/](docs/decisions/) | ADR-001 … ADR-013 |
+
+| 📄 Document                                            | 🎯 Purpose                                                                      |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| [docs/doc-map.html](docs/doc-map.html)                 | **Judge hub** — [live /doc-hub](https://memwalpp-dashboard.vercel.app/doc-hub/) |
+| [SUMMARY.md](SUMMARY.md)                               | Role & benefits (1 page)                                                        |
+| [JUDGE_GUIDE.md](JUDGE_GUIDE.md)                       | 5–10 min runbook                                                                |
+| [SUBMISSION.md](SUBMISSION.md)                         | Walrus track brief                                                              |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)           | Canonical architecture                                                          |
+| [docs/PROJECT-STRUCTURE.md](docs/PROJECT-STRUCTURE.md) | Repo tree + CI                                                                  |
+| [packages/mcp/README.md](packages/mcp/README.md)       | MCP package                                                                     |
+| [ROADMAP.md](ROADMAP.md)                               | Phase status                                                                    |
+| [CHANGELOG.md](CHANGELOG.md)                           | Notable changes                                                                 |
+| [docs/decisions/](docs/decisions/)                     | ADR-001 … ADR-013                                                               |
+
 
 ---
 
 ## 🔗 References
 
-<details>
-<summary><strong>🏆 Hackathon & Walrus track</strong></summary>
+**🏆 Hackathon & Walrus track**
 
-| Resource | URL |
-|:---------|:----|
-| Sui Overflow 2026 | [overflow.sui.io](https://overflow.sui.io) |
-| Walrus track | [Notion problem statement](https://mystenlabs.notion.site/walrus-track-problem-statement) |
-| Walrus | [walrus.xyz](https://www.walrus.xyz) |
-| Sui | [sui.io](https://sui.io) |
 
-</details>
+| Resource          | URL                                                                                       |
+| ----------------- | ----------------------------------------------------------------------------------------- |
+| Sui Overflow 2026 | [overflow.sui.io](https://overflow.sui.io)                                                |
+| Walrus track      | [Notion problem statement](https://mystenlabs.notion.site/walrus-track-problem-statement) |
+| Walrus            | [walrus.xyz](https://www.walrus.xyz)                                                      |
+| Sui               | [sui.io](https://sui.io)                                                                  |
 
-<details>
-<summary><strong>🎓 Walrus Memory workshop</strong></summary>
 
-| Resource | URL |
-|:---------|:----|
-| Workshop guide | [Notion](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e) |
-| Hands-on kit | [GitHub](https://github.com/DionisisLougaris/walrus-memory-workshop-kit) |
-| Recording (~90 min) | [YouTube](https://www.youtube.com/watch?v=GncjVUEJw9Y) |
-| Judge map | [docs/judge-walrus-memory-workshop.md](docs/judge-walrus-memory-workshop.md) |
 
-</details>
 
-<details>
-<summary><strong>🐋 MemWal & Walrus (official SDK we wrap)</strong></summary>
+**🎓 Walrus Memory workshop**
 
-| Resource | URL |
-|:---------|:----|
-| Walrus Memory docs | [docs.wal.app](https://docs.wal.app) |
-| MemWal GitHub | [MystenLabs/MemWal](https://github.com/MystenLabs/MemWal) |
-| npm SDK | `@mysten-incubation/memwal` |
-| Alignment backlog | [docs/walrus-memory-alignment.md](docs/walrus-memory-alignment.md) |
 
-</details>
+| Resource            | URL                                                                                                                        |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Workshop guide      | [Notion](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e) |
+| Hands-on kit        | [GitHub](https://github.com/DionisisLougaris/walrus-memory-workshop-kit)                                                   |
+| Recording (~90 min) | [YouTube](https://www.youtube.com/watch?v=GncjVUEJw9Y)                                                                     |
+| Judge map           | [docs/judge-walrus-memory-workshop.md](docs/judge-walrus-memory-workshop.md)                                               |
 
-<details>
-<summary><strong>⛓️ Sui mainnet IDs</strong></summary>
 
-| Item | Value |
-|:-----|:------|
-| Package (original) | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050` |
-| Published-at (v3 PTBs) | `0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711` |
-| Marketplace v1 | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548` |
-| v2 bootstrap tx | [Suiscan](https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW) |
 
-</details>
+
+**🐋 MemWal & Walrus (official SDK we wrap)**
+
+
+| Resource           | URL                                                                |
+| ------------------ | ------------------------------------------------------------------ |
+| Walrus Memory docs | [docs.wal.app](https://docs.wal.app)                               |
+| MemWal GitHub      | [MystenLabs/MemWal](https://github.com/MystenLabs/MemWal)          |
+| npm SDK            | `@mysten-incubation/memwal`                                        |
+| Alignment backlog  | [docs/walrus-memory-alignment.md](docs/walrus-memory-alignment.md) |
+
+
+
+
+**🧩 Cursor Marketplace & distribution**
+
+
+| Resource              | URL                                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------------------ |
+| MCP npm package       | [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp)                             |
+| Cursor plugin repo    | [Olympusxvn/cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
+| Marketplace submit    | [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish) (application submitted) |
+| Plugin submit playbook | [docs in plugin repo](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory/blob/master/docs/SUBMIT-PLAYBOOK.md) |
+| npm publish notes     | [docs/product/npm-publish.md](docs/product/npm-publish.md)                                       |
+
+
+
+
+**⛓️ Sui mainnet IDs**
+
+
+| Item                   | Value                                                                                  |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| Package (original)     | `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`                   |
+| Published-at (v3 PTBs) | `0x9de4c63e976b5244fc7a5378134c9a87030ef534491f8a6919698e7379a2b711`                   |
+| Marketplace v1         | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548`                   |
+| v2 bootstrap tx        | [Suiscan](https://suiscan.xyz/mainnet/tx/BjV2Q8mCarkmtENT1T3SPncKAFP3qNHQKVJ2DgptUnkW) |
+
+
+
 
 ---
 
@@ -453,23 +512,25 @@ Use **MemWal delegate keys** only. Never commit owner keys. Keep secrets in loca
 
 ---
 
-<div align="center">
 
-<br />
+
+  
+
 
 **MemWal Agent Memory**
 
 *Hybrid verifiable memory for autonomous agents on Sui and Walrus*
 
-<br />
+  
 
-[![Star on GitHub](https://img.shields.io/github/stars/Olympusxvn/memwal-agent-memory?style=social)](https://github.com/Olympusxvn/memwal-agent-memory/stargazers)
-[![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
-<br />
+[Star on GitHub](https://github.com/Olympusxvn/memwal-agent-memory/stargazers)
+[MIT License](LICENSE)
+
+  
+
 
 Made with 🧠 for **[Sui Overflow 2026](https://overflow.sui.io)** · **[Walrus Track](https://mystenlabs.notion.site/walrus-track-problem-statement)**
 
 *We wrap the official MemWal SDK — we do not fork it.*
 
-</div>

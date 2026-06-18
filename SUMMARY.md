@@ -6,6 +6,8 @@
 |                               |                                                                                                                              |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | **Repository**                | [https://github.com/Olympusxvn/memwal-agent-memory](https://github.com/Olympusxvn/memwal-agent-memory)                       |
+| **MCP npm**                   | [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp) · `npx -y @memwalpp/mcp@0.1.0 --transport stdio`      |
+| **Cursor plugin**             | [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) · Marketplace review pending |
 | **Hackathon**                 | [Sui Overflow 2026](https://overflow.sui.io) · [Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement) |
 | **Live demo**                 | [https://memwalpp-dashboard.vercel.app/](https://memwalpp-dashboard.vercel.app/)                                             |
 | **Summary (this page, live)** | [https://memwalpp-dashboard.vercel.app/summary](https://memwalpp-dashboard.vercel.app/summary)                               |
@@ -69,7 +71,8 @@ Think of three layers:
 
 ### Developers
 
-- **Drop-in MCP** — `pnpm mcp:e2e` proves stdio tools without wallet setup
+- **Drop-in MCP** — `pnpm mcp:e2e` proves stdio tools without wallet setup; **`npx -y @memwalpp/mcp@0.1.0`** for product installs
+- **Cursor plugin** — [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) bundles MCP wiring, rules, and skills; Marketplace application submitted (review pending)
 - **Hybrid sync** — `MemorySyncService` handles redact → gate → promote in one place
 - **Mainnet Move** — marketplace and bounty modules already published (see `[docs/deploy.md](docs/deploy.md)`)
 - **Built on official workshop curriculum** — same `remember` / `recall` / namespaces as [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e)
@@ -195,6 +198,7 @@ Last maintainer smoke log: `[docs/judge-final-checklist.md](docs/judge-final-che
 | **Vision & goals**          | `[PROJECT.md](PROJECT.md)`                                                                                     |
 | **On-chain IDs**            | `[docs/deploy.md](docs/deploy.md)`                                                                             |
 | **MCP setup**               | `[docs/mcp-setup.md](docs/mcp-setup.md)` · `[packages/mcp/README.md](packages/mcp/README.md)` |
+| **Cursor plugin / npm**     | `[cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory)` · [`@memwalpp/mcp`](https://www.npmjs.com/package/@memwalpp/mcp) |
 | **MCP technical feedback**  | `[FINAL_FEEDBACK.md](FINAL_FEEDBACK.md)`                                                       |
 | **Product (Cursor/Claude)** | `[docs/product/README.md](docs/product/README.md)`                                                             |
 | **Full README**             | `[README.md](README.md)`                                                                                       |

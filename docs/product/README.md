@@ -27,7 +27,7 @@ Chain marketplace tools are **not** part of this product guide — see [`docs/de
 | Use case | Package | Setup |
 |----------|---------|-------|
 | **Pure Walrus Memory** (remember/recall/analyze/restore on relayer) | [`@mysten-incubation/memwal-mcp`](https://www.npmjs.com/package/@mysten-incubation/memwal-mcp) | `npx -y @mysten-incubation/memwal-mcp --prod` → agent calls `memwal_login` |
-| **Hybrid project memory** (local SQLite + optional promote + redact gate) | **`@memwalpp/mcp`** (this repo) | `pnpm mcp:build` + [`.cursor/mcp.json`](../../.cursor/mcp.json) |
+| **Hybrid project memory** (local SQLite + optional promote + redact gate) | **`@memwalpp/mcp`** (this repo) | `npx -y @memwalpp/mcp@0.1.0 --transport stdio` or [Cursor plugin](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
 | **Hackathon judges (no keys)** | **`@memwalpp/mcp`** | `pnpm mcp:e2e` |
 
 They complement each other — not replacements. Full comparison: [`Comparison.md`](../../Comparison.md). Post-hackathon alignment notes: [`walrus-memory-alignment.md`](../walrus-memory-alignment.md).
@@ -46,16 +46,37 @@ Source: [`docs/skills/setup.md`](../skills/setup.md)
 
 ### Cursor (recommended)
 
-1. Clone and open this repo in Cursor (ships [`.cursor/mcp.json`](../../.cursor/mcp.json)), **or** add global MCP config (below).
-2. Run once:
+**Easiest:** install from the [Cursor plugin repo](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) (Marketplace listing pending review) or add global MCP config below.
+
+**Monorepo path:** clone and open this repo in Cursor (ships [`.cursor/mcp.json`](../../.cursor/mcp.json)), then:
 
 ```bash
 pnpm install && pnpm mcp:build
 ```
 
-3. **Cursor → Settings → MCP** → enable `memwal-agent-memory` (green).
-4. Enable rule [`.cursor/rules/memwal-mcp-product.mdc`](../../.cursor/rules/memwal-mcp-product.mdc) (or copy into your project).
-5. In chat:
+**npm path (no clone):** add to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "memwal-agent-memory": {
+      "command": "npx",
+      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "env": {
+        "MEMWAL_NAMESPACE": "cursor",
+        "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
+      }
+    }
+  }
+}
+```
+
+Then:
+
+1. Run `pnpm mcp:build` once if using the monorepo clone path (skip for `npx`).
+2. **Cursor → Settings → MCP** → enable `memwal-agent-memory` (green).
+3. Enable rule [`.cursor/rules/memwal-mcp-product.mdc`](../../.cursor/rules/memwal-mcp-product.mdc) (or copy into your project).
+4. In chat:
 
 > Remember: "API uses published-at package id for PTBs, original id for WAL coin type."
 > Then recall: "Sui package id rules"
@@ -95,9 +116,10 @@ Then use MCP tools with `promote: true` on `remember`, or call `sync` / `promote
 
 | Method | Status | Command / path |
 |--------|--------|----------------|
-| **Open repo in Cursor** | Available now | `.cursor/mcp.json` + `pnpm mcp:build` |
-| **Clone + Claude config** | Available now | [`claude_desktop_config.json`](../examples/claude_desktop_config.json) |
-| **`npx @memwalpp/mcp`** | Planned ([npm-publish.md](npm-publish.md)) | `npx -y @memwalpp/mcp --transport stdio` |
+| **`npx @memwalpp/mcp`** | **Live** | `npx -y @memwalpp/mcp@0.1.0 --transport stdio` · [npm](https://www.npmjs.com/package/@memwalpp/mcp) |
+| **Cursor Marketplace plugin** | Review pending | [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
+| **Open repo in Cursor** | Available | `.cursor/mcp.json` + `pnpm mcp:build` |
+| **Clone + Claude config** | Available | [`claude_desktop_config.json`](../examples/claude_desktop_config.json) |
 
 ---
 
@@ -107,14 +129,14 @@ Requires repo cloned and `pnpm mcp:build` once. Open this project in Cursor befo
 
 [![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=memwal-agent-memory&config=eyJjb21tYW5kIjoibm9kZSIsImFyZ3MiOlsiJHt3b3Jrc3BhY2VGb2xkZXJ9L3BhY2thZ2VzL21jcC9kaXN0L2NsaS5qcyIsIi0tdHJhbnNwb3J0Iiwic3RkaW8iXSwiZW52Ijp7Ik1FTVdBTF9OQU1FU1BBQ0UiOiJjdXJzb3IiLCJNRU1XQUlfTVBDX0RBVEFfRElSIjoiJHt1c2VySG9tZX0vLm1lbXdhbC1hZ2VudC1tZW1vcnltL21jcCJ9fQ==)
 
-Global config template (`~/.cursor/mcp.json`) after **npm publish**:
+Global config template (`~/.cursor/mcp.json`):
 
 ```json
 {
   "mcpServers": {
     "memwal-agent-memory": {
       "command": "npx",
-      "args": ["-y", "@memwalpp/mcp", "--transport", "stdio"],
+      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
       "env": {
         "MEMWAL_NAMESPACE": "cursor",
         "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
@@ -166,7 +188,8 @@ Expected: recall returns the stored phrase (JSON text from MCP tool).
 | [landing.html](landing.html) | Repo copy (same content) |
 | [claude-instructions.md](claude-instructions.md) | Paste into Claude project |
 | [e2e-matrix.md](e2e-matrix.md) | QA: Windows + macOS × clients |
-| [npm-publish.md](npm-publish.md) | Ship `npx @memwalpp/mcp` |
+| [npm-publish.md](npm-publish.md) | `@memwalpp/mcp@0.1.0` publish record |
+| [Cursor plugin](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) | Marketplace bundle |
 | [mcp-setup.md](../mcp-setup.md) | Technical MCP reference |
 | [openspec-product-mvp-cursor-claude.md](../specs/openspec-product-mvp-cursor-claude.md) | Full MVP spec |
 

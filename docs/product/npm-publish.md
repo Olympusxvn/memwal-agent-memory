@@ -1,70 +1,70 @@
 # npm publish — `@memwalpp/mcp` / `memwal-mcp`
 
-**Status:** Planned (Phase 1b). Package is currently `private: true` with `workspace:*` dependencies.
+**Status:** **Published** — `@memwalpp/mcp@0.1.0` (2026-06-18)
 
-**Target command for users:**
+**Registry:** https://www.npmjs.com/package/@memwalpp/mcp  
+**npm org:** `@memwalpp` (owner: `olympusxvn`)
+
+**User install:**
 
 ```bash
-npx -y @memwalpp/mcp --transport stdio
+npx -y @memwalpp/mcp@0.1.0 --transport stdio
 ```
 
----
-
-## Blocker
-
-`@memwalpp/mcp` depends on:
-
-- `@memwalpp/core`
-- `@memwalpp/local-memory`
-- `@memwalpp/memwal-client`
-- `@memwalpp/shared`
-
-npm consumers cannot resolve `workspace:*`. Choose **one**:
-
-| Strategy | Pros | Cons |
-|----------|------|------|
-| **A. Publish all workspace packages** | Clean semver, matches monorepo | 4+ packages to maintain on npm |
-| **B. esbuild single-file bundle** | One `npx` entry, simple UX | Larger artifact; native `better-sqlite3` must ship prebuilds or fall back to in-memory |
-| **C. GitHub tarball install** | Quick hack | Poor DX, not true `npx` |
-
-**Recommendation:** **B** for MVP — bundle to `dist/bundle.cjs` with `bin` pointing at bundle; document in-memory fallback when SQLite native missing.
+**Cursor plugin** (Marketplace distribution): [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) — publisher application submitted via [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish) (review pending).
 
 ---
 
-## Pre-publish checklist
+## What shipped
 
-- [ ] `packages/mcp/package.json`: `"private": false`, `"files": ["dist", "README.md"]`
-- [ ] `prepublishOnly`: `pnpm build && pnpm test:e2e`
-- [ ] `packages/mcp/README.md` — npm homepage (link to `docs/product/README.md`)
-- [ ] Version bump semver
-- [ ] `npm login` + `npm publish --access public` (scoped `@memwalpp`)
-- [ ] Update [product README](README.md) and [landing.html](landing.html) — primary install = `npx`
-- [ ] Tag `mcp-v0.1.0`
+| Item | Detail |
+|------|--------|
+| **Bundle** | `dist/bundle.mjs` (~134 KB) via esbuild — inlines `@memwalpp/*` workspace |
+| **External deps** | `better-sqlite3`, `@mysten-incubation/memwal`, `@mysten/sui`, MCP SDK, Express, Zod |
+| **Bin** | `memwal-mcp` → `dist/bundle.mjs` |
+| **prepublishOnly** | `pnpm build && pnpm test` (42 tests) |
 
 ---
 
-## package.json sketch (post-bundle)
+## Verify after install
+
+```bash
+npm view @memwalpp/mcp version
+# → 0.1.0
+
+npx -y @memwalpp/mcp@0.1.0 --transport stdio
+# MCP stdio server (Ctrl+C to exit)
+```
+
+Monorepo CI path unchanged: `pnpm mcp:build && pnpm mcp:e2e`.
+
+---
+
+## Cursor global MCP config
 
 ```json
 {
-  "name": "@memwalpp/mcp",
-  "version": "0.1.0",
-  "description": "MCP server — project memory for Cursor and Claude (local-first, optional Walrus)",
-  "bin": { "memwal-mcp": "./dist/cli.js" },
-  "files": ["dist", "README.md"],
-  "publishConfig": { "access": "public" },
-  "engines": { "node": ">=20" },
-  "keywords": ["mcp", "cursor", "claude", "walrus", "memwal", "agent-memory"]
+  "mcpServers": {
+    "memwal-agent-memory": {
+      "command": "npx",
+      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "env": {
+        "MEMWAL_NAMESPACE": "cursor",
+        "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
+      }
+    }
+  }
 }
 ```
 
+Same wiring ships in the [Cursor plugin repo](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory/blob/master/mcp.json).
+
 ---
 
-## Verify after publish
+## Release checklist (next version)
 
-```bash
-npx -y @memwalpp/mcp --transport stdio
-# In another terminal — or use MCP client smoke
-```
-
-Add matrix row **M8** in [e2e-matrix.md](e2e-matrix.md): npx install without clone.
+- [ ] Bump semver in `packages/mcp/package.json` and `CHANGELOG.md`
+- [ ] `pnpm --filter @memwalpp/mcp build && pnpm --filter @memwalpp/mcp test`
+- [ ] `npm publish --access public --otp=<6-digit-or-recovery>` from `packages/mcp`
+- [ ] Pin plugin repo `mcp.json` to new version; bump `plugin.json` semver
+- [ ] Request Marketplace re-index after plugin manifest change

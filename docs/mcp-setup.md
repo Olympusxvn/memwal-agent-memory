@@ -10,7 +10,21 @@ Connect **Cursor**, **Claude Desktop**, or any MCP client to the hybrid memory l
 
 **Package docs:** [`packages/mcp/README.md`](../packages/mcp/README.md) · **Technical feedback:** [`FINAL_FEEDBACK.md`](../FINAL_FEEDBACK.md)
 
+**npm (no clone):** [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp) · **Cursor plugin:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) (Marketplace review pending)
+
 ## Prerequisites
+
+### Option A — npm / Cursor plugin (recommended for product users)
+
+Node 20+. No monorepo clone required:
+
+```bash
+npx -y @memwalpp/mcp@0.1.0 --transport stdio
+```
+
+Or install the **Cursor Marketplace plugin** from [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) (local load or Marketplace listing when approved). Plugin `mcp.json` uses the same `npx` command.
+
+### Option B — monorepo dev / judges
 
 ```bash
 pnpm install
@@ -54,6 +68,27 @@ This repo ships [`.cursor/mcp.json`](../.cursor/mcp.json):
 2. In Cursor: **Settings → MCP** → reload servers (or restart Cursor).
 3. Confirm **memwal-agent-memory** shows green / nine tools listed.
 4. In chat, ask the agent to call `remember` then `recall` for a test phrase.
+
+### Cursor — npm or Marketplace plugin (no clone)
+
+Add to `~/.cursor/mcp.json` or enable the [Cursor plugin](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory):
+
+```json
+{
+  "mcpServers": {
+    "memwal-agent-memory": {
+      "command": "npx",
+      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "env": {
+        "MEMWAL_NAMESPACE": "cursor",
+        "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
+      }
+    }
+  }
+}
+```
+
+Fully restart Cursor after MCP config changes.
 
 **Dev mode** (no build, uses tsx):
 

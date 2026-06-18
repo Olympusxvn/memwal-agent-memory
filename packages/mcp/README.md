@@ -1,7 +1,7 @@
 # @memwalpp/mcp
 
 **Server name:** `memwal-agent-memory`  
-**Package:** `@memwalpp/mcp` · **Version:** 0.1.0 (MCP v1 + v1.1 complete)
+**Package:** `@memwalpp/mcp` · **Version:** 0.1.0 (MCP v1 + v1.1 complete) · **npm:** https://www.npmjs.com/package/@memwalpp/mcp
 
 > *A fast, private, verifiable hybrid memory layer that any MCP-compatible agent can use.*
 
@@ -25,6 +25,16 @@ Universal [Model Context Protocol](https://modelcontextprotocol.io/) front door 
 ---
 
 ## Quick start
+
+### npm (no clone)
+
+Node 20+:
+
+```bash
+npx -y @memwalpp/mcp@0.1.0 --transport stdio
+```
+
+**Cursor plugin:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) — same `npx` wiring in `mcp.json`; Marketplace listing pending review.
 
 ### Monorepo (build + run)
 

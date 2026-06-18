@@ -11,7 +11,7 @@ Side-by-side reference for integrators and judges. Official setup skill: [`curl 
 | | **Official Walrus Memory** (`@mysten-incubation/memwal-mcp`) | **`@memwalpp/mcp`** (this repo) |
 |---|---|---|
 | **Tagline** | Durable Walrus memory on the relayer | *Fast, private, verifiable hybrid memory layer* |
-| **Setup** | `curl -sL https://memory.walrus.xyz/skills/setup` → `npx -y @mysten-incubation/memwal-mcp` | `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup` → clone + `pnpm mcp:build` (npm publish planned) |
+| **Setup** | `curl -sL https://memory.walrus.xyz/skills/setup` → `npx -y @mysten-incubation/memwal-mcp` | `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup` → `npx -y @memwalpp/mcp@0.1.0` or [Cursor plugin](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
 | **Adapter / wrapper** | No — direct relayer | Yes — `@memwalpp/core` + SQLite + redact/quality gate |
 | **Default tier** | Cloud-first (Walrus) | **Pro Local** (SQLite); **+ Walrus Sync** optional |
 | **Auth** | Browser login → `~/.memwal/credentials.json`; tools `memwal_login` / `memwal_logout` | Env `MEMWAL_PRIVATE_KEY` + `MEMWAL_ACCOUNT_ID` (delegate key only); or Pro Local with no keys |
@@ -59,7 +59,7 @@ Marketplace write tools (`createBounty`, `buyMemoryPack`, …) are **not** regis
 
 | Capability | Official | `@memwalpp/mcp` |
 |---|---|---|
-| One-command install (`npx`) | ✅ | 🔜 planned (`docs/product/npm-publish.md`) |
+| One-command install (`npx`) | ✅ | ✅ [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp) |
 | Browser / zkLogin login | ✅ `memwal_login` | ❌ (use env or official login → copy credentials) |
 | Remote MCP on hosted relayer | ✅ ChatGPT + custom headers | ❌ (self-hosted HTTP only) |
 | Local SQLite, offline recall/search | ❌ | ✅ |
@@ -122,6 +122,8 @@ Relayer / Walrus                 └── MemWal relayer → Walrus
 | [`docs/product/README.md`](docs/product/README.md) | Product guide |
 | [`docs/mcp-setup.md`](docs/mcp-setup.md) | Technical MCP reference |
 | [`packages/mcp/README.md`](packages/mcp/README.md) | Package docs |
+| [`docs/product/npm-publish.md`](docs/product/npm-publish.md) | npm publish record (`@memwalpp/mcp@0.1.0`) |
+| [Cursor plugin repo](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) | Marketplace bundle (rules, skills, MCP wiring) |
 | [`docs/walrus-memory-alignment.md`](docs/walrus-memory-alignment.md) | SDK parity backlog |
 | [`docs/judge-walrus-memory-workshop.md`](docs/judge-walrus-memory-workshop.md) | Judge dual-MCP notes |
 | [`FINAL_FEEDBACK.md`](FINAL_FEEDBACK.md) | MemWal integrator feedback |

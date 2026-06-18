@@ -14,14 +14,15 @@ Prepare **`npx -y @memwalpp/mcp@0.1.0 --transport stdio`** for Cursor Marketplac
 - **`packages/mcp/package.json`:** npm-publish-ready — `publishConfig.access: public`, `files: [dist/bundle.mjs, README.md]`, `bin.memwal-mcp` → bundle, runtime deps listed, workspace packages moved to `devDependencies`.
 - **Build:** `pnpm --filter @memwalpp/mcp build` = `tsc` + bundle.
 - **Verified:** `pnpm --filter @memwalpp/mcp test` (42/42), `npm pack`, `npx ./memwalpp-mcp-0.1.0.tgz --transport stdio`, local Cursor plugin smoke (remember/recall).
-- **Pending:** `npm login` + `npm publish --access public` from `packages/mcp` (registry not yet published).
+- **Published:** `@memwalpp/mcp@0.1.0` on npm (org `@memwalpp`, 2026-06-18) — https://www.npmjs.com/package/@memwalpp/mcp
+- **Cursor Marketplace:** publisher application submitted for [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) (review pending).
 
 ### Added — docs & Cursor plugin track (2026-06-16)
 
 - **`Comparison.md`:** Official `@mysten-incubation/memwal-mcp` vs `@memwalpp/mcp`.
 - **`docs/skills/setup.md`:** Agent setup skill (Pro Local vs + Walrus Sync); synced to dashboard `/skills/setup`.
 - **README:** links to setup skill curl + Comparison.
-- **Cursor plugin repo:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) — marketplace bundle (manifest, rules, skills, compliance docs).
+- **Cursor plugin repo:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) — marketplace bundle (manifest, rules, skills, compliance docs); submit via [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
 
 ### Fixed — dashboard CI (2026-06-16)
 
