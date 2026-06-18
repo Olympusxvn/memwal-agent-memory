@@ -1,32 +1,66 @@
 {
   "name": "@memwalpp/mcp",
   "version": "0.1.0",
-  "private": true,
+  "description": "MCP server — hybrid agent memory for Cursor and Claude (local-first, optional Walrus)",
   "type": "module",
-  "description": "MCP server — universal front door to MemWal Agent Memory hybrid layer",
   "bin": {
-    "memwal-mcp": "./dist/cli.js"
+    "memwal-mcp": "./dist/bundle.mjs"
   },
-  "main": "./src/index.ts",
+  "files": [
+    "dist/bundle.mjs",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "mcp",
+    "cursor",
+    "claude",
+    "walrus",
+    "memwal",
+    "agent-memory",
+    "hybrid-memory"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Olympusxvn/memwal-agent-memory.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://github.com/Olympusxvn/memwal-agent-memory/tree/main/packages/mcp",
+  "bugs": {
+    "url": "https://github.com/Olympusxvn/memwal-agent-memory/issues"
+  },
+  "license": "MIT",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && node scripts/bundle.mjs",
+    "build:bundle": "node scripts/bundle.mjs",
     "check": "tsc -p tsconfig.json --noEmit",
-    "start": "node dist/cli.js",
+    "prepublishOnly": "pnpm run build && pnpm test",
+    "start": "node dist/bundle.mjs",
     "dev": "tsx src/cli.ts",
     "test": "vitest run",
-    "test:e2e": "vitest run test/e2e-stdio.test.ts"
+    "test:e2e": "vitest run test/e2e-stdio.test.ts",
+    "pack:verify": "npm pack && node -e \"console.log('Run: npx -y ./memwalpp-mcp-0.1.0.tgz --transport stdio')\""
   },
   "dependencies": {
-    "@memwalpp/core": "workspace:*",
-    "@memwalpp/local-memory": "workspace:*",
-    "@memwalpp/memwal-client": "workspace:*",
-    "@memwalpp/shared": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@mysten-incubation/memwal": "^0.0.7",
+    "@mysten/sui": "^2.16.2",
+    "better-sqlite3": "^11.8.1",
     "express": "^5.0.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@memwalpp/core": "workspace:*",
+    "@memwalpp/local-memory": "workspace:*",
+    "@memwalpp/memwal-client": "workspace:*",
+    "@memwalpp/shared": "workspace:*",
     "@types/express": "^5.0.0",
+    "esbuild": "^0.27.7",
     "typescript": "^5.7.2",
     "vitest": "^3.0.5"
   }

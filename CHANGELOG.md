@@ -6,7 +6,27 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-### Fixed — sync / Walrus correctness (2026-06-11)
+### Added — `@memwalpp/mcp` npm bundle (2026-06-18)
+
+Prepare **`npx -y @memwalpp/mcp@0.1.0 --transport stdio`** for Cursor Marketplace and plugin distribution.
+
+- **`packages/mcp/scripts/bundle.mjs`:** esbuild bundles `@memwalpp/*` workspace into `dist/bundle.mjs` (~134KB); native/heavy deps stay external (`better-sqlite3`, `@mysten-incubation/memwal`, `@mysten/sui`, MCP SDK, Express, Zod).
+- **`packages/mcp/package.json`:** npm-publish-ready — `publishConfig.access: public`, `files: [dist/bundle.mjs, README.md]`, `bin.memwal-mcp` → bundle, runtime deps listed, workspace packages moved to `devDependencies`.
+- **Build:** `pnpm --filter @memwalpp/mcp build` = `tsc` + bundle.
+- **Verified:** `pnpm --filter @memwalpp/mcp test` (42/42), `npm pack`, `npx ./memwalpp-mcp-0.1.0.tgz --transport stdio`, local Cursor plugin smoke (remember/recall).
+- **Pending:** `npm login` + `npm publish --access public` from `packages/mcp` (registry not yet published).
+
+### Added — docs & Cursor plugin track (2026-06-16)
+
+- **`Comparison.md`:** Official `@mysten-incubation/memwal-mcp` vs `@memwalpp/mcp`.
+- **`docs/skills/setup.md`:** Agent setup skill (Pro Local vs + Walrus Sync); synced to dashboard `/skills/setup`.
+- **README:** links to setup skill curl + Comparison.
+- **Cursor plugin repo:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) — marketplace bundle (manifest, rules, skills, compliance docs).
+
+### Fixed — dashboard CI (2026-06-16)
+
+- **`@memwalpp/shared/deployed-package` subpath:** dashboard client import avoids pulling `node:crypto` through shared barrel (fixes Next.js webpack build on CI/Vercel).
+
 
 Clean-code + clear-docs review pass. All changes verified: `pnpm check` (12/12), full test suite (local-memory 23 · core 8 · memwal-client 10 · mcp 14), `pnpm build` (8/8), and both judge demos (`agent:demo`, `agent:bounty-hunt`) exit 0.
 
