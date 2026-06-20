@@ -1,66 +1,59 @@
 # @memwalpp/mcp
 
-**Server name:** `memwal-agent-memory`  
-**Package:** `@memwalpp/mcp` · **Version:** 0.1.0 (MCP v1 + v1.1 complete) · **npm:** https://www.npmjs.com/package/@memwalpp/mcp
+[![npm version](https://img.shields.io/npm/v/@memwalpp/mcp?style=flat-square&color=3b82f6&label=npm)](https://www.npmjs.com/package/@memwalpp/mcp)
+[![Node](https://img.shields.io/badge/node-%3E%3D20-0ea5e9?style=flat-square)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-64748b?style=flat-square)](../../LICENSE)
+[![MCP](https://img.shields.io/badge/MCP-stdio%20%7C%20HTTP-8b5cf6?style=flat-square)](https://modelcontextprotocol.io/)
 
-> *A fast, private, verifiable hybrid memory layer that any MCP-compatible agent can use.*
+**Server name:** `memwal-agent-memory` · **npm:** [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp)
 
-Universal [Model Context Protocol](https://modelcontextprotocol.io/) front door to [MemWal Agent Memory](https://github.com/Olympusxvn/memwal-agent-memory). Agents get local SQLite speed, optional Walrus durability, and server-enforced privacy — without importing `@memwalpp/core` directly.
+> **Local SQLite speed. Optional Walrus durability. Proof you can check.**  
+> The MCP server that gives Cursor, Claude, and any MCP agent **hybrid memory** — without importing `@memwalpp/core`.
 
-**Hybrid flow:** Local (fast + private) → Redaction → Quality Gate → Walrus (durable + verifiable)
-
-| Package | Role |
-|---------|------|
-| `@memwalpp/mcp` | Transport, schemas, auth, rate limiting |
-| `@memwalpp/core` | `MemorySyncService` — sync, gates, orchestration |
-| `@memwalpp/local-memory` | SQLite + PII redaction + semantic scoring |
-| `@memwalpp/memwal-client` | Walrus durable store + read-only Sui `ChainReader` |
-
-**Canonical spec:** [`docs/specs/openspec-mcp-server.md`](../../docs/specs/openspec-mcp-server.md)  
-**Official vs hybrid comparison:** [`Comparison.md`](../../Comparison.md)  
-**Agent setup skill:** [`curl -sL https://memwalpp-dashboard.vercel.app/skills/setup`](https://memwalpp-dashboard.vercel.app/skills/setup) · [`docs/skills/setup.md`](../../docs/skills/setup.md)  
-**Technical feedback (MemWal integrators):** [`FINAL_FEEDBACK.md`](../../FINAL_FEEDBACK.md)  
-**Package design:** [`PROJECT.md`](./PROJECT.md)
+```
+remember → local SQLite (fast, private)
+sync     → redact + quality gate → Walrus (optional)
+verify   → layered proof: local · blob · chain read
+```
 
 ---
 
-## Quick start
+## Why use this?
 
-### npm (no clone)
+- **Hybrid** — Pro Local by default (no keys, no network). Promote to Walrus **only when you call `sync`** — not every chat turn.
+- **Privacy** — Server-side PII redaction and quality gates **before** durable upload. Delegate keys only; owner keys refused at startup.
+- **Verifiable** — `verify` checks local proofs, Walrus blobs, and optional on-chain refs. Judges and CI can reproduce without guessing.
+- **Agent experience** — Nine stable MCP tools (`remember`, `recall`, `search`, `sync`, …). Works in Cursor, Claude Desktop, OpenClaw, or self-hosted HTTP.
 
-Node 20+:
+**Not a fork of Walrus Memory** — wraps Mysten's MemWal SDK via `@memwalpp/core`. Compare with official MCP: [`Comparison.md`](../../Comparison.md).
+
+---
+
+## Quick start for Cursor / Claude
+
+**Requires:** [Node.js 20+](https://nodejs.org/). No clone required for production use.
+
+### 1. Smoke test (terminal)
 
 ```bash
 npx -y @memwalpp/mcp@0.1.0 --transport stdio
 ```
 
-**Cursor plugin:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) — same `npx` wiring in `mcp.json`; Marketplace listing pending review.
+Process stays open on stdio — configure your client below, then restart the IDE.
 
-### Monorepo (build + run)
+### 2. Cursor — project or global MCP
 
-```bash
-pnpm install
-pnpm mcp:build
-node packages/mcp/dist/cli.js --transport stdio
-```
+Create or edit **`.cursor/mcp.json`** in your project (or Cursor global MCP settings):
 
-Verify integration:
-
-```bash
-pnpm mcp:e2e
-pnpm --filter @memwalpp/mcp test
-```
-
-### Cursor (`.cursor/mcp.json`)
-
-```jsonc
+```json
 {
   "mcpServers": {
     "memwal-agent-memory": {
-      "command": "node",
-      "args": ["packages/mcp/dist/cli.js", "--transport", "stdio"],
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
       "env": {
-        "MEMWAL_NAMESPACE": "default",
+        "MEMWAL_NAMESPACE": "cursor",
         "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
       }
     }
@@ -68,11 +61,82 @@ pnpm --filter @memwalpp/mcp test
 }
 ```
 
-Run `pnpm mcp:build` after MCP code changes. Full setup: [`docs/mcp-setup.md`](../../docs/mcp-setup.md).
+**Monorepo dev** (built bundle instead of npm):
 
-### Claude Desktop
+```json
+{
+  "mcpServers": {
+    "memwal-agent-memory": {
+      "command": "node",
+      "args": ["packages/mcp/dist/bundle.mjs", "--transport", "stdio"],
+      "env": {
+        "MEMWAL_NAMESPACE": "cursor",
+        "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
+      }
+    }
+  }
+}
+```
 
-See [`docs/examples/claude_desktop_config.json`](../../docs/examples/claude_desktop_config.json) — replace the repo path.
+Run `pnpm mcp:build` after MCP code changes. **Fully quit and reopen Cursor** (Cmd+Q on macOS).
+
+**Cursor Marketplace plugin** (rules, skills, same `npx` wiring): [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory)
+
+### 3. Claude Desktop
+
+Edit **`claude_desktop_config.json`** (macOS: `~/Library/Application Support/Claude/`):
+
+```json
+{
+  "mcpServers": {
+    "memwal-agent-memory": {
+      "command": "npx",
+      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "env": {
+        "MEMWAL_NAMESPACE": "claude-desktop",
+        "MEMWAL_MCP_DATA_DIR": "${HOME}/.memwal-agent-memory/mcp"
+      }
+    }
+  }
+}
+```
+
+Restart Claude completely after saving.
+
+### 4. + Walrus Sync (optional)
+
+Add to the same `env` block — **delegate key only**, never commit secrets:
+
+```json
+"MEMWAL_PRIVATE_KEY": "<delegate-key>",
+"MEMWAL_ACCOUNT_ID": "<account-id>",
+"MEMWAL_SERVER_URL": "https://relayer.memory.walrus.xyz"
+```
+
+Obtain credentials: `npx -y @mysten-incubation/memwal-mcp login --prod` → map from `~/.memwal/credentials.json` into MCP env yourself.
+
+### 5. Confirm it works
+
+In chat: *“Remember: MemWal smoke test OK.”* then *“Recall: smoke test OK”* — or run `pnpm mcp:e2e` from the [monorepo](https://github.com/Olympusxvn/memwal-agent-memory).
+
+| Resource | Link |
+|----------|------|
+| Full setup guide | [`docs/mcp-setup.md`](../../docs/mcp-setup.md) |
+| Agent setup skill | [`docs/skills/setup.md`](../../docs/skills/setup.md) |
+| OpenSpec | [`docs/specs/openspec-mcp-server.md`](../../docs/specs/openspec-mcp-server.md) |
+| Tool reference | [`docs/TOOLS.md`](./docs/TOOLS.md) |
+
+---
+
+## Monorepo development
+
+```bash
+pnpm install
+pnpm mcp:build
+node packages/mcp/dist/bundle.mjs --transport stdio
+pnpm mcp:e2e
+pnpm --filter @memwalpp/mcp test
+```
 
 ### Streamable HTTP
 
@@ -83,9 +147,16 @@ MCP_HTTP_TOKEN="$(openssl rand -hex 32)" \
 pnpm --filter @memwalpp/mcp start
 ```
 
-Client URL: `http://127.0.0.1:8787/mcp` with `Authorization: Bearer <token>`.
+Client URL: `http://127.0.0.1:8787/mcp` with `Authorization: Bearer <token>`. Details: [`docs/HTTP.md`](./docs/HTTP.md)
 
-Details: [`docs/HTTP.md`](./docs/HTTP.md)
+**Package stack**
+
+| Package | Role |
+|---------|------|
+| `@memwalpp/mcp` | Transport, schemas, auth, rate limiting |
+| `@memwalpp/core` | `MemorySyncService` — sync, gates, orchestration |
+| `@memwalpp/local-memory` | SQLite + PII redaction + semantic scoring |
+| `@memwalpp/memwal-client` | Walrus durable store + read-only Sui `ChainReader` |
 
 ---
 
