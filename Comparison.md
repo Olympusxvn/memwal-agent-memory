@@ -18,7 +18,60 @@ Side-by-side reference for integrators and judges. Official setup skill: [`curl 
 | **Write flow** | `memwal_remember` → relayer → Walrus (automatic) | `remember` → local SQLite → **`sync`** promotes to Walrus (gated) |
 | **Offline / CI** | Needs login + network for real memory | `pnpm mcp:e2e` + `MEMWAL_MCP_MOCK_DURABLE=1` — no keys |
 | **Transport** | stdio + **Remote MCP** on relayer (`/api/mcp`) for ChatGPT | stdio + **self-hosted** Streamable HTTP (`MCP_TRANSPORT=http`) |
-| **Tool count** | 9 (`memwal_*`) | 9 (generic names) |
+| **Tool count** | 8 (`memwal_*`) | 9 (generic names) |
+
+---
+
+## Nine tools — side-by-side
+
+Both servers target a **full agent memory surface**, but tool counts differ: **8 official** (`memwal_*`) vs **9 memwalpp** (generic names). They are **not a 1:1 rename**.
+
+| # | Official (`memwal_*`) | What it does (official) | `@memwalpp/mcp` | What it does (memwalpp) | Relationship |
+|---|----------------------|---------------------------|-----------------|----------------------------|--------------|
+| 1 | `memwal_remember` | Write to relayer → Walrus (embedding + Seal on relayer) | `remember` | Write to **local SQLite** first; optional `redactLocal` | **Different flow** — same intent, different storage |
+| 2 | `memwal_remember_bulk` | Batch write to Walrus | — | No dedicated tool — loop `remember` or batch in app layer | **Official only** |
+| 3 | `memwal_recall` | Semantic recall on relayer / Walrus index | `recall` | Hybrid pull — local first, optional durable hydrate | **Closest pair** |
+| 4 | `memwal_analyze` | Analyze / capture patterns from cloud memory | — | — | **Official only** |
+| 5 | `memwal_restore` | Rebuild search index from Walrus blobs | — | — | **Official only** (memwalpp backlog: use official MCP or SDK) |
+| 6 | `memwal_health` | Relayer / server health check | `getStats` | Row counts, `durableLive`, namespace inventory | **Loose analog** — health vs stats |
+| 7 | `memwal_login` | Browser / zkLogin → `~/.memwal/credentials.json` | — | Run official login, copy delegate into MCP env | **Official only** (auth tool) |
+| 8 | `memwal_logout` | Clear local credentials | — | Remove MCP env vars / rotate keys manually | **Official only** |
+| — | — | — | `search` | Ranked hybrid search — `score`, `hitSource`, `verifiable` | **Memwalpp only** (richer than recall alone) |
+| — | — | — | `sync` | Promote pending rows — **unskippable** redact + quality gate → Walrus | **Memwalpp only** (official auto-uploads on remember) |
+| — | — | — | `verify` | Layered proof — local / Walrus blob / optional chain read | **Memwalpp only** |
+| — | — | — | `getLineage` | Ancestry graph — local + optional Sui pack lineage | **Memwalpp only** |
+| — | — | — | `getVersionHistory` | Version timeline from `metadata.versionHistory` | **Memwalpp only** |
+| — | — | — | `softDelete` | Tombstone local row (`metadata.deleted=1`) | **Memwalpp only** |
+
+**Summary:** Official **8** tools = Walrus memory as a service (login, cloud write/recall/analyze/restore). Memwalpp **9** tools = hybrid memory OS for agents (local speed, gated `sync`, search, verify, lineage, history). Memwalpp **wraps** the MemWal SDK; it does not fork Walrus Memory.
+
+### Agent workflow map
+
+```
+Official                          @memwalpp/mcp
+────────                          ────────────
+memwal_login          ──copy cred──►  MCP env (delegate key)
+memwal_remember       ≈ partial    ►  remember (local SQLite)
+                      ──gate──────►  sync → Walrus (optional)
+memwal_recall         ≈            ►  recall + search (ranked)
+memwal_analyze        ✗            ►  use official MCP if needed
+memwal_restore        ✗            ►  use official MCP if needed
+memwal_health         ≈ loose      ►  getStats
+memwal_logout         ✗            ►  clear MCP env / policy
+                      ✗            ►  verify · getLineage · getVersionHistory · softDelete
+```
+
+### Behavioral differences (same agent session)
+
+| Behavior | Official | `@memwalpp/mcp` |
+|----------|----------|-----------------|
+| After write | Uploading to Walrus; recall may be empty for **5–15s** | Immediate on SQLite; Walrus only after explicit **`sync`** |
+| Redaction / quality | Relayer-side | Server-enforced on **`sync`**; optional on **`remember`**; `MEMWAL_SYNC_QUALITY_MIN` |
+| Prove “memory exists” | Walrus blob on relayer | **`verify`** + optional chain; **`verifiable`** flag on **`search`** hits |
+| **`analyze` / `restore`** | ✅ | ❌ — keep official MCP alongside for these |
+| Daily coding without keys | ❌ needs login | ✅ **Pro Local** |
+
+**Tool schemas (memwalpp):** [`packages/mcp/docs/TOOLS.md`](packages/mcp/docs/TOOLS.md)
 
 ---
 
