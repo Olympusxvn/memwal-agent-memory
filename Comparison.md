@@ -99,6 +99,7 @@ memwal_logout         ✗            ►  clear MCP env / policy
 | `recall` | Hybrid recall (local + optional durable hydrate) |
 | `search` | Ranked hybrid search — `score`, `hitSource`, `verifiable` |
 | `sync` | Promote pending rows — **unskippable** redact + quality gate |
+| `saveArtifact` | JSON/markdown report with `artifact: true` metadata |
 | `getVersionHistory` | Version timeline from `metadata.versionHistory` |
 | `getLineage` | Ancestry graph — local + optional Sui pack lineage |
 | `verify` | Layered proof — local / Walrus / on-chain |
