@@ -74,7 +74,7 @@ export async function runSharedMemory(runtime: AgentRuntime): Promise<void> {
   demoInfo("Store", storeKind === "sqlite" ? "SQLite" : "in-memory");
   demoInfo("Durable", durableLive ? "live" : "offline");
 
-  demoStep(2, STEPS, "Agent: Research — seed findings to local memory");
+  demoStep(2, STEPS, "Agent: Research — seed findings + JSON artifact report");
   const researchId = await saveAgentMemory(
     runtime,
     "[RESEARCH] Walrus verification patterns for hybrid agent memory:\n" +
@@ -83,10 +83,32 @@ export async function runSharedMemory(runtime: AgentRuntime): Promise<void> {
       "3) attach walrusBlobId for bounty fulfillment",
     { role: "agent-research", agentId: "agent-research" },
   );
+  const artifactPayload = JSON.stringify(
+    {
+      report: "walrus-verification",
+      findings: ["hybrid sync", "layered verify", "shared namespace"],
+      generatedBy: "agent-research",
+    },
+    null,
+    2,
+  );
+  const artifactId = await saveAgentMemory(
+    runtime,
+    `# Artifact: walrus-verification-report\n\n${artifactPayload}`,
+    {
+      role: "agent-research",
+      agentId: "agent-research",
+      artifact: "true",
+      artifactName: "walrus-verification-report",
+      artifactMime: "application/json",
+    },
+  );
   demoOk(`Research memory ${researchId}`);
+  demoOk(`Artifact report ${artifactId.slice(0, 8)}… (metadata artifact: true)`);
 
-  demoStep(3, STEPS, "Research — pushOne (redact → MemWal → Walrus)");
+  demoStep(3, STEPS, "Research — pushOne findings + artifact (redact → MemWal → Walrus)");
   await pushAndTrack(runtime, "agent-research", researchId, agentRows);
+  await pushAndTrack(runtime, "agent-research", artifactId, agentRows);
 
   const analystCtx: SwarmHookContext = {
     namespace: NAMESPACE,
@@ -102,6 +124,17 @@ export async function runSharedMemory(runtime: AgentRuntime): Promise<void> {
     injectedResearch > 0
       ? `Injected ${injectedResearch} chars from shared hybrid memory`
       : "Recall local-only (research row still local)",
+  );
+  const artifactHits = await sync.pullQuery("walrus-verification-report", {
+    namespace: NAMESPACE,
+    limit: 5,
+    forceDurable: durableLive,
+  });
+  const artifactHit = artifactHits.find((h) => h.metadata?.artifact === "true");
+  demoOk(
+    artifactHit
+      ? `Analyst recalled artifact "${artifactHit.metadata?.artifactName ?? "report"}"`
+      : "Artifact recall local-only",
   );
 
   demoStep(5, STEPS, "Agent: Analyst — capture synthesis + push");
@@ -149,6 +182,6 @@ export async function runSharedMemory(runtime: AgentRuntime): Promise<void> {
     Flow: "research → push → analyst recall → push → executor recall → sync",
     Walrus: durableLive ? `${exported.blobIds.length} blob ref(s)` : "offline — set MEMWAL_*",
     Verify: verify.valid ? "PASS" : "local-only",
-    Next: "Phase 12 saveArtifact + portable MCP path",
+    Artifact: artifactHit ? "recalled by analyst" : "local-only",
   });
 }

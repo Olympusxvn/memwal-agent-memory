@@ -10,6 +10,7 @@ import {
   handleGetVersionHistory,
   handleRecall,
   handleRemember,
+  handleSaveArtifact,
   handleSearch,
   handleVerify,
   type ToolRuntime,
@@ -117,6 +118,21 @@ describe("MCP memory handlers", () => {
     });
     const row = await rt.local.getById(out.recordId as string);
     expect(row?.content).toContain(email);
+  });
+
+  it("saveArtifact stores artifact metadata and wraps content", async () => {
+    const rt = offlineRuntime();
+    const out = await handleSaveArtifact(rt, {
+      name: "walrus-report",
+      content: JSON.stringify({ ok: true, detail: "artifact demo with enough length" }),
+      mime: "application/json",
+    });
+    expect(out.stored).toBe(true);
+    expect(out.artifact).toBe(true);
+    expect(out.artifactName).toBe("walrus-report");
+    const row = await rt.local.getById(out.recordId as string);
+    expect(row?.metadata?.artifact).toBe("true");
+    expect(row?.content).toContain("# Artifact: walrus-report");
   });
 
   it("sync returns offline structured result when durable down", async () => {

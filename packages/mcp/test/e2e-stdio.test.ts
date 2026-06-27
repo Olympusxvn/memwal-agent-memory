@@ -174,4 +174,43 @@ describe("MCP stdio E2E — v1 core flows", () => {
       expect(row?.content).toContain("[redacted-email]");
     });
   });
+
+  describe("flow 4: saveArtifact → sync → recall", () => {
+    it("stores JSON report with artifact metadata and promotes on sync", async () => {
+      const unique = `e2e-artifact-${crypto.randomUUID()}`;
+      const saved = parseToolJson(
+        await client.callTool({
+          name: "saveArtifact",
+          arguments: {
+            name: `report-${unique}`,
+            content: JSON.stringify({ report: unique, findings: ["hybrid", "verify"] }),
+            mime: "application/json",
+            promote: "walrus",
+          },
+        }),
+      );
+      expect(saved.stored).toBe(true);
+      expect(saved.artifact).toBe(true);
+      expect(typeof saved.recordId).toBe("string");
+
+      const synced = parseToolJson(
+        await client.callTool({
+          name: "sync",
+          arguments: { forceDurable: false },
+        }),
+      );
+      expect(Number((synced.metrics as { pushed?: number }).pushed)).toBeGreaterThanOrEqual(1);
+
+      const recalled = parseToolJson(
+        await client.callTool({
+          name: "recall",
+          arguments: { query: unique, options: { limit: 5 } },
+        }),
+      );
+      const hits = recalled.hits as Array<{ content?: string }>;
+      const hit = hits.find((h) => h.content?.includes(unique));
+      expect(hit).toBeDefined();
+      expect(hit?.content).toContain("Artifact:");
+    });
+  });
 });

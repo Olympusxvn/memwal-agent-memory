@@ -42,13 +42,13 @@
 | **8** | Dashboard + live chain integration | ◐ In progress | Kiosk v1 PTBs wired; indexer schema-only |
 | **9** | Submission polish & judge experience | ✓ Complete | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
 | **10** | Walrus Track narrative polish | ✓ Complete | `openspec-walrus-track-gaps.md` Tier S |
-| **11** | Multi-agent shared memory (Gap A) | ◐ Planned | `agent:shared-memory` |
-| **12** | Artifacts + portable verify (Gap C, E) | ○ Planned | MCP `saveArtifact`, JUDGE Path D |
-| **13** | Smart upload decision v1 (Gap D) | ○ Planned | `promote`, `MEMWAL_UPLOAD_THRESHOLD` |
-| **14** | Long-running integration (Gap B) | ◐ Partial | companion doc + Tier S narrative |
-| **15** | Dashboard Walrus metrics + benchmarks (G, H) | ○ Planned | dashboard panel, `docs/benchmarks/` |
-| **16** | Trust model & Seal (Gap F) | ○ Planned | docs-first; see `walrus-memory-alignment.md` |
-| **17** | Developer tooling expansion | ○ Planned | MCP profiles, auto-capture, FTS5 |
+| **11** | Multi-agent shared memory (Gap A) | ✓ Complete | `agent:shared-memory` |
+| **12** | Artifacts + portable verify (Gap C, E) | ✓ Complete | MCP `saveArtifact`, JUDGE Path G |
+| **13** | Smart upload decision v1 (Gap D) | ✓ Complete | `promote`, `MEMWAL_UPLOAD_THRESHOLD` |
+| **14** | Long-running integration (Gap B) | ✓ Complete | `agent:resume-session`, companion doc |
+| **15** | Dashboard Walrus metrics + benchmarks (G, H) | ✓ Complete | WalrusStatsPanel, `pnpm bench:recall` |
+| **16** | Trust model & Seal (Gap F) | ✓ Complete | SUBMISSION §3.2, Doc Hub `#trust` |
+| **17** | Developer tooling expansion | ✓ Complete | MCP profiles, FTS5, auto-capture docs |
 
 **Legend:** ✓ Complete · ◐ In progress / partial · ○ Planned
 
@@ -245,17 +245,17 @@
 
 ---
 
-### Phase 12 — Artifacts + portable verify (Gap C, E) ◐
+### Phase 12 — Artifacts + portable verify (Gap C, E) ✓
 
 **Goal:** Artifact-driven workflow + 5-minute portable memory proof for judges.
 
 | Exit criterion | Status |
 |----------------|--------|
 | MCP tool `saveArtifact` (text/JSON/markdown) | ✓ |
-| Demo: save report → promote → second agent recall | ○ |
+| Demo: save report → promote → second agent recall | ✓ |
 | `JUDGE_GUIDE.md` Path G — fresh store → recall → verify PASS | ✓ |
 | `pnpm mcp:e2e:portable` or extended E2E | ✓ |
-| Doc Hub 60s verify includes portable step | ○ |
+| Doc Hub 60s verify includes portable step | ✓ |
 
 **Depends on:** Phase 6 (MCP), Phase 11 (shared demo integration optional).
 

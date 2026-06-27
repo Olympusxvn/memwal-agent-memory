@@ -27,6 +27,26 @@ Store content in local SQLite. Optionally redact before persist.
 
 ---
 
+## saveArtifact `[W]`
+
+Store a JSON/markdown report with `metadata.artifact=true` (Phase 12 / Gap C). Wraps `remember` with artifact metadata and optional `promote`.
+
+```jsonc
+{
+  "name": "walrus-verification-report",
+  "content": "{ \"findings\": [\"hybrid sync\"] }",
+  "mime": "application/json",
+  "namespace": "optional",
+  "promote": "auto"
+}
+```
+
+**Returns**: `{ stored, recordId, proof, artifact: true, artifactName, promote, … }`
+
+**HTTP auth**: Required.
+
+---
+
 ## recall `[R]`
 
 Hybrid recall via `MemorySyncService.pullQuery` — local first, optional durable hydrate.

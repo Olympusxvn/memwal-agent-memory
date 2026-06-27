@@ -71,8 +71,8 @@
 |---|------|------------|--------|
 | C1 | MCP `saveArtifact` tool | schema in TOOLS.md | ✓ |
 | C2 | Metadata `artifact: true` | search filter | ✓ |
-| C3 | Demo: report JSON promote + recall | shared-memory or bounty | ◐ |
-| C4 | MCP E2E covers saveArtifact | test green | ◐ |
+| C3 | Demo: report JSON promote + recall | shared-memory or bounty | ✓ |
+| C4 | MCP E2E covers saveArtifact | test green | ✓ |
 
 ### Gap E — Portable verify (Phase 12)
 
@@ -80,8 +80,8 @@
 |---|------|------------|--------|
 | E1 | JUDGE_GUIDE Path G | 5-min portable flow | ✓ |
 | E2 | `pnpm mcp:e2e:portable` (or extended e2e) | verify PASS | ✓ |
-| E3 | Doc Hub 60s verify includes portable | mermaid | ◐ |
-| E4 | Link `memwal:restore-smoke` from Path G | doc only | ◐ |
+| E3 | Doc Hub 60s verify includes portable | mermaid | ✓ |
+| E4 | Link `memwal:restore-smoke` from Path G | doc only | ✓ |
 
 ### Gap D — Smart upload v1 (Phase 13)
 
@@ -161,7 +161,7 @@
 |-------|------|--------|------------|
 | **10** | Track narrative polish | ✓ | — |
 | **11** | Multi-agent shared memory | ✓ | — |
-| **12** | Artifacts + portable verify | ◐ | C3–C4, E3–E4 |
+| **12** | Artifacts + portable verify | ✓ | — |
 | **13** | Smart upload v1 | ✓ | — |
 | **14** | Long-running integration | ✓ | — |
 | **15** | Dashboard + benchmarks | ✓ | — |

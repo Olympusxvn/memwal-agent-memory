@@ -68,7 +68,7 @@ and stop.
 
 - Node 20+
 - Clone of [memwal-agent-memory](https://github.com/Olympusxvn/memwal-agent-memory)
-  **or** (when published) `npx -y @memwalpp/mcp`
+  **or** `npx -y @memwalpp/mcp@0.1.0 --transport stdio` ([npm](https://www.npmjs.com/package/@memwalpp/mcp))
 - One-time build: `pnpm install && pnpm mcp:build` (monorepo clone path)
 
 ### + Walrus Sync (optional)
@@ -159,11 +159,13 @@ Use **stdio** for local MCP clients.
 "MEMWAL_SERVER_URL": "https://relayer.memory.walrus.xyz"
 ```
 
-**Planned (npm publish):**
+**npm (published):**
 
 ```bash
-npx -y @memwalpp/mcp --transport stdio
+npx -y @memwalpp/mcp@0.1.0 --transport stdio
 ```
+
+**Cursor Marketplace plugin:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) (application submitted; listing pending).
 
 ### Cursor
 

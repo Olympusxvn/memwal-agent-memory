@@ -398,12 +398,22 @@
 
   <!-- Verify -->
   <section id="verify">
-    <h2>Five-minute verification</h2>
-    <p class="section-desc">No wallet, no MemWal API keys, no Sui CLI required. Exit code <code>0</code> on every command is the pass bar.</p>
+    <h2>Five-minute verification (+60s portable)</h2>
+    <p class="section-desc">No wallet, no MemWal API keys, no Sui CLI required. Exit code <code>0</code> on every command is the pass bar. Add <code>pnpm mcp:e2e:portable</code> for portable rehydrate (+~60s).</p>
     <div class="panel judge">
       <div class="verify-cmd">git clone https://github.com/Olympusxvn/memwal-agent-memory.git
 cd memwal-agent-memory
-pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt</div>
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
+# optional +60s portable:
+pnpm mcp:e2e:portable && pnpm agent:shared-memory</div>
+      <div class="diagram-box" style="margin: 16px 0;"><pre class="mermaid">
+flowchart LR
+  E2E[pnpm mcp:e2e] --> Demo[pnpm agent:demo]
+  Demo --> Hunt[pnpm agent:bounty-hunt]
+  Hunt --> Port[pnpm mcp:e2e:portable]
+  Port --> Shared[pnpm agent:shared-memory]
+  Port --> OK[verify PASS]
+      </pre></div>
       <table class="verify-table">
         <thead>
           <tr><th>Command</th><th>What exit 0 proves</th><th>Pass</th></tr>
@@ -411,7 +421,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
         <tbody>
           <tr>
             <td><code>pnpm mcp:e2e</code></td>
-            <td>MCP stdio server works; memory tools (<code>remember</code>, <code>recall</code>, <code>sync</code>) execute; chain tools return <code>chain_not_configured</code> without keys (expected).</td>
+            <td>MCP stdio — <code>remember</code>, <code>recall</code>, <code>sync</code>, <code>saveArtifact</code> (flow 4).</td>
             <td class="pass">Required</td>
           </tr>
           <tr>
@@ -423,6 +433,16 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
             <td><code>pnpm agent:bounty-hunt</code></td>
             <td>Poster + Hunter agents; recall injects context; bounty fulfillment path references Walrus blob semantics.</td>
             <td class="pass">Required</td>
+          </tr>
+          <tr>
+            <td><code>pnpm mcp:e2e:portable</code></td>
+            <td>Fresh local SQLite rehydrates from mock durable; layered <code>verify</code> PASS. Optional live: <code>pnpm memwal:restore-smoke</code> (needs <code>MEMWAL_*</code>).</td>
+            <td class="pass">Optional +60s</td>
+          </tr>
+          <tr>
+            <td><code>pnpm agent:shared-memory</code></td>
+            <td>3-agent shared namespace; JSON artifact report recalled by Analyst (<code>artifact: true</code>).</td>
+            <td class="pass">Optional</td>
           </tr>
         </tbody>
       </table>
@@ -472,7 +492,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
           <tr>
             <td class="num">7</td>
             <td class="q">Do agents share context on Walrus?</td>
-            <td class="where"><code>pnpm agent:bounty-hunt</code> — Poster promotes → Hunter hybrid recall. Phase 11: 3-agent shared memory (planned).</td>
+            <td class="where"><code>pnpm agent:shared-memory</code> · <code>pnpm agent:bounty-hunt</code></td>
           </tr>
         </tbody>
       </table>
