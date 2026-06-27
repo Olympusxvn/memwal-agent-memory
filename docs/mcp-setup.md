@@ -4,6 +4,32 @@ Connect **Cursor**, **Claude Desktop**, or any MCP client to the hybrid memory l
 
 **Judges:** fastest path is [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md#judge-mcp-quickstart-2-min) (`pnpm mcp:e2e`). Workshop context: [`judge-walrus-memory-workshop.md`](judge-walrus-memory-workshop.md).
 
+---
+
+## Integrate in 5 minutes
+
+Minimal path for any MCP-compatible agent (Cursor, Claude Desktop, custom client).
+
+| Step | Action | Time |
+|------|--------|------|
+| **1** | **Node 20+** installed | — |
+| **2** | **No clone:** `npx -y @memwalpp/mcp@0.1.0 --transport stdio` — or clone repo + `pnpm install && pnpm mcp:build` | ~1 min |
+| **3** | Add MCP server to client config (see [Cursor](#cursor-project-config) or [Claude Desktop](#claude-desktop)) | ~1 min |
+| **4** | Restart client; confirm **9 tools** listed (`remember`, `recall`, `search`, `verify`, …) | ~30 s |
+| **5** | In chat: ask agent to **`remember`** a test phrase, then **`recall`** it — optional **`verify`** on the returned proof | ~2 min |
+
+**Offline OK:** steps 2–5 work without `MEMWAL_*` keys (local SQLite only). Add keys from [`.env.example`](../.env.example) when you want live Walrus promote via `sync`.
+
+**Monorepo verify (judges / CI):**
+
+```bash
+pnpm mcp:build && pnpm mcp:e2e
+```
+
+**Walrus track map:** [`SUBMISSION.md` §3](../SUBMISSION.md) · [`docs/doc-map.html`](doc-map.html#track-map)
+
+---
+
 **Product users (Cursor / Claude):** [`product/README.md`](product/README.md) — Pro Local vs + Walrus Sync.
 
 **Agent setup skill:** `curl -sL https://memwalpp-dashboard.vercel.app/skills/setup` · [`docs/skills/setup.md`](skills/setup.md) · **Comparison:** [`Comparison.md`](../Comparison.md)

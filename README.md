@@ -61,6 +61,7 @@
 |     |                                                                                |
 | --- | ------------------------------------------------------------------------------ |
 | ⚖️  | [For judges — 5 min verify](#-for-judges--5-min-verify)                        |
+| 🌐  | [Live Walrus memory — 30 s](#-live-walrus-memory--30-seconds-long-running-proof) |
 | 🎬  | [Demo slides & Doc Hub](#-demo-slides--doc-hub)                                |
 | 🔌  | [MCP Server `@memwalpp/mcp](#-mcp-server--memwalppmcp)`                        |
 | 🚀  | [Companion MVP — Mr. Toxic Special One](#-companion-mvp--mr-toxic-special-one) |
@@ -115,6 +116,19 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 > ✨ Built on the official [Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e).  
 > You do **not** need the [workshop kit](https://github.com/DionisisLougaris/walrus-memory-workshop-kit) to score us.  
 > Expect colored `[1/N]` steps and `── RESULT ── PASS`. Optional live Walrus: [.env.example](.env.example) + `MEMWAL_AUTO_PUSH=1`.
+
+---
+
+## 🌐 Live Walrus memory — 30 seconds (long-running proof)
+
+**Scoring “persistent memory over time”?** Open the production companion app first — same MemWal mainnet stack as this repo.
+
+| | |
+|---|---|
+| **Live** | [**special-one-agent.vercel.app/chat**](https://special-one-agent.vercel.app/chat) |
+| **Walkthrough** | Wallet → Settings → Gemini key → prediction → **Walrus Memory Ledger** + **MemWal 🟢 LIVE** |
+| **Platform map** | [docs/companion-mvp-special-one-agent.md](docs/companion-mvp-special-one-agent.md) |
+| **This repo** | Clone + `pnpm mcp:e2e` for **how to build** hybrid memory + MCP + Move economy |
 
 ---
 

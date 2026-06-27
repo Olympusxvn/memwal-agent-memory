@@ -19,6 +19,7 @@ import {
   handleGetVersionHistory,
   handleRecall,
   handleRemember,
+  handleSaveArtifact,
   handleSearch,
   handleVerify,
   type ToolRuntime,
@@ -144,8 +145,22 @@ export function createMemWalMcpServer(
       namespace: z.string().optional(),
       metadata: z.record(z.string()).optional(),
       redactLocal: z.boolean().optional(),
+      promote: z.enum(["auto", "local", "walrus"]).optional(),
     },
     (args) => handleRemember(rt, args as Parameters<typeof handleRemember>[1]),
+  );
+
+  wrapTool(
+    "saveArtifact",
+    "[W] Store text/json/markdown artifact — wraps remember with artifact metadata (Phase 12).",
+    {
+      name: z.string().min(1).max(200),
+      content: z.string().max(8000),
+      mime: z.string().max(120).optional(),
+      namespace: z.string().optional(),
+      promote: z.enum(["auto", "local", "walrus"]).optional(),
+    },
+    (args) => handleSaveArtifact(rt, args as Parameters<typeof handleSaveArtifact>[1]),
   );
 
   wrapTool(

@@ -20,7 +20,7 @@ function parseToolJson(result: { content?: Array<{ type: string; text?: string }
 function createHttpTestDeps(port: number): MemWalMcpDeps {
   const local = new InMemoryLocalMemoryStore();
   const durable = createMockDurableMemoryStore("http-e2e");
-  const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+  const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
   return {
     sync,
     local,

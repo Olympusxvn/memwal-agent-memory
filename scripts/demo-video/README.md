@@ -46,6 +46,21 @@ Record **35–40s** raw, then trim to manifest `brollTrim`:
 
 Overlay B-roll **picture-in-picture** on slides 5–7 and 9 (bottom-right terminal, 40% width).
 
+## Storyboard addendum — Tier A (Phase 11+)
+
+When **`pnpm agent:shared-memory`** ships, extend B-roll and `voiceover.json` with this chapter (~45 s total):
+
+| Segment | Visual | Narration hook | Verify on screen |
+|---------|--------|----------------|------------------|
+| **Multi-agent** | `pnpm agent:shared-memory` terminal | “Three agents — Research, Analyst, Executor — share one Walrus namespace.” | Summary table: `agentId` · `walrusBlobId` · `hitSource` |
+| **Shared recall** | Hunter/Analyst step log | “Agent B recalls context Agent A promoted — hybrid pull from Walrus.” | `Injected N chars from hybrid memory` |
+| **Verify** | MCP or CLI `verify` | “Layered proof — local hash matches durable blob.” | `valid: true` / PASS |
+| **Long-running** | [special-one-agent.vercel.app/chat](https://special-one-agent.vercel.app/chat) | “Production ledger survives refresh — mainnet MemWal LIVE.” | Walrus Memory Ledger sidebar |
+
+**Portable memory (Phase 12):** optional clip — export proof JSON → fresh DB → `recall forceDurable` → verify PASS (`JUDGE_GUIDE.md` Path D when added).
+
+Re-run `pnpm demo:publish` after updating `scripts/demo-video/voiceover.json`.
+
 ## Assemble in CapCut (recommended)
 
 1. **Import** slide screen recording + `full-voiceover.mp3` + B-roll MP4s.

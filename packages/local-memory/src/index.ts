@@ -1,4 +1,11 @@
 export { scoreSnippet, scoreQuality } from "./quality-scorer.js";
+export {
+  resolvePromoteMode,
+  scoreUploadDecision,
+  shouldUploadToWalrus,
+  type PromoteMode,
+  type UploadDecision,
+} from "./upload-decision.js";
 export { scoreSemanticMatch } from "./semantic-score.js";
 export { redactForUpstream } from "./redact.js";
 export type { RedactForUpstreamResult } from "./redact.js";

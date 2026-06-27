@@ -48,7 +48,7 @@ export function createAgentRuntime(options?: {
   const sync = createMemorySyncService({
     local,
     durable,
-    config: { defaultNamespace: namespace, qualityMin: 0 },
+    config: { defaultNamespace: namespace, qualityMin: 0, uploadThreshold: 0 },
     logger,
   });
 

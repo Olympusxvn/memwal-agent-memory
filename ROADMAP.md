@@ -41,7 +41,7 @@
 | **7** | Move contracts v2 refactor | ✓ Complete (mainnet) | `openspec-move-contracts-refactor.md`; bootstrapped 2026-06-01 |
 | **8** | Dashboard + live chain integration | ◐ In progress | Kiosk v1 PTBs wired; indexer schema-only |
 | **9** | Submission polish & judge experience | ✓ Complete | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
-| **10** | Walrus Track narrative polish | ◐ In progress | `openspec-walrus-track-gaps.md` Tier S |
+| **10** | Walrus Track narrative polish | ✓ Complete | `openspec-walrus-track-gaps.md` Tier S |
 | **11** | Multi-agent shared memory (Gap A) | ◐ Planned | `agent:shared-memory` |
 | **12** | Artifacts + portable verify (Gap C, E) | ○ Planned | MCP `saveArtifact`, JUDGE Path D |
 | **13** | Smart upload decision v1 (Gap D) | ○ Planned | `promote`, `MEMWAL_UPLOAD_THRESHOLD` |
@@ -211,7 +211,7 @@
 
 ---
 
-### Phase 10 — Walrus Track narrative polish ◐
+### Phase 10 — Walrus Track narrative polish ✓
 
 **Goal:** Map every official track pillar to a judge-verifiable command or URL — minimal code.
 
@@ -219,60 +219,60 @@
 
 | Exit criterion | Status |
 |----------------|--------|
-| SUBMISSION §3 track pillar → evidence table | ○ |
-| Doc Hub scoring lens + track map | ○ |
-| Special One elevated as long-running proof (README + SUBMISSION) | ○ |
-| Demo video storyboard: 3-agent + verify | ○ |
-| “Integrate in 5 minutes” in `docs/mcp-setup.md` | ○ |
+| SUBMISSION §3 track pillar → evidence table | ✓ |
+| Doc Hub scoring lens + track map (`#track-map`) | ✓ |
+| Special One elevated as long-running proof (README + SUBMISSION §3.1) | ✓ |
+| Demo video storyboard: 3-agent + verify (README addendum) | ✓ |
+| “Integrate in 5 minutes” in `docs/mcp-setup.md` | ✓ |
 
-**Depends on:** Phase 9 (submission baseline). **Does not block** Phase 11 implementation.
+**Completed:** 2026-06-27 · Checklist: [`walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md)
 
 ---
 
-### Phase 11 — Multi-agent shared memory (Gap A) ◐
+### Phase 11 — Multi-agent shared memory (Gap A) ✓
 
 **Goal:** Judges see **three agents** sharing context via the same Walrus namespace/blob — not only sequential steps in one process.
 
 | Exit criterion | Status |
 |----------------|--------|
-| `pnpm agent:shared-memory` — Research → Analyst → Executor | ○ |
-| Summary table: `agentId \| memoryId \| walrusBlobId \| hitSource` | ○ |
-| Analyst/Executor `pullQuery` with `forceDurable: true` | ○ |
-| `JUDGE_GUIDE.md` Path D (optional second process) | ○ |
-| Offline exit 0; live blob with `MEMWAL_AUTO_PUSH=1` | ○ |
+| `pnpm agent:shared-memory` — Research → Analyst → Executor | ✓ |
+| Summary table: `agentId \| memoryId \| walrusBlobId \| hitSource` | ✓ |
+| Analyst/Executor `pullQuery` with `forceDurable: true` | ✓ |
+| `JUDGE_GUIDE.md` Path G (portable + shared context) | ✓ |
+| Offline exit 0; live blob with `MEMWAL_AUTO_PUSH=1` | ✓ offline |
 
 **Depends on:** Phase 2 (sync), Phase 4 (agent bridge). **Preserves:** `agent:bounty-hunt`.
 
 ---
 
-### Phase 12 — Artifacts + portable verify (Gap C, E) ○
+### Phase 12 — Artifacts + portable verify (Gap C, E) ◐
 
 **Goal:** Artifact-driven workflow + 5-minute portable memory proof for judges.
 
 | Exit criterion | Status |
 |----------------|--------|
-| MCP tool `saveArtifact` (text/JSON/markdown) | ○ |
+| MCP tool `saveArtifact` (text/JSON/markdown) | ✓ |
 | Demo: save report → promote → second agent recall | ○ |
-| `JUDGE_GUIDE.md` Path D — export → fresh DB → recall → verify PASS | ○ |
-| `pnpm mcp:e2e:portable` or extended E2E | ○ |
+| `JUDGE_GUIDE.md` Path G — fresh store → recall → verify PASS | ✓ |
+| `pnpm mcp:e2e:portable` or extended E2E | ✓ |
 | Doc Hub 60s verify includes portable step | ○ |
 
 **Depends on:** Phase 6 (MCP), Phase 11 (shared demo integration optional).
 
 ---
 
-### Phase 13 — Smart upload decision v1 (Gap D) ○
+### Phase 13 — Smart upload decision v1 (Gap D) ✓
 
 **Goal:** Intelligent hybrid sync v1 — not full 6-factor engine; extends existing quality gate.
 
 | Exit criterion | Status |
 |----------------|--------|
-| `RememberOptions.promote`: `auto` \| `local` \| `walrus` | ○ |
-| Metadata boosts: `@walrus`, `@local`, `important`, bounty roles | ○ |
-| `accessCount` on local rows; used in upload score | ○ |
-| `MEMWAL_UPLOAD_THRESHOLD` (default 65) in `.env.example` | ○ |
-| `shouldUploadToWalrus()` + logged reason in `pushOne` | ○ |
-| Unit tests for promote modes and PII hard block | ○ |
+| `RememberOptions.promote`: `auto` \| `local` \| `walrus` | ✓ |
+| Metadata boosts: `@walrus`, `@local`, `important`, bounty roles | ✓ |
+| `accessCount` on local rows; used in upload score | ✓ |
+| `MEMWAL_UPLOAD_THRESHOLD` (default 65) in `.env.example` | ✓ |
+| `shouldUploadToWalrus()` + logged reason in `pushOne` | ✓ |
+| Unit tests for promote modes and PII hard block | ✓ |
 
 **Reference:** MemWal Hybrid MCP research · [`sovereign-memory-roadmap-discussion.md`](docs/product/sovereign-memory-roadmap-discussion.md) Phase 10.
 
@@ -369,7 +369,7 @@ Phases **12–13** (Tier A) follow. **15–17** (Tier B) can run in parallel whe
 
 | Sprint | Focus | Deliverable | Tier |
 |--------|-------|-------------|------|
-| **S6** | Track narrative | SUBMISSION map, Doc Hub, Special One hero, mcp-setup 5-min | S |
+| **S6** | Track narrative | SUBMISSION map, Doc Hub, Special One hero, mcp-setup 5-min | S | ✓ |
 | **S7** | Multi-agent demo | `pnpm agent:shared-memory`, JUDGE Path D draft | A |
 | **S8** | Artifacts + portable | `saveArtifact`, `mcp:e2e:portable`, Path D complete | A |
 | **S9** | Smart upload v1 | `promote`, threshold, accessCount, tests | A |
@@ -427,7 +427,7 @@ Prior sprints S1–S5 (submission) are **complete** — see table above.
 ```bash
 pnpm agent:demo          # hybrid memory demo (offline-safe)
 pnpm agent:bounty-hunt   # 2-agent bounty swarm
-pnpm agent:shared-memory # 3-agent shared Walrus context (Phase 11 — planned)
+pnpm agent:shared-memory # 3-agent shared Walrus context (Phase 11)
 pnpm mcp:e2e             # MCP stdio integration
 pnpm contracts:info      # mainnet package + object IDs
 pnpm run check           # TypeScript across monorepo

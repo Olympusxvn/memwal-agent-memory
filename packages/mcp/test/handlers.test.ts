@@ -67,7 +67,7 @@ function liveDurable(handlers?: {
 function offlineRuntime(qualityMin = 40): ToolRuntime {
   const local = new InMemoryLocalMemoryStore();
   const durable = offlineDurable();
-  const sync = createMemorySyncService({ local, durable, config: { qualityMin } });
+  const sync = createMemorySyncService({ local, durable, config: { qualityMin, uploadThreshold: qualityMin } });
   return {
     sync,
     local,
@@ -79,7 +79,7 @@ function offlineRuntime(qualityMin = 40): ToolRuntime {
 function liveDurableRuntime(qualityMin = 0): ToolRuntime {
   const local = new InMemoryLocalMemoryStore();
   const durable = liveDurable();
-  const sync = createMemorySyncService({ local, durable, config: { qualityMin } });
+  const sync = createMemorySyncService({ local, durable, config: { qualityMin, uploadThreshold: qualityMin } });
   return { sync, local, durable, config: { defaultNamespace: "default", qualityMin } };
 }
 
@@ -133,12 +133,12 @@ describe("MCP memory handlers", () => {
     }));
     const local = new InMemoryLocalMemoryStore();
     const durable = liveDurable({ remember });
-    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
     const rt: ToolRuntime = {
       sync,
       local,
       durable,
-      config: { defaultNamespace: "default", qualityMin: 0 },
+      config: { defaultNamespace: "default", qualityMin: 0, uploadThreshold: 0 },
     };
     await handleRemember(rt, {
       content: "Contact user@example.com with enough text for quality gate pass in sync.",
@@ -165,12 +165,12 @@ describe("MCP memory handlers", () => {
   it("remember → sync → recall round-trip with mock durable", async () => {
     const local = new InMemoryLocalMemoryStore();
     const durable = createMockDurableMemoryStore("default");
-    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
     const rt: ToolRuntime = {
       sync,
       local,
       durable,
-      config: { defaultNamespace: "default", qualityMin: 0 },
+      config: { defaultNamespace: "default", qualityMin: 0, uploadThreshold: 0 },
     };
     const unique = `sync-roundtrip-${crypto.randomUUID()}`;
     await handleRemember(rt, {
@@ -200,12 +200,12 @@ describe("MCP memory handlers", () => {
   it("getVersionHistory returns timeline after sync (1.1e)", async () => {
     const local = new InMemoryLocalMemoryStore();
     const durable = liveDurable();
-    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
     const rt: ToolRuntime = {
       sync,
       local,
       durable,
-      config: { defaultNamespace: "default", qualityMin: 0 },
+      config: { defaultNamespace: "default", qualityMin: 0, uploadThreshold: 0 },
     };
 
     const remembered = await handleRemember(rt, {
@@ -228,7 +228,7 @@ describe("MCP memory handlers", () => {
   it("search includeProof adds proof for verifiable hybrid hits", async () => {
     const local = new InMemoryLocalMemoryStore();
     const durable = liveDurable();
-    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
     await sync.remember({
       id: "prov1",
       namespace: "default",
@@ -242,7 +242,7 @@ describe("MCP memory handlers", () => {
       sync,
       local,
       durable,
-      config: { defaultNamespace: "default", qualityMin: 0 },
+      config: { defaultNamespace: "default", qualityMin: 0, uploadThreshold: 0 },
     };
     const out = await handleSearch(rt, {
       semantic_query: "verifiable walrus",
@@ -278,12 +278,12 @@ describe("MCP memory handlers", () => {
   it("verify by memoryId checks walrus layer with mock durable (1.1c)", async () => {
     const local = new InMemoryLocalMemoryStore();
     const durable = createMockDurableMemoryStore("default");
-    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
     const rt: ToolRuntime = {
       sync,
       local,
       durable,
-      config: { defaultNamespace: "default", qualityMin: 0 },
+      config: { defaultNamespace: "default", qualityMin: 0, uploadThreshold: 0 },
     };
     const remembered = await handleRemember(rt, {
       content: "Walrus verify layered test with enough quality scoring text here.",

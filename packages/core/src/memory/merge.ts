@@ -46,7 +46,8 @@ export function mergeDurableHitIntoRecord(
   index: number,
 ): MemoryRecord {
   const now = Date.now();
-  const id = existing?.id ?? stableIdFromHit(hit, namespace, index);
+  const recordIdFromHit = hit.metadata?.recordId?.trim();
+  const id = existing?.id ?? recordIdFromHit ?? stableIdFromHit(hit, namespace, index);
   const walrusBlobId = hit.blobId ? (hit.blobId as ObjectId) : existing?.walrusBlobId;
   const parentFromHit = hit.metadata?.[MEMORY_METADATA_KEYS.lineageParentId] ?? hit.metadata?.parentId;
 

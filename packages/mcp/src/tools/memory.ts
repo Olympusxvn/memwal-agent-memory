@@ -85,6 +85,7 @@ export async function handleRemember(
     namespace?: string;
     metadata?: Record<string, string>;
     redactLocal?: boolean;
+    promote?: "auto" | "local" | "walrus";
   },
 ): Promise<Record<string, unknown>> {
   const content = args.content.trim();
@@ -111,7 +112,10 @@ export async function handleRemember(
     metadata,
   };
 
-  const saved = await rt.sync.remember(record, { redactLocal });
+  const saved = await rt.sync.remember(record, {
+    redactLocal,
+    promote: args.promote,
+  });
 
   return {
     recordId: id,
@@ -120,8 +124,38 @@ export async function handleRemember(
     namespace,
     redactLocal,
     redacted: saved.metadata?.redacted === "1",
+    promote: args.promote ?? "auto",
     proof: JSON.stringify(createProof(saved)),
   };
+}
+
+export async function handleSaveArtifact(
+  rt: ToolRuntime,
+  args: {
+    name: string;
+    content: string;
+    mime?: string;
+    namespace?: string;
+    promote?: "auto" | "local" | "walrus";
+  },
+): Promise<Record<string, unknown>> {
+  const name = args.name.trim();
+  const content = args.content.trim();
+  if (!name) return { stored: false, error: "name must be non-empty" };
+  if (!content) return { stored: false, error: "content must be non-empty" };
+
+  const wrapped = `# Artifact: ${name}\n\n${content}`;
+  const result = await handleRemember(rt, {
+    content: wrapped,
+    namespace: args.namespace,
+    metadata: {
+      artifact: "true",
+      artifactName: name,
+      ...(args.mime?.trim() ? { artifactMime: args.mime.trim() } : {}),
+    },
+    promote: args.promote ?? "auto",
+  });
+  return { ...result, artifact: true, artifactName: name };
 }
 
 export async function handleRecall(

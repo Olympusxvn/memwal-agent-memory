@@ -160,14 +160,15 @@ Client URL: `http://127.0.0.1:8787/mcp` with `Authorization: Bearer <token>`. De
 
 ---
 
-## v1 tool surface (9 tools)
+## v1 tool surface (10 tools)
 
 | Tool | Kind | HTTP auth | Description |
 |------|------|-----------|-------------|
-| `remember` | W | Required | Local write; optional `redactLocal` |
+| `remember` | W | Required | Local write; optional `redactLocal`, `promote` |
 | `recall` | R | Optional | Hybrid recall (local + optional durable) |
 | `search` | R | Optional | Ranked hybrid search — score, `hitSource`, `verifiable` |
 | `sync` | D | Required | Promote pending rows — **unskippable** redact + gate |
+| `saveArtifact` | W | Required | JSON/markdown report with `artifact: true` metadata |
 | `getVersionHistory` | R | Optional | Version timeline (`metadata.versionHistory`) |
 | `getLineage` | R | Optional | Ancestry graph — local + optional Sui pack lineage |
 | `verify` | R | Optional | Layered proof — local / Walrus / on-chain |
