@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "memwal-agent-memory": {
+      "command": "npx",
+      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "env": {
+        "MEMWAL_NAMESPACE": "openclaw",
+        "MEMWAL_MCP_DATA_DIR": "${HOME}/.memwal-agent-memory/mcp",
+        "MEMWAL_RECALL_FTS": "1"
+      }
+    }
+  }
+}

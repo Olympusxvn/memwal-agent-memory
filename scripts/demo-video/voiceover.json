@@ -82,6 +82,15 @@
       "vi": "Làm cho Walrus: blob bền, id xác minh được, truy cập lập trình qua Move, riêng tư trước khi upload. Đây là cốt lõy sản phẩm."
     },
     {
+      "id": "09b-long-running",
+      "slide": 9,
+      "durationTargetSec": 14,
+      "broll": "https://special-one-agent.vercel.app/chat",
+      "brollTrim": { "inSec": 0, "outSec": 10, "keep": "Walrus Memory Ledger sidebar + MemWal LIVE" },
+      "en": "Long-running proof: Special One keeps the Walrus Memory Ledger across refresh on mainnet. Platform stub: pnpm agent resume session for day-two recall in the same namespace.",
+      "vi": "Chứng minh long-running: Special One giữ Walrus Memory Ledger sau refresh trên mainnet. Platform: pnpm agent resume session cho recall ngày hai."
+    },
+    {
       "id": "09-why-win",
       "slide": 9,
       "durationTargetSec": 16,

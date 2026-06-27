@@ -172,6 +172,7 @@ story for judges and follow-on programs.
 
 - **Master OpenSpec**: [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md)
 - **Walrus Track gaps (post-submit)**: [`docs/specs/openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md) · [`docs/walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md)
+- **MemWal / Walrus alignment backlog**: [`docs/walrus-memory-alignment.md`](docs/walrus-memory-alignment.md)
 - **Architecture**: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - **MCP Server**: [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md)
 - **Product MVP (Cursor + Claude)**: [`docs/specs/openspec-product-mvp-cursor-claude.md`](docs/specs/openspec-product-mvp-cursor-claude.md) · [`docs/product/README.md`](docs/product/README.md)

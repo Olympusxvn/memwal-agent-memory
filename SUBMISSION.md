@@ -54,10 +54,10 @@ to **evidence you can verify in this repo** (commands, URLs, source files).
 | **Durable off-chain storage** | Large, persistent blobs on Walrus | `DurableMemoryStore.remember()` → MemWal relayer → **Walrus**; `MemoryRecord.walrusBlobId` | `MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt` → `✓ Promoted — blob …` | **Shipped** |
 | **Verifiable data** | Prove memory exists; not vendor lock-in | Layered `verify`, `contentHash`, proof JSON; bounty `walrus_blob_id` | `pnpm mcp:e2e`; MCP `verify` · [`packages/mcp/docs/VERIFY.md`](packages/mcp/docs/VERIFY.md) | **Shipped** |
 | **AI agent integration** | Agents need memory beyond one session | Hybrid hooks + `pnpm agent:demo`, `pnpm agent:bounty-hunt` | Offline exit `0` — no keys | **Shipped** |
-| **Multi-agent coordination** | Share context across agents/workflows | Poster → Hunter swarm; same namespace + hybrid `pullQuery` | `pnpm agent:bounty-hunt` (steps 2–5) | **Partial** → Phase 11: 3-agent shared memory |
-| **Long-running workflows** | State over hours/days | **Production:** [Mr. Toxic Special One](https://special-one-agent.vercel.app/chat) (companion repo) | §3.1 below (~30 s browser) | **Shipped** (companion) |
-| **Artifact-driven workflows** | Reports, datasets, logs on Walrus | Planned: MCP `saveArtifact` + promote path | Phase 12 spec | **Planned** |
-| **Developer tooling** | MCP, adapters, inspect memory | `@memwalpp/mcp` — 9 tools, stdio E2E, Doc Hub | [`docs/mcp-setup.md`](docs/mcp-setup.md) · `pnpm mcp:e2e` | **Shipped** |
+| **Multi-agent coordination** | Share context across agents/workflows | `pnpm agent:shared-memory` — Research → Analyst → Executor | `pnpm agent:shared-memory` | **Shipped** |
+| **Long-running workflows** | State over hours/days | **Production:** [Mr. Toxic Special One](https://special-one-agent.vercel.app/chat) + `pnpm agent:resume-session` stub | §3.1 below (~30 s browser) | **Shipped** |
+| **Artifact-driven workflows** | Reports, datasets, logs on Walrus | MCP `saveArtifact` + promote path | MCP tool · Phase 12 | **Shipped** |
+| **Developer tooling** | MCP, adapters, inspect memory | `@memwalpp/mcp` — 10 tools, profiles, stdio E2E | [`docs/mcp-setup.md`](docs/mcp-setup.md) · `pnpm mcp:e2e` | **Shipped** |
 | **Privacy before share** | Sensitive data must not leak upstream | `redactForUpstream` + quality gate **before** MemWal push | `memory-sync-service.ts`; MCP cannot bypass | **Shipped** |
 | **On-chain economy** | Incentives tied to verifiable fulfillment | Mainnet Move: marketplace, bounty escrow, NFT pack, royalty | `pnpm contracts:info` · [`docs/deploy.md`](docs/deploy.md) | **Shipped** |
 | **Judge-friendly demo** | Runnable without setup pain | 5-min offline path; honest stub labels | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) · [`docs/doc-map.html`](docs/doc-map.html) | **Shipped** |
@@ -86,6 +86,23 @@ LocalMemoryStore → redactForUpstream → quality gate → MemWal remember → 
 **Judge walkthrough:** connect Sui wallet → **Settings** → paste free Gemini key → send a prediction → confirm **Walrus Memory Ledger** sidebar + **MemWal 🟢 LIVE** + [MemWalAccount on SuiScan](https://suiscan.xyz/mainnet/object/0x73b07979a6712f54283c02ddf70e2bdfb3ec729627c9ef0e0d8a214015066a99).
 
 **Overflow framing:** *This repo = how to build hybrid verifiable memory + economy. Special One = what users get in production on mainnet.*
+
+Platform stub for cross-session recall: `pnpm agent:resume-session` (offline exit 0).
+
+### 3.2 Trust model (privacy before Walrus)
+
+Local redaction runs **before** any MemWal/Walrus upload. Judges should understand who can see plaintext at each layer.
+
+| Mode | Trust boundary | This repo |
+|------|----------------|-----------|
+| **Managed relayer** | Walrus Foundation sees plaintext during embed/encrypt | Default live path after **local redact** |
+| **MemWalManual** | Relayer sees only encrypted payloads + vectors | Not wired — privacy-max path (ADR spike) |
+| **Self-hosted relayer** | Your infra | Not in demo |
+| **TEE relayer** | Attested enclave | Not in demo |
+
+**Pitch line:** Local PII gate → managed Walrus Memory relayer. On-chain ownership/delegates remain trustless via Sui `memwal:account`.
+
+Reference: [`docs/walrus-memory-alignment.md`](docs/walrus-memory-alignment.md) · [`docs/decisions/ADR-014-memwal-manual-spike.md`](docs/decisions/ADR-014-memwal-manual-spike.md)
 
 ---
 

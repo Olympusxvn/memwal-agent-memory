@@ -177,6 +177,8 @@ Client URL: `http://127.0.0.1:8787/mcp` with `Authorization: Bearer <token>`. De
 
 Marketplace write tools (`createBounty`, `buyMemoryPack`, …) are **not** registered in v1.
 
+**Profiles:** [`profiles/cursor.json`](./profiles/cursor.json) · [`profiles/claude-desktop.json`](./profiles/claude-desktop.json) · [`profiles/openclaw.json`](./profiles/openclaw.json)
+
 **Reference:** [`docs/TOOLS.md`](./docs/TOOLS.md)
 
 ---

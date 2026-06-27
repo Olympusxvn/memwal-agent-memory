@@ -6,6 +6,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const REPO = "https://github.com/Olympusxvn/memwal-agent-memory";
 const LIVE_DEMO = "https://memwalpp-dashboard.vercel.app/";
+const WALRUS_MEMORY = "https://memory.walrus.xyz";
 
 export function SiteHeader() {
   return (
@@ -28,6 +29,9 @@ export function SiteHeader() {
           <Link href="/doc-hub">Doc Hub</Link>
           <Link href="/kiosk">Memory Kiosk</Link>
           <Link href="/product">MCP product</Link>
+          <a href={WALRUS_MEMORY} target="_blank" rel="noopener noreferrer">
+            Walrus Memory
+          </a>
           <a href={`${REPO}/blob/main/JUDGE_GUIDE.md`} target="_blank" rel="noopener noreferrer">
             Judge guide
           </a>

@@ -94,5 +94,15 @@ Details: [special-one-agent/FINAL_FEEDBACK.md](https://github.com/Olympusxvn/spe
 | Doc | Use |
 |-----|-----|
 | [`SUBMISSION.md`](../SUBMISSION.md) | Overflow Walrus track brief |
-| [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md) | Path F — production MVP |
+| [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md) | Path F — production MVP · Path G — portable |
 | [`SUMMARY.md`](../SUMMARY.md) | Platform overview + companion link |
+| [`docs/doc-map.html`](doc-map.html) | Judge hub — track map, trust model, benchmarks |
+| [`docs/specs/openspec-walrus-track-gaps.md`](specs/openspec-walrus-track-gaps.md) | Post-submit gaps A–H |
+| [`docs/walrus-track-post-submit-checklist.md`](walrus-track-post-submit-checklist.md) | Tier S/A/B progress |
+
+## Related docs (Special One repo)
+
+Add to [special-one-agent README](https://github.com/Olympusxvn/special-one-agent) (bidirectional):
+
+- Platform repo: [memwal-agent-memory](https://github.com/Olympusxvn/memwal-agent-memory)
+- Companion map: [companion-mvp-special-one-agent.md](https://github.com/Olympusxvn/memwal-agent-memory/blob/main/docs/companion-mvp-special-one-agent.md)

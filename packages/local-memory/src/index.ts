@@ -1,5 +1,12 @@
 export { scoreSnippet, scoreQuality } from "./quality-scorer.js";
 export {
+  ftsQueryTokens,
+  matchFtsContent,
+  shouldUseFtsRecall,
+  toFtsMatchExpression,
+} from "./fts-recall.js";
+export type { RecallSearchMode } from "./fts-recall.js";
+export {
   resolvePromoteMode,
   scoreUploadDecision,
   shouldUploadToWalrus,

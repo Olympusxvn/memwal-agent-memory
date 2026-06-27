@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "memwal-agent-memory": {
+      "command": "npx",
+      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "env": {
+        "MEMWAL_NAMESPACE": "cursor",
+        "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
+      }
+    }
+  }
+}

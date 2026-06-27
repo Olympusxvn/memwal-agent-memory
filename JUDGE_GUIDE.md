@@ -54,6 +54,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 | `pnpm agent:demo`        | Hybrid hooks + 5-step narrative                                                     |
 | `pnpm agent:bounty-hunt` | Poster + Hunter agents; recall injects context                                      |
 | `pnpm agent:shared-memory` | Research + Analyst + Executor share namespace + agent table                        |
+| `pnpm agent:resume-session` | Day-2 recall stub (long-running narrative, offline exit 0)                        |
 
 
 Optional live Walrus blob: [Path B](#path-b--live-walrus-blob-id-2-min-optional). Optional **restore proof**: [Path B+](#path-b-restore-proof-1-min-optional).
@@ -259,6 +260,10 @@ pnpm mcp:e2e:portable
 **What PASS means:** `remember` → `sync` → new empty local SQLite → `pullQuery forceDurable` finds the row → `verify` valid.
 
 **MCP tool:** `saveArtifact` stores JSON/markdown reports with `artifact: true` metadata (see [`docs/mcp-setup.md`](docs/mcp-setup.md)).
+
+**Live Walrus restore smoke:** `pnpm memwal:restore-smoke` (requires `MEMWAL_*` keys — optional).
+
+**Long-running stub:** `pnpm agent:resume-session` — seeds session-1 memory, session-2 `pullQuery` recall (companion: [Special One](https://special-one-agent.vercel.app/chat)).
 
 ---
 
