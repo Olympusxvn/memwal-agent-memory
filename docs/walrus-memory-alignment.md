@@ -1,6 +1,7 @@
 # Walrus Memory alignment — backlog (P2 / P3)
 
-**Status:** Reference for post-hackathon work. P0–P1 items are implemented in repo + judge docs.
+**Status:** Reference for post-hackathon work. P0–P1 items are implemented in repo + judge docs.  
+**Active track plan:** [`docs/specs/openspec-walrus-track-gaps.md`](specs/openspec-walrus-track-gaps.md) · [`docs/walrus-track-post-submit-checklist.md`](walrus-track-post-submit-checklist.md)
 
 **Official docs:** [Walrus Memory on docs.wal.app](https://docs.wal.app) · LLM index: [llms.txt](https://docs.wal.app/llms.txt)
 

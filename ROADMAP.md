@@ -3,7 +3,7 @@
 **Project:** `memwal-agent-memory`
 **Track:** Sui Overflow 2026 — Walrus Track
 **Mainnet package:** `0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050`
-**Last updated:** June 1, 2026
+**Last updated:** June 13, 2026
 
 > Canonical references: [`PROJECT.md`](PROJECT.md) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md)
 
@@ -41,8 +41,19 @@
 | **7** | Move contracts v2 refactor | ✓ Complete (mainnet) | `openspec-move-contracts-refactor.md`; bootstrapped 2026-06-01 |
 | **8** | Dashboard + live chain integration | ◐ In progress | Kiosk v1 PTBs wired; indexer schema-only |
 | **9** | Submission polish & judge experience | ✓ Complete | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
+| **10** | Walrus Track narrative polish | ◐ In progress | `openspec-walrus-track-gaps.md` Tier S |
+| **11** | Multi-agent shared memory (Gap A) | ◐ Planned | `agent:shared-memory` |
+| **12** | Artifacts + portable verify (Gap C, E) | ○ Planned | MCP `saveArtifact`, JUDGE Path D |
+| **13** | Smart upload decision v1 (Gap D) | ○ Planned | `promote`, `MEMWAL_UPLOAD_THRESHOLD` |
+| **14** | Long-running integration (Gap B) | ◐ Partial | companion doc + Tier S narrative |
+| **15** | Dashboard Walrus metrics + benchmarks (G, H) | ○ Planned | dashboard panel, `docs/benchmarks/` |
+| **16** | Trust model & Seal (Gap F) | ○ Planned | docs-first; see `walrus-memory-alignment.md` |
+| **17** | Developer tooling expansion | ○ Planned | MCP profiles, auto-capture, FTS5 |
 
 **Legend:** ✓ Complete · ◐ In progress / partial · ○ Planned
+
+**Post-submit canonical spec:** [`docs/specs/openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md)  
+**Progress checklist:** [`docs/walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md)
 
 **Workflow (Phase 1+):** OpenSpec → GSD plan → Implement → Review → Acceptance.
 
@@ -200,7 +211,130 @@
 
 ---
 
-## Dependency graph (phases 5–9)
+### Phase 10 — Walrus Track narrative polish ◐
+
+**Goal:** Map every official track pillar to a judge-verifiable command or URL — minimal code.
+
+**Tier:** S · **Spec:** [`openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md) §5 Tier S
+
+| Exit criterion | Status |
+|----------------|--------|
+| SUBMISSION §3 track pillar → evidence table | ○ |
+| Doc Hub scoring lens + track map | ○ |
+| Special One elevated as long-running proof (README + SUBMISSION) | ○ |
+| Demo video storyboard: 3-agent + verify | ○ |
+| “Integrate in 5 minutes” in `docs/mcp-setup.md` | ○ |
+
+**Depends on:** Phase 9 (submission baseline). **Does not block** Phase 11 implementation.
+
+---
+
+### Phase 11 — Multi-agent shared memory (Gap A) ◐
+
+**Goal:** Judges see **three agents** sharing context via the same Walrus namespace/blob — not only sequential steps in one process.
+
+| Exit criterion | Status |
+|----------------|--------|
+| `pnpm agent:shared-memory` — Research → Analyst → Executor | ○ |
+| Summary table: `agentId \| memoryId \| walrusBlobId \| hitSource` | ○ |
+| Analyst/Executor `pullQuery` with `forceDurable: true` | ○ |
+| `JUDGE_GUIDE.md` Path D (optional second process) | ○ |
+| Offline exit 0; live blob with `MEMWAL_AUTO_PUSH=1` | ○ |
+
+**Depends on:** Phase 2 (sync), Phase 4 (agent bridge). **Preserves:** `agent:bounty-hunt`.
+
+---
+
+### Phase 12 — Artifacts + portable verify (Gap C, E) ○
+
+**Goal:** Artifact-driven workflow + 5-minute portable memory proof for judges.
+
+| Exit criterion | Status |
+|----------------|--------|
+| MCP tool `saveArtifact` (text/JSON/markdown) | ○ |
+| Demo: save report → promote → second agent recall | ○ |
+| `JUDGE_GUIDE.md` Path D — export → fresh DB → recall → verify PASS | ○ |
+| `pnpm mcp:e2e:portable` or extended E2E | ○ |
+| Doc Hub 60s verify includes portable step | ○ |
+
+**Depends on:** Phase 6 (MCP), Phase 11 (shared demo integration optional).
+
+---
+
+### Phase 13 — Smart upload decision v1 (Gap D) ○
+
+**Goal:** Intelligent hybrid sync v1 — not full 6-factor engine; extends existing quality gate.
+
+| Exit criterion | Status |
+|----------------|--------|
+| `RememberOptions.promote`: `auto` \| `local` \| `walrus` | ○ |
+| Metadata boosts: `@walrus`, `@local`, `important`, bounty roles | ○ |
+| `accessCount` on local rows; used in upload score | ○ |
+| `MEMWAL_UPLOAD_THRESHOLD` (default 65) in `.env.example` | ○ |
+| `shouldUploadToWalrus()` + logged reason in `pushOne` | ○ |
+| Unit tests for promote modes and PII hard block | ○ |
+
+**Reference:** MemWal Hybrid MCP research · [`sovereign-memory-roadmap-discussion.md`](docs/product/sovereign-memory-roadmap-discussion.md) Phase 10.
+
+---
+
+### Phase 14 — Long-running integration (Gap B) ◐
+
+**Goal:** Main repo narrative + optional stub for “resume session”; production proof stays in Special One.
+
+| Exit criterion | Status |
+|----------------|--------|
+| Companion doc bidirectional links | ○ |
+| SUBMISSION/README hero link to Special One | ◐ (partial in SUBMISSION) |
+| Optional `agent:resume-session` stub | ○ |
+| Demo video “long-running” chapter | ○ |
+
+**Companion:** [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md)
+
+---
+
+### Phase 15 — Dashboard Walrus metrics + benchmarks (Gap G, H) ○
+
+| Exit criterion | Status |
+|----------------|--------|
+| Dashboard panel: blobs promoted, verify status, namespace count | ○ |
+| Links to memory.walrus.xyz + Suiscan | ○ |
+| Kiosk labeled “indexer pending” (no fake listings) | ○ |
+| `docs/benchmarks/hybrid-memory.md` | ○ |
+| Optional `pnpm bench:recall` | ○ |
+
+**Depends on:** Phase 8 (dashboard shell). Indexer E2E remains P3 backlog.
+
+---
+
+### Phase 16 — Trust model & Seal (Gap F) ○
+
+**Goal:** Document trust boundaries; defer MemWalManual wire-up.
+
+| Exit criterion | Status |
+|----------------|--------|
+| Trust model table in SUBMISSION + Doc Hub | ○ |
+| `walrus-memory-alignment.md` linked from PROJECT | ◐ |
+| Optional MemWalManual spike ADR | ○ |
+
+---
+
+### Phase 17 — Developer tooling expansion ○
+
+**Goal:** Competitive polish from Phase 1.2 research — after Tier A complete.
+
+| Exit criterion | Status |
+|----------------|--------|
+| MCP profiles (cursor, claude-desktop, openclaw) | ○ |
+| Auto-capture hooks (oc-memwal alignment) | ○ |
+| SQLite FTS5 hybrid search mode | ○ |
+| Optional `examples/crewai_memwal.py` snippet | ○ |
+
+**Explicitly deferred:** Full CrewAI/LangGraph adapters, Streamable HTTP MCP, `analyze`/`ask` facade — see [`walrus-memory-alignment.md`](docs/walrus-memory-alignment.md).
+
+---
+
+## Dependency graph (phases 5–17)
 
 ```mermaid
 flowchart LR
@@ -213,13 +347,41 @@ flowchart LR
   P4[Phase 4 Agents] --> P8
   P6 --> P9[Phase 9 Submission]
   P8 --> P9
+  P9 --> P10[Phase 10 Narrative]
+  P10 --> P11[Phase 11 Multi-agent]
+  P4 --> P11
+  P6 --> P12[Phase 12 Artifact + Portable]
+  P11 --> P12
+  P2 --> P13[Phase 13 Smart upload]
+  P9 --> P14[Phase 14 Long-running]
+  P8 --> P15[Phase 15 Dashboard metrics]
+  P10 --> P16[Phase 16 Trust docs]
+  P6 --> P17[Phase 17 Dev tooling]
+  P13 --> P17
 ```
 
-Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 specs are locked.
+Phases **10** (narrative) and **11** (multi-agent) are the **highest priority** post-submit.  
+Phases **12–13** (Tier A) follow. **15–17** (Tier B) can run in parallel when capacity allows.
 
 ---
 
-## Recommended execution order (next sprints)
+## Recommended execution order (post-submit sprints)
+
+| Sprint | Focus | Deliverable | Tier |
+|--------|-------|-------------|------|
+| **S6** | Track narrative | SUBMISSION map, Doc Hub, Special One hero, mcp-setup 5-min | S |
+| **S7** | Multi-agent demo | `pnpm agent:shared-memory`, JUDGE Path D draft | A |
+| **S8** | Artifacts + portable | `saveArtifact`, `mcp:e2e:portable`, Path D complete | A |
+| **S9** | Smart upload v1 | `promote`, threshold, accessCount, tests | A |
+| **S10** | Long-running + resume stub | companion links, optional `agent:resume-session` | S + B |
+| **S11** | Dashboard + benchmarks | Walrus panel, `docs/benchmarks/hybrid-memory.md` | B |
+| **S12** | Trust docs + MCP profiles | Phase 16 + 17 starter | B |
+
+Prior sprints S1–S5 (submission) are **complete** — see table above.
+
+---
+
+## Recommended execution order (pre-submit sprints — archive)
 
 | Sprint | Focus | Deliverable |
 |--------|-------|-------------|
@@ -233,13 +395,18 @@ Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 spe
 
 ## Post-hackathon backlog
 
-| Item | Notes |
-|------|-------|
-| Full decentralized indexer | Lightweight schema exists; not a production network |
-| OpenClaw plugin npm publish | In-repo manifest today |
-| Real WAL bridging | Demo coin only |
-| Multi-tenant MCP hosting | Out of scope for hackathon |
-| Mobile / embedded agents | Non-goal |
+| Item | Notes | Spec / phase |
+|------|-------|--------------|
+| **Walrus Track gaps (active)** | Phases 10–17 — checklist drives progress | [`openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md) · [`walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md) |
+| **Sovereign Memory roadmap (draft)** | Vault, Auditor LLM, Consolidator — R&D horizon | [`docs/product/sovereign-memory-roadmap-discussion.md`](docs/product/sovereign-memory-roadmap-discussion.md) |
+| Walrus Memory SDK gaps | `analyze`, `ask`, MemWalManual | [`docs/walrus-memory-alignment.md`](docs/walrus-memory-alignment.md) P2 |
+| Full decentralized indexer | Schema only | P3 · Phase 8 |
+| OpenClaw plugin npm publish | In-repo manifest today | Phase 17 |
+| Real WAL bridging | Demo coin only | Non-goal |
+| Multi-tenant MCP hosting | Out of scope | Non-goal |
+| Mobile / embedded agents | Non-goal | PROJECT.md |
+| zk-proof / heavy PoI | Deferred | openspec §6 |
+| Full CrewAI / LangGraph adapters | Snippet only | openspec §6 |
 
 ---
 
@@ -252,15 +419,16 @@ Phases **6** (MCP) and **7** (Move v2) can run **in parallel** after Phase 5 spe
 | Deploy + interact | [`docs/deploy.md`](docs/deploy.md) |
 | Architecture | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | Master OpenSpec | [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md) |
+| Walrus Track gaps spec | [`docs/specs/openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md) |
+| Post-submit checklist | [`docs/walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md) |
 
 **Judge commands:**
 
 ```bash
 pnpm agent:demo          # hybrid memory demo (offline-safe)
 pnpm agent:bounty-hunt   # 2-agent bounty swarm
+pnpm agent:shared-memory # 3-agent shared Walrus context (Phase 11 — planned)
 pnpm mcp:e2e             # MCP stdio integration
 pnpm contracts:info      # mainnet package + object IDs
-pnpm contracts:upgrade-v2   # operator: upgrade v2 bytecode
-pnpm contracts:bootstrap-v2 # operator: bootstrap v2 shared objects
 pnpm run check           # TypeScript across monorepo
 ```
