@@ -22,7 +22,7 @@ npx -y @memwalpp/mcp@0.1.0 --transport stdio
 | **Bundle** | `dist/bundle.mjs` (~134 KB) via esbuild — inlines `@memwalpp/*` workspace |
 | **External deps** | `better-sqlite3`, `@mysten-incubation/memwal`, `@mysten/sui`, MCP SDK, Express, Zod |
 | **Bin** | `memwal-mcp` → `dist/bundle.mjs` |
-| **prepublishOnly** | `pnpm build && pnpm test` (42 tests) |
+| **prepublishOnly** | `pnpm build && pnpm test` (45 MCP tests in `@memwalpp/mcp`) |
 
 ---
 

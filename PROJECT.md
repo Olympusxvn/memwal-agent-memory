@@ -104,29 +104,29 @@ Post-submit work **extends** these; it does not replace the hybrid pipeline or j
 | Layered verify + proof JSON | MCP `verify`, `search(includeProof)` |
 | Mainnet Move economy | `packages/sui-contracts`, `pnpm contracts:info` |
 | 2-agent bounty swarm | `pnpm agent:bounty-hunt` |
+| 3-agent shared memory + artifact | `pnpm agent:shared-memory` |
+| Portable verify (Path G) | `pnpm mcp:e2e:portable` |
 | Judge docs + Doc Hub | `JUDGE_GUIDE.md`, `/doc-hub/` |
 | Long-running production proof | [special-one-agent](https://github.com/Olympusxvn/special-one-agent) — see [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) |
 
-### Post-submit track gaps (Phases 10–17)
+### Post-submit track gaps (Phases 10–17) — complete
 
-**Submitted** for Sui Overflow 2026 Walrus Track; development continues where ideas strengthen the
-story for judges and follow-on programs.
+Walrus Track post-submit work (Tiers **S**, **A**, **B**) is **shipped on `main`**. Phases 10–17 cover narrative polish, multi-agent shared memory, artifacts + portable verify, smart upload v1, long-running integration, dashboard metrics, trust docs, and developer tooling (MCP profiles, FTS5, auto-capture).
 
-| Gap | Track theme | Phase | Priority |
-|-----|-------------|-------|----------|
-| **A** | Multi-agent shared memory on Walrus | 11 | Tier A |
-| **B** | Long-running workflows | 14 | Tier S + B |
-| **C** | Artifact-driven (reports, JSON on Walrus) | 12 | Tier A |
-| **D** | Intelligent upload decision v1 | 13 | Tier A |
-| **E** | Verifiable + portable judge path | 12 | Tier A |
-| **F** | Privacy / Seal trust model (docs) | 16 | Tier B |
-| **G** | Dashboard Walrus metrics | 15 | Tier B |
-| **H** | Benchmarks (local vs Walrus) | 15 | Tier B |
+| Gap | Track theme | Phase | Status |
+|-----|-------------|-------|--------|
+| **A** | Multi-agent shared memory on Walrus | 11 | ✓ |
+| **B** | Long-running workflows | 14 | ✓ |
+| **C** | Artifact-driven (reports, JSON on Walrus) | 12 | ✓ |
+| **D** | Intelligent upload decision v1 | 13 | ✓ |
+| **E** | Verifiable + portable judge path | 12 | ✓ |
+| **F** | Privacy / Seal trust model (docs) | 16 | ✓ |
+| **G** | Dashboard Walrus metrics | 15 | ✓ |
+| **H** | Benchmarks (local vs Walrus) | 15 | ✓ |
 
 **Canonical plan:** [`docs/specs/openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md)  
-**Progress checklist:** [`docs/walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md)  
-**Execution order:** Tier **S** (narrative) → Tier **A** (demos + MCP) → Tier **B** (polish).  
-**Deferred:** zk-proof, full framework adapters, production indexer, MemWalManual wire-up — see spec §6.
+**Progress checklist:** [`docs/walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md) (all tiers ✓)  
+**Deferred:** zk-proof, full framework adapters, production indexer E2E, MemWalManual wire-up — see spec §6.
 
 ---
 

@@ -23,7 +23,7 @@ verify   → layered proof: local · blob · chain read
 - **Hybrid** — Pro Local by default (no keys, no network). Promote to Walrus **only when you call `sync`** — not every chat turn.
 - **Privacy** — Server-side PII redaction and quality gates **before** durable upload. Delegate keys only; owner keys refused at startup.
 - **Verifiable** — `verify` checks local proofs, Walrus blobs, and optional on-chain refs. Judges and CI can reproduce without guessing.
-- **Agent experience** — Nine stable MCP tools (`remember`, `recall`, `search`, `sync`, …). Works in Cursor, Claude Desktop, OpenClaw, or self-hosted HTTP.
+- **Agent experience** — **10** stable MCP v1 tools (`remember`, `recall`, `search`, `sync`, `saveArtifact`, …). Works in Cursor, Claude Desktop, OpenClaw, or self-hosted HTTP.
 
 **Not a fork of Walrus Memory** — wraps Mysten's MemWal SDK via `@memwalpp/core`. Compare with official MCP: [`Comparison.md`](../../Comparison.md).
 
@@ -308,7 +308,7 @@ Details: [`docs/SECURITY.md`](./docs/SECURITY.md)
 | **stdio** | ✓ | Local IDE agents — trusted process |
 | **Streamable HTTP** | `MCP_TRANSPORT=http` | Remote / multi-session deployments |
 
-Both expose the **same nine tools** (OpenSpec T-1).
+Both expose the **same 10 v1 tools** (OpenSpec T-1).
 
 HTTP health: `GET /health`, `GET /ready` (no auth).
 
@@ -318,8 +318,9 @@ HTTP health: `GET /health`, `GET /ready` (no auth).
 
 ```bash
 pnpm --filter @memwalpp/mcp check    # typecheck
-pnpm --filter @memwalpp/mcp test     # 42 tests
-pnpm mcp:e2e                         # stdio integration
+pnpm --filter @memwalpp/mcp test     # 45 tests
+pnpm mcp:e2e                         # stdio integration (5 flows)
+pnpm mcp:e2e:portable                # fresh store rehydrate + verify PASS
 pnpm --filter @memwalpp/mcp dev -- --transport stdio
 ```
 
@@ -327,7 +328,8 @@ pnpm --filter @memwalpp/mcp dev -- --transport stdio
 |-------|----------|
 | `test/handlers.test.ts` | Tool handlers, hybrid flows |
 | `test/http-*.test.ts` | Auth, rate limit, Streamable HTTP |
-| `test/e2e-stdio.test.ts` | Full stdio client cycle |
+| `test/e2e-stdio.test.ts` | Full stdio client cycle (incl. `saveArtifact`) |
+| `test/e2e-portable.test.ts` | Portable rehydrate + verify |
 | `test/validate.test.ts` | S-1 bypass rejection |
 
 ---

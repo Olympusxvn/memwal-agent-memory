@@ -24,6 +24,7 @@ Minimal path for any MCP-compatible agent (Cursor, Claude Desktop, custom client
 
 ```bash
 pnpm mcp:build && pnpm mcp:e2e
+pnpm mcp:e2e:portable   # optional Path G — fresh store + verify PASS
 ```
 
 **Walrus track map:** [`SUBMISSION.md` §3](../SUBMISSION.md) · [`docs/doc-map.html`](doc-map.html#track-map)
@@ -149,7 +150,7 @@ pnpm --filter @memwalpp/mcp test
 
 Runs stdio integration: `tools/list`, `remember` → `recall` → `sync` → redaction checks.
 
-## Tool quick reference (v1 — 9 tools)
+## Tool quick reference (v1 — 10 tools)
 
 | Tool | Kind | HTTP auth | Notes |
 |------|------|-----------|-------|
@@ -157,6 +158,7 @@ Runs stdio integration: `tools/list`, `remember` → `recall` → `sync` → red
 | `recall` | R | Optional | Hybrid `pullQuery` |
 | `search` | R | Optional | Ranked hybrid search — `score`, `hitSource`, `verifiable` |
 | `sync` | D | Required | Unskippable redaction + quality gate |
+| `saveArtifact` | W | Required | JSON/markdown report with `artifact: true` metadata |
 | `getVersionHistory` | R | Optional | Timeline from `metadata.versionHistory` |
 | `getLineage` | R | Optional | Local graph + optional Sui pack lineage (metadata only) |
 | `verify` | R | Optional | Layered: local / Walrus / on-chain |

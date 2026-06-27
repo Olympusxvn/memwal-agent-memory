@@ -41,7 +41,7 @@ Browser-safe: `NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID` (see `apps/dashboard/.env.pro
 ## Judge smoke
 
 ```bash
-pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt && pnpm agent:shared-memory
 ```
 
 ## ADRs & plans

@@ -1,7 +1,7 @@
 # Final submission checklist (maintainer verification)
 
 **Project:** MemWal Agent Memory · **Track:** Walrus · Sui Overflow 2026  
-**Verified:** 2026-06-01 · **Branch:** `main`
+**Verified:** 2026-06-13 · **Branch:** `main`
 
 Judges should use [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md) and [`judge-walrus-memory-workshop.md`](judge-walrus-memory-workshop.md). This file records the last maintainer smoke run before Devpost freeze.
 
@@ -12,16 +12,18 @@ Judges should use [`JUDGE_GUIDE.md`](../JUDGE_GUIDE.md) and [`judge-walrus-memor
 | Step | Command | Expected | Last run |
 |------|---------|----------|----------|
 | 1 | `pnpm install` | deps resolve | ✓ |
-| 2 | `pnpm mcp:build && pnpm mcp:e2e` | exit `0`, 5 tests pass | ✓ |
+| 2 | `pnpm mcp:build && pnpm mcp:e2e` | exit `0`, 5 stdio flows pass | ✓ |
 | 3 | `pnpm agent:demo` | exit `0`, `Status: PASS` | ✓ |
 | 4 | `pnpm agent:bounty-hunt` | exit `0`, poster + hunter | ✓ |
+| 5 | `pnpm agent:shared-memory` | exit `0`, 3-agent + artifact recall | ✓ |
+| 6 (opt) | `pnpm mcp:e2e:portable` | exit `0`, rehydrate + verify PASS | ✓ |
 
 **One-liner (clone → verify):**
 
 ```bash
 git clone https://github.com/Olympusxvn/memwal-agent-memory.git
 cd memwal-agent-memory
-pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt && pnpm agent:shared-memory
 ```
 
 Offline `Not promoted (offline)` / `Chain offline` in demos is **expected** without `.env` — not a failure.
@@ -51,6 +53,7 @@ Optional restore proof (with `MEMWAL_*` in `.env`): `pnpm memwal:restore-smoke`.
 | [`docs/companion-mvp-special-one-agent.md`](companion-mvp-special-one-agent.md) | Production MVP (Special One) |
 | [`docs/judge-walrus-memory-workshop.md`](judge-walrus-memory-workshop.md) | Official workshop → this repo |
 | [`docs/deploy.md`](deploy.md) | Mainnet package + v2 object IDs |
+| [`docs/walrus-track-post-submit-checklist.md`](walrus-track-post-submit-checklist.md) | Phases 10–17 progress (Tier S/A/B ✓) |
 | [`docs/mcp-setup.md`](mcp-setup.md) | Cursor / Claude MCP |
 
 ---

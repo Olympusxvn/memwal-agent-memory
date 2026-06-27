@@ -15,7 +15,7 @@ We built a **production-oriented hybrid memory layer** on top of the official Me
 
 - End-to-end hybrid flow: **Local → Redaction → Quality Gate → Walrus** with no client-side bypass.
 - MCP **stdio E2E** runs without secrets (`pnpm mcp:e2e`, exit 0).
-- **42 MCP tests** + core/client/shared coverage for sync, search, verify, and lineage.
+- **45 MCP tests** + core/client/shared coverage for sync, search, verify, and lineage.
 - Read-only **Sui RPC** enrichment for verify and lineage (no owner keys in MCP path).
 
 **Honest limits**
@@ -44,7 +44,7 @@ MCP client (stdio | Streamable HTTP)
 
 ---
 
-## MCP v1 tool surface (9 tools)
+## MCP v1 tool surface (10 tools)
 
 | Tool | Purpose |
 |------|---------|
@@ -52,6 +52,7 @@ MCP client (stdio | Streamable HTTP)
 | `recall` | Hybrid pull — local first, optional durable hydrate |
 | `search` | Ranked hybrid search with `score`, `hitSource`, `verifiable` |
 | `sync` | Promote pending rows — **unskippable** redaction + quality gate |
+| `saveArtifact` | JSON/markdown report with `artifact: true` metadata |
 | `getVersionHistory` | Timeline from `metadata.versionHistory` + durable merge |
 | `getLineage` | Local ancestry graph + optional Sui pack lineage (metadata only) |
 | `verify` | Layered check: local proof → Walrus blob → on-chain refs |
@@ -346,7 +347,7 @@ We added a read-only **`ChainReader`** (`@memwalpp/memwal-client`):
 pnpm install
 pnpm mcp:build
 pnpm mcp:e2e                    # stdio: remember → recall → sync → verify
-pnpm --filter @memwalpp/mcp test   # 42 tests (handlers, HTTP, auth, rate limit)
+pnpm --filter @memwalpp/mcp test   # 45 tests (handlers, HTTP, auth, rate limit, E2E)
 pnpm --filter @memwalpp/core test  # sync, verify, lineage
 pnpm --filter @memwalpp/shared test
 pnpm --filter @memwalpp/memwal-client test

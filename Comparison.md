@@ -18,13 +18,13 @@ Side-by-side reference for integrators and judges. Official setup skill: [`curl 
 | **Write flow** | `memwal_remember` → relayer → Walrus (automatic) | `remember` → local SQLite → **`sync`** promotes to Walrus (gated) |
 | **Offline / CI** | Needs login + network for real memory | `pnpm mcp:e2e` + `MEMWAL_MCP_MOCK_DURABLE=1` — no keys |
 | **Transport** | stdio + **Remote MCP** on relayer (`/api/mcp`) for ChatGPT | stdio + **self-hosted** Streamable HTTP (`MCP_TRANSPORT=http`) |
-| **Tool count** | 8 (`memwal_*`) | 9 (generic names) |
+| **Tool count** | 8 (`memwal_*`) | 10 (generic names) |
 
 ---
 
-## Nine tools — side-by-side
+## Ten tools — side-by-side
 
-Both servers target a **full agent memory surface**, but tool counts differ: **8 official** (`memwal_*`) vs **9 memwalpp** (generic names). They are **not a 1:1 rename**.
+Both servers target a **full agent memory surface**, but tool counts differ: **8 official** (`memwal_*`) vs **10 memwalpp** (generic names). They are **not a 1:1 rename**.
 
 | # | Official (`memwal_*`) | What it does (official) | `@memwalpp/mcp` | What it does (memwalpp) | Relationship |
 |---|----------------------|---------------------------|-----------------|----------------------------|--------------|
@@ -41,9 +41,10 @@ Both servers target a **full agent memory surface**, but tool counts differ: **8
 | — | — | — | `verify` | Layered proof — local / Walrus blob / optional chain read | **Memwalpp only** |
 | — | — | — | `getLineage` | Ancestry graph — local + optional Sui pack lineage | **Memwalpp only** |
 | — | — | — | `getVersionHistory` | Version timeline from `metadata.versionHistory` | **Memwalpp only** |
+| — | — | — | `saveArtifact` | JSON/markdown report with `artifact: true` metadata | **Memwalpp only** |
 | — | — | — | `softDelete` | Tombstone local row (`metadata.deleted=1`) | **Memwalpp only** |
 
-**Summary:** Official **8** tools = Walrus memory as a service (login, cloud write/recall/analyze/restore). Memwalpp **9** tools = hybrid memory OS for agents (local speed, gated `sync`, search, verify, lineage, history). Memwalpp **wraps** the MemWal SDK; it does not fork Walrus Memory.
+**Summary:** Official **8** tools = Walrus memory as a service (login, cloud write/recall/analyze/restore). Memwalpp **10** tools = hybrid memory OS for agents (local speed, gated `sync`, search, verify, lineage, history, artifacts). Memwalpp **wraps** the MemWal SDK; it does not fork Walrus Memory.
 
 ### Agent workflow map
 
@@ -58,7 +59,7 @@ memwal_analyze        ✗            ►  use official MCP if needed
 memwal_restore        ✗            ►  use official MCP if needed
 memwal_health         ≈ loose      ►  getStats
 memwal_logout         ✗            ►  clear MCP env / policy
-                      ✗            ►  verify · getLineage · getVersionHistory · softDelete
+                      ✗            ►  verify · getLineage · getVersionHistory · saveArtifact · softDelete
 ```
 
 ### Behavioral differences (same agent session)

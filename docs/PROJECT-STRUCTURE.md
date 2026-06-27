@@ -10,7 +10,7 @@
 ```
 memwal-agent-memory/
 ├── apps/                          # Runnable entrypoints (do not import from packages)
-│   ├── agent-swarm/               # Judge demos: agent:demo, agent:bounty-hunt
+│   ├── agent-swarm/               # Judge demos: demo, bounty-hunt, shared-memory, resume-session
 │   ├── dashboard/                 # Next.js — Vercel live demo + /summary + /product
 │   └── cli/                       # Thin ops / package info CLI
 │
@@ -64,7 +64,7 @@ Apps **must not** be imported by `packages/*`.
 
 | App | Command | Role |
 |-----|---------|------|
-| `agent-swarm` | `pnpm agent:demo`, `pnpm agent:bounty-hunt` | Judge narrative; bounty **metadata stub**, sync path **real** |
+| `agent-swarm` | `pnpm agent:demo`, `pnpm agent:bounty-hunt`, `pnpm agent:shared-memory`, `pnpm agent:resume-session` | Judge narrative; bounty **metadata stub**, sync path **real** |
 | `dashboard` | `pnpm --filter @memwalpp/dashboard dev` | Live UI, kiosk PTBs, static `/summary`, `/product` |
 | `cli` | `pnpm --filter memwalpp-cli` (if wired) | Package info / smoke |
 
@@ -116,7 +116,8 @@ Tests are **colocated by package** (Vitest + Move), not split into a top-level `
 | **Unit** | `packages/*/tests/*.test.ts` | `pnpm test` | Sync, redact, MCP handlers, durable store |
 | **Integration** | e.g. `memwal-client/tests/chain-ptb.test.ts`, `mcp/test/handlers.test.ts` | `pnpm test` | PTB wiring, tool handlers with mocks |
 | **E2E (automated)** | `packages/mcp/test/e2e-stdio.test.ts` | `pnpm mcp:e2e` | Full MCP stdio: remember → recall |
-| **E2E (manual / judge)** | `apps/agent-swarm` demos | `pnpm agent:demo`, `pnpm agent:bounty-hunt` | Hybrid hooks + multi-agent story |
+| **E2E (manual / judge)** | `apps/agent-swarm` demos | `pnpm agent:demo`, `pnpm agent:bounty-hunt`, `pnpm agent:shared-memory` | Hybrid hooks + multi-agent story |
+| **MCP portable E2E** | `packages/mcp` | `pnpm mcp:e2e:portable` | Fresh store rehydrate + verify PASS |
 | **Contracts** | `packages/sui-contracts/tests/` | `pnpm contracts:test` | Move modules (v1 + v2) |
 
 **Do not add** empty `tests/unit`, `tests/integration`, `tests/e2e` at repo root — would duplicate CI and confuse contributors. If you add cross-package E2E later, use `e2e/` with one orchestrator script and document it here.

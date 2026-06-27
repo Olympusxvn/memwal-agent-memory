@@ -12,6 +12,7 @@
 | **Live demo**                 | [https://memwalpp-dashboard.vercel.app/](https://memwalpp-dashboard.vercel.app/)                                             |
 | **Summary (this page, live)** | [https://memwalpp-dashboard.vercel.app/summary](https://memwalpp-dashboard.vercel.app/summary)                               |
 | **Judge quickstart**          | `[JUDGE_GUIDE.md](JUDGE_GUIDE.md)` (5–10 min, no keys)                                                                       |
+| **Post-submit checklist**     | `[docs/walrus-track-post-submit-checklist.md](docs/walrus-track-post-submit-checklist.md)` (Phases 10–17 ✓)                  |
 
 
 ---
@@ -22,7 +23,7 @@
 
 It **wraps** the official [Walrus Memory](https://docs.wal.app) SDK (`@mysten-incubation/memwal`). It does **not** fork Mysten’s stack. It adds:
 
-- **Local-first** speed and privacy (SQLite + vectors)
+- **Local-first** speed and privacy (SQLite + FTS5 + vectors)
 - **Controlled promotion** to Walrus (redaction + quality gates)
 - **Sui Move** marketplace, bounties, and royalties
 - **MCP** so Cursor, Claude, OpenClaw, or any MCP client can use the same layer
@@ -67,7 +68,7 @@ Think of three layers:
 - **Remember across sessions** without stuffing entire chat logs into every prompt
 - **Recall by meaning** (semantic search), not only keywords
 - **Work offline**, sync when credentials and quality rules allow
-- **Collaborate** in multi-agent flows (poster + hunter bounty demo)
+- **Collaborate** in multi-agent flows (poster + hunter bounty; three-agent shared memory)
 
 ### Developers
 
@@ -100,7 +101,7 @@ Think of three layers:
 | **Verifiability**  | `walrusBlobId` on memory records; bounty fulfillment references on-chain blob ids |
 | **Portability**    | MemWal namespaces and Walrus blobs — not trapped in one vendor DB                 |
 | **Economy**        | Discover, buy, fork, and improve memories; royalties to original creators         |
-| **Accessibility**  | MCP tools — 9 hybrid/privacy tools; v1.1 adds ranked search, verify, lineage, version history |
+| **Accessibility**  | MCP **10 tools** — hybrid recall, ranked search, `saveArtifact`, verify, lineage, version history |
 | **Judge-friendly** | Offline demos exit `0`; live Walrus is one `.env` block away                      |
 
 
@@ -141,8 +142,10 @@ We are an **extension and economy layer**, not a replacement for [MystenLabs/Mem
 The [Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement) asks for persistent, verifiable agent memory and developer tooling. This project delivers:
 
 - Long-term memory on **Walrus** via MemWal
-- Multi-agent **bounty-hunter** narrative
-- **MCP** integration for frameworks
+- Multi-agent **bounty-hunter** + **shared-memory** (Research → Analyst → Executor)
+- **Portable verify** — `pnpm mcp:e2e:portable` (Path G)
+- **Artifact workflow** — MCP `saveArtifact` + JSON recall in swarm demo
+- **MCP** integration (profiles, auto-capture docs, 45 tests)
 - **Mainnet** Sui objects for marketplace and bounties
 
 **Not in scope here:** DeFi risk guardian, DeepBook agent wallet, or NL→swap intent engine (those are [Agentic Web](https://mystenlabs.notion.site/agentic-web-problem-statement) sub-tracks). We complement Agentic Web by supplying the **memory and proof layer** agents need when they act over time.
@@ -171,15 +174,19 @@ Production app built in parallel — proves MemWal in the wild while this repo s
 ```bash
 git clone https://github.com/Olympusxvn/memwal-agent-memory.git
 cd memwal-agent-memory
-pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt && pnpm agent:shared-memory
 ```
 
+| Command (optional) | What it proves |
+| ------------------ | -------------- |
+| `pnpm mcp:e2e:portable` | Fresh store rehydrates durable memory + verify PASS |
+| `pnpm agent:resume-session` | Long-running session stub (offline exit 0) |
 
 | Result                   | Meaning                                                                             |
 | ------------------------ | ----------------------------------------------------------------------------------- |
 | All commands exit `0`    | Core integration works                                                              |
 | `Not promoted (offline)` | Normal without MemWal credentials — **not a failure**                               |
-| `✓ Promoted — blob 0x…`  | Optional: set `MEMWAL_`* in `[.env.example](.env.example)` and `MEMWAL_AUTO_PUSH=1` |
+| `✓ Promoted — blob 0x…`  | Optional: set `MEMWAL_*` in `[.env.example](.env.example)` and `MEMWAL_AUTO_PUSH=1` |
 
 
 Last maintainer smoke log: `[docs/judge-final-checklist.md](docs/judge-final-checklist.md)`.
@@ -191,7 +198,7 @@ Last maintainer smoke log: `[docs/judge-final-checklist.md](docs/judge-final-che
 
 | Audience                    | Document                                                                                                       |
 | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| **Judges**                  | `[JUDGE_GUIDE.md](JUDGE_GUIDE.md)` · `[SUBMISSION.md](SUBMISSION.md)`                                          |
+| **Judges**                  | `[JUDGE_GUIDE.md](JUDGE_GUIDE.md)` · `[SUBMISSION.md](SUBMISSION.md)` · `[docs/walrus-track-post-submit-checklist.md](docs/walrus-track-post-submit-checklist.md)` |
 | **Workshop alignment**      | `[docs/judge-walrus-memory-workshop.md](docs/judge-walrus-memory-workshop.md)`                                 |
 | **Repo layout**             | `[docs/PROJECT-STRUCTURE.md](docs/PROJECT-STRUCTURE.md)`                                                       |
 | **Architecture**            | `[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)` · [diagram SVG](docs/diagrams/memwalpp-merged-architecture.svg) |
