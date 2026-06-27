@@ -10,7 +10,7 @@ import type { MemWalMcpDeps } from "../src/types.js";
 function testDeps(): MemWalMcpDeps {
   const local = new InMemoryLocalMemoryStore();
   const durable = createMockDurableMemoryStore("rl-test");
-  const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+  const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
   return {
     sync,
     local,

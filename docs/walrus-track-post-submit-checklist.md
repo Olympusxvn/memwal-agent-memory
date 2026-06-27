@@ -59,39 +59,39 @@
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
 | A1 | Spec reviewed / locked | openspec-walrus-track-gaps §4.A | ✓ |
-| A2 | `agent:shared-memory` script (3 agents) | exit 0 offline | ☐ |
-| A3 | Summary table: agentId, blobId, hitSource | demo log | ☐ |
-| A4 | `forceDurable` recall step documented | JUDGE_GUIDE Path D | ☐ |
-| A5 | Root `package.json` script wired | `pnpm agent:shared-memory` | ☐ |
-| A6 | ROADMAP Phase 11 marked complete | — | ☐ |
+| A2 | `agent:shared-memory` script (3 agents) | exit 0 offline | ✓ |
+| A3 | Summary table: agentId, blobId, hitSource | demo log | ✓ |
+| A4 | `forceDurable` recall step documented | JUDGE_GUIDE Path G | ✓ |
+| A5 | Root `package.json` script wired | `pnpm agent:shared-memory` | ✓ |
+| A6 | ROADMAP Phase 11 marked complete | — | ✓ |
 
 ### Gap C — Artifacts (Phase 12)
 
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
-| C1 | MCP `saveArtifact` tool | schema in TOOLS.md | ☐ |
-| C2 | Metadata `artifact: true` | search filter | ☐ |
-| C3 | Demo: report JSON promote + recall | shared-memory or bounty | ☐ |
-| C4 | MCP E2E covers saveArtifact | test green | ☐ |
+| C1 | MCP `saveArtifact` tool | schema in TOOLS.md | ✓ |
+| C2 | Metadata `artifact: true` | search filter | ✓ |
+| C3 | Demo: report JSON promote + recall | shared-memory or bounty | ◐ |
+| C4 | MCP E2E covers saveArtifact | test green | ◐ |
 
 ### Gap E — Portable verify (Phase 12)
 
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
-| E1 | JUDGE_GUIDE Path D | 5-min portable flow | ☐ |
-| E2 | `pnpm mcp:e2e:portable` (or extended e2e) | verify PASS | ☐ |
-| E3 | Doc Hub 60s verify includes portable | mermaid | ☐ |
-| E4 | Link `memwal:restore-smoke` from Path D | doc only | ☐ |
+| E1 | JUDGE_GUIDE Path G | 5-min portable flow | ✓ |
+| E2 | `pnpm mcp:e2e:portable` (or extended e2e) | verify PASS | ✓ |
+| E3 | Doc Hub 60s verify includes portable | mermaid | ◐ |
+| E4 | Link `memwal:restore-smoke` from Path G | doc only | ◐ |
 
 ### Gap D — Smart upload v1 (Phase 13)
 
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
-| D1 | `RememberOptions.promote` | auto \| local \| walrus | ☐ |
-| D2 | `@walrus` / `@local` / `important` boosts | unit tests | ☐ |
-| D3 | `accessCount` on recall/search | local store | ☐ |
-| D4 | `MEMWAL_UPLOAD_THRESHOLD` env | .env.example | ☐ |
-| D5 | `shouldUploadToWalrus()` + log reason | pushOne | ☐ |
+| D1 | `RememberOptions.promote` | auto \| local \| walrus | ✓ |
+| D2 | `@walrus` / `@local` / `important` boosts | unit tests | ✓ |
+| D3 | `accessCount` on recall/search | local store | ✓ |
+| D4 | `MEMWAL_UPLOAD_THRESHOLD` env | .env.example | ✓ |
+| D5 | `shouldUploadToWalrus()` + log reason | pushOne | ✓ |
 
 ---
 

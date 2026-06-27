@@ -14,6 +14,7 @@ export function toolKind(name: string): ToolKind {
     case "getStats":
       return "read";
     case "remember":
+    case "saveArtifact":
     case "softDelete":
       return "mutate";
     case "sync":

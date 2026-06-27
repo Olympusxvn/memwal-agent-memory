@@ -33,12 +33,12 @@ function offlineDurable(): DurableMemoryStore {
 function chainRuntime(): ChainToolRuntime {
   const local = new InMemoryLocalMemoryStore();
   const durable = offlineDurable();
-  const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+  const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
   return {
     sync,
     local,
     durable,
-    config: { defaultNamespace: "default", qualityMin: 0 },
+    config: { defaultNamespace: "default", qualityMin: 0, uploadThreshold: 0 },
     chain: null,
   };
 }

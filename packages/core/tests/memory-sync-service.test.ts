@@ -73,7 +73,7 @@ describe("MemorySyncService", () => {
       synced: false,
     });
 
-    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
     const result = await sync.pushOne("r1");
 
     expect(result.pushed).toBe(true);
@@ -89,7 +89,7 @@ describe("MemorySyncService", () => {
 
   it("remember with redactLocal stores redacted content locally", async () => {
     const local = new InMemoryLocalMemoryStore();
-    const sync = createMemorySyncService({ local, durable: offlineDurable(), config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable: offlineDurable(), config: { qualityMin: 0, uploadThreshold: 0 } });
     const saved = await sync.remember(
       {
         id: "r-local",
@@ -107,7 +107,7 @@ describe("MemorySyncService", () => {
 
   it("remember without redactLocal keeps raw content until pushOne", async () => {
     const local = new InMemoryLocalMemoryStore();
-    const sync = createMemorySyncService({ local, durable: offlineDurable(), config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable: offlineDurable(), config: { qualityMin: 0, uploadThreshold: 0 } });
     const saved = await sync.remember(
       {
         id: "r-raw",
@@ -220,7 +220,7 @@ describe("MemorySyncService", () => {
       synced: false,
     });
 
-    const sync = createMemorySyncService({ local, durable: offlineDurable(), config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable: offlineDurable(), config: { qualityMin: 0, uploadThreshold: 0 } });
     const hits = await sync.searchQuery("walrus hybrid", { limit: 5 });
     expect(hits.length).toBe(1);
     expect(hits[0]?.record.id).toBe("s1");
@@ -286,7 +286,7 @@ describe("MemorySyncService", () => {
   it("getVersionHistory returns created + promoted timeline (1.1e)", async () => {
     const local = new InMemoryLocalMemoryStore();
     const durable = liveDurable({});
-    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
 
     await sync.remember({
       id: "vh1",
@@ -367,7 +367,7 @@ describe("MemorySyncService", () => {
       synced: false,
     });
 
-    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0 } });
+    const sync = createMemorySyncService({ local, durable, config: { qualityMin: 0, uploadThreshold: 0 } });
     const metrics = await sync.syncPending();
     expect(metrics.pushed).toBe(1);
     expect((await local.getById("r4"))?.synced).toBe(true);

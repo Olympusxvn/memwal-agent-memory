@@ -21,6 +21,7 @@ const E2E_ENV = {
   MEMWAL_MCP_USE_MEMORY: "1",
   MEMWAL_MCP_MOCK_DURABLE: "1",
   MEMWAL_SYNC_QUALITY_MIN: "0",
+  MEMWAL_UPLOAD_THRESHOLD: "0",
 };
 
 function parseToolJson(result: { content?: Array<{ type: string; text?: string }> }): Record<string, unknown> {
@@ -51,10 +52,10 @@ describe("MCP stdio E2E — v1 core flows", () => {
     await transport.close();
   });
 
-  it("exposes exactly 9 v1 tools", async () => {
+  it("exposes exactly 10 v1 tools", async () => {
     expect(client.getServerVersion()?.name).toBe("memwal-agent-memory");
     const { tools } = await client.listTools();
-    expect(tools).toHaveLength(9);
+    expect(tools).toHaveLength(10);
     const names = tools.map((t) => t.name).sort();
     expect(names).toEqual(
       [
@@ -63,6 +64,7 @@ describe("MCP stdio E2E — v1 core flows", () => {
         "getVersionHistory",
         "recall",
         "remember",
+        "saveArtifact",
         "search",
         "softDelete",
         "sync",

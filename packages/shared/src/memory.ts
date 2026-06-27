@@ -10,6 +10,8 @@ export interface RememberOptions {
    * Default false — redaction runs on durable sync only (ADR-010).
    */
   redactLocal?: boolean;
+  /** Hybrid sync: auto (score gate), local (never push), walrus (push when durable live). */
+  promote?: "auto" | "local" | "walrus";
 }
 
 /** Well-known `MemoryRecord.metadata` keys (string values). */
@@ -30,6 +32,11 @@ export const MEMORY_METADATA_KEYS = {
   lineageRootId: "lineageRootId",
   forkDepth: "forkDepth",
   lineageHistory: "lineageHistory",
+  promoteMode: "promoteMode",
+  accessCount: "accessCount",
+  artifact: "artifact",
+  artifactName: "artifactName",
+  artifactMime: "artifactMime",
 } as const;
 
 /** Local or hydrated memory unit before/after sync to MemWal. */

@@ -5,7 +5,10 @@ import {
   isLocallyRedacted,
   LOCAL_MEMORY_RECALL_MAX,
   type LocalMemoryStore,
+  resolvePromoteMode,
   scoreSemanticMatch,
+  scoreUploadDecision,
+  shouldUploadToWalrus,
 } from "@memwalpp/local-memory";
 import type { MemoryRecord, ObjectId, RememberOptions } from "@memwalpp/shared";
 import {
@@ -51,6 +54,7 @@ export type PushSkipReason =
   | "offline"
   | "tombstone"
   | "gate"
+  | "promote_local"
   | "allow_upstream_false"
   | "not_found"
   | "error";
@@ -149,6 +153,9 @@ class MemorySyncServiceImpl implements MemorySyncService {
           versionHistory,
           [MEMORY_METADATA_KEYS.lineageRootId]: record.id,
           [MEMORY_METADATA_KEYS.forkDepth]: "0",
+          ...(opts?.promote
+            ? { [MEMORY_METADATA_KEYS.promoteMode]: opts.promote }
+            : {}),
           [MEMORY_METADATA_KEYS.lineageHistory]: appendLineageEvent(record.metadata, {
             memoryId: record.id,
             event: "created",
@@ -195,10 +202,26 @@ class MemorySyncServiceImpl implements MemorySyncService {
     }
 
     const redacted = this.local.redactForUpstream(existing.content);
-    const score = await this.local.scoreQuality(redacted.text);
-    if (score < this.cfg.qualityMin) {
-      this.log.warn("push blocked quality gate", { recordId: id, score });
-      return { recordId: id, pushed: false, reason: "gate" };
+    const accessCount =
+      Number.parseInt(existing.metadata?.[MEMORY_METADATA_KEYS.accessCount] ?? "0", 10) || 0;
+    const promoteMode = resolvePromoteMode(existing.metadata, existing.content);
+    const score = scoreUploadDecision(redacted.text, existing.metadata, accessCount);
+    const decision = shouldUploadToWalrus({
+      score,
+      threshold: this.cfg.uploadThreshold,
+      promoteMode,
+    });
+    if (!decision.upload) {
+      const reason: PushSkipReason =
+        decision.reason === "promote_local" ? "promote_local" : "gate";
+      this.log.warn("push blocked upload decision", {
+        recordId: id,
+        score: decision.score,
+        threshold: decision.threshold,
+        promoteMode: decision.promoteMode,
+        reason: decision.reason,
+      });
+      return { recordId: id, pushed: false, reason };
     }
 
     const now = Date.now();
@@ -214,7 +237,7 @@ class MemorySyncServiceImpl implements MemorySyncService {
       ...prePush,
       namespace,
       updatedAtMs: now,
-      localQualityScore: score,
+      localQualityScore: decision.score,
       synced: false,
     };
 
@@ -313,6 +336,7 @@ class MemorySyncServiceImpl implements MemorySyncService {
       (opts?.forceDurable === true || localHits.length < limit);
 
     if (!shouldHydrate) {
+      await this.bumpAccessCounts(localHits);
       return localHits;
     }
 
@@ -349,7 +373,25 @@ class MemorySyncServiceImpl implements MemorySyncService {
       throw err;
     }
 
-    return this.local.recall({ namespace, query: q, limit });
+    const finalHits = await this.local.recall({ namespace, query: q, limit });
+    await this.bumpAccessCounts(finalHits);
+    return finalHits;
+  }
+
+  private async bumpAccessCounts(records: MemoryRecord[]): Promise<void> {
+    const now = Date.now();
+    for (const row of records) {
+      const prev =
+        Number.parseInt(row.metadata?.[MEMORY_METADATA_KEYS.accessCount] ?? "0", 10) || 0;
+      await this.local.remember({
+        ...row,
+        updatedAtMs: now,
+        metadata: {
+          ...(row.metadata ?? {}),
+          [MEMORY_METADATA_KEYS.accessCount]: String(prev + 1),
+        },
+      });
+    }
   }
 
   async searchQuery(query: string, opts?: SearchQueryOpts): Promise<SearchHit[]> {

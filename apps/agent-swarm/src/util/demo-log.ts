@@ -44,3 +44,31 @@ export function demoSummary(rows: Record<string, string>): void {
   }
   console.log(`${GREEN}  Status: PASS (exit 0)${RESET}\n`);
 }
+
+export interface AgentMemoryRow {
+  agentId: string;
+  memoryId: string;
+  walrusBlobId: string;
+  hitSource: string;
+}
+
+export function demoAgentTable(rows: AgentMemoryRow[]): void {
+  console.log(`\n${CYAN}── SHARED MEMORY (agents × Walrus) ──${RESET}`);
+  console.log(
+    `  ${"agentId".padEnd(18)}${"memoryId".padEnd(14)}${"walrusBlobId".padEnd(26)}hitSource`,
+  );
+  for (const row of rows) {
+    const mid =
+      row.memoryId.length > 12 ? `${row.memoryId.slice(0, 8)}…` : row.memoryId;
+    const blob =
+      row.walrusBlobId === "—"
+        ? "—"
+        : row.walrusBlobId.length > 24
+          ? `${row.walrusBlobId.slice(0, 22)}…`
+          : row.walrusBlobId;
+    console.log(
+      `  ${row.agentId.padEnd(18)}${mid.padEnd(14)}${blob.padEnd(26)}${row.hitSource}`,
+    );
+  }
+  console.log("");
+}

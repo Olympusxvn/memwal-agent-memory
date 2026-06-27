@@ -43,15 +43,17 @@
 ```bash
 git clone https://github.com/Olympusxvn/memwal-agent-memory.git
 cd memwal-agent-memory
-pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt
+pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:bounty-hunt && pnpm agent:shared-memory
 ```
 
 
 | Command                  | Exit `0` means                                                                      |
 | ------------------------ | ----------------------------------------------------------------------------------- |
 | `pnpm mcp:e2e`           | MCP memory tools work (stdio); chain tools OK without keys (`chain_not_configured`) |
+| `pnpm mcp:e2e:portable`  | Fresh local store rehydrates from durable + verify PASS ([Path G](#path-g--portable-memory-3-min-optional)) |
 | `pnpm agent:demo`        | Hybrid hooks + 5-step narrative                                                     |
 | `pnpm agent:bounty-hunt` | Poster + Hunter agents; recall injects context                                      |
+| `pnpm agent:shared-memory` | Research + Analyst + Executor share namespace + agent table                        |
 
 
 Optional live Walrus blob: [Path B](#path-b--live-walrus-blob-id-2-min-optional). Optional **restore proof**: [Path B+](#path-b-restore-proof-1-min-optional).
@@ -243,6 +245,20 @@ pnpm mcp:e2e            # MCP stdio integration
 | Marketplace                | `0x7dea19c34022cc7d28d21bfef75859bd6704f8fbd9bc7ea00c787052f895d548`                                                                                                                                           |
 | Explorer                   | [https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050](https://suiscan.xyz/mainnet/object/0x48db008a3c9e638dd17d20702632d9909c3c075e44eb339f890fb29503ec3050) |
 
+
+---
+
+## Path G — Portable memory (~3 min, optional)
+
+Proves memory is **portable**: promote to durable (mock or live Walrus), then rehydrate into a **fresh local store** and verify.
+
+```bash
+pnpm mcp:e2e:portable
+```
+
+**What PASS means:** `remember` → `sync` → new empty local SQLite → `pullQuery forceDurable` finds the row → `verify` valid.
+
+**MCP tool:** `saveArtifact` stores JSON/markdown reports with `artifact: true` metadata (see [`docs/mcp-setup.md`](docs/mcp-setup.md)).
 
 ---
 
