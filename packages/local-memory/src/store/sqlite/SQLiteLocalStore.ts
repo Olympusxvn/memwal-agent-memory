@@ -4,6 +4,7 @@ import path from "node:path";
 
 import type { MemoryRecord, ObjectId, RememberOptions } from "@memwalpp/shared";
 
+import { shouldUseFtsRecall, toFtsMatchExpression } from "../../fts-recall.js";
 import { SqliteLocalStoreError } from "../../errors.js";
 import {
   LocalMemoryStore,
@@ -11,7 +12,7 @@ import {
   type RecallParams,
 } from "../LocalMemoryStore.js";
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 const DDL = `
 CREATE TABLE IF NOT EXISTS memory_records (
@@ -27,6 +28,24 @@ CREATE TABLE IF NOT EXISTS memory_records (
 );
 CREATE INDEX IF NOT EXISTS idx_memory_namespace_updated
   ON memory_records(namespace, updated_at_ms DESC);
+`;
+
+const FTS_DDL = `
+CREATE VIRTUAL TABLE IF NOT EXISTS memory_records_fts USING fts5(
+  content,
+  content='memory_records',
+  content_rowid='rowid'
+);
+CREATE TRIGGER IF NOT EXISTS memory_records_ai AFTER INSERT ON memory_records BEGIN
+  INSERT INTO memory_records_fts(rowid, content) VALUES (new.rowid, new.content);
+END;
+CREATE TRIGGER IF NOT EXISTS memory_records_ad AFTER DELETE ON memory_records BEGIN
+  INSERT INTO memory_records_fts(memory_records_fts, rowid, content) VALUES('delete', old.rowid, old.content);
+END;
+CREATE TRIGGER IF NOT EXISTS memory_records_au AFTER UPDATE ON memory_records BEGIN
+  INSERT INTO memory_records_fts(memory_records_fts, rowid, content) VALUES('delete', old.rowid, old.content);
+  INSERT INTO memory_records_fts(rowid, content) VALUES (new.rowid, new.content);
+END;
 `;
 
 export interface SQLiteLocalStoreOptions {
@@ -81,15 +100,38 @@ export class SqliteLocalStore extends LocalMemoryStore {
     if (!hasVersion) {
       this.db.exec(`CREATE TABLE _schema_version (version INTEGER NOT NULL);`);
       this.db.prepare(`INSERT INTO _schema_version (version) VALUES (?)`).run(SCHEMA_VERSION);
+      this.ensureFtsSchema();
       return;
     }
     const v = this.db.prepare(`SELECT version FROM _schema_version LIMIT 1`).get() as
       | { version: number }
       | undefined;
-    if (!v || v.version !== SCHEMA_VERSION) {
+    const current = v?.version ?? 0;
+    if (current === 1) {
+      this.ensureFtsSchema();
+      this.db.prepare(`UPDATE _schema_version SET version = ?`).run(SCHEMA_VERSION);
+      return;
+    }
+    if (current !== SCHEMA_VERSION) {
       throw new SqliteLocalStoreError(
         "SQL",
-        `Unsupported SQLite schema version (expected ${SCHEMA_VERSION}, got ${String(v?.version ?? "none")})`,
+        `Unsupported SQLite schema version (expected ${SCHEMA_VERSION}, got ${String(current)})`,
+      );
+    }
+    this.ensureFtsSchema();
+  }
+
+  private ensureFtsSchema(): void {
+    this.db.exec(FTS_DDL);
+    const ftsCount = this.db.prepare(`SELECT COUNT(*) as c FROM memory_records_fts`).get() as {
+      c: number;
+    };
+    const rowCount = this.db.prepare(`SELECT COUNT(*) as c FROM memory_records`).get() as {
+      c: number;
+    };
+    if (Number(rowCount.c) > 0 && Number(ftsCount.c) === 0) {
+      this.db.exec(
+        `INSERT INTO memory_records_fts(rowid, content) SELECT rowid, content FROM memory_records`,
       );
     }
   }
@@ -152,7 +194,24 @@ export class SqliteLocalStore extends LocalMemoryStore {
     LocalMemoryStore.assertNonEmptyNamespace(params.namespace);
     const limit = LocalMemoryStore.clampRecallLimit(params.limit);
     const q = params.query.trim();
+    const useFts = shouldUseFtsRecall(q, params.searchMode ?? "auto");
     try {
+      if (q && useFts) {
+        const match = toFtsMatchExpression(q);
+        if (match) {
+          const rows = this.db
+            .prepare(
+              `SELECT mr.* FROM memory_records mr
+               INNER JOIN memory_records_fts fts ON mr.rowid = fts.rowid
+               WHERE mr.namespace = ? AND memory_records_fts MATCH ?
+               ORDER BY mr.updated_at_ms DESC
+               LIMIT ?`,
+            )
+            .all(params.namespace, match, limit) as Record<string, unknown>[];
+          return rows.map((r) => this.rowToRecord(r));
+        }
+      }
+
       const rows = q
         ? (this.db
             .prepare(

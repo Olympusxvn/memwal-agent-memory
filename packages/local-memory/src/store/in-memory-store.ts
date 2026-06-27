@@ -6,6 +6,7 @@ import {
   type RecallParams,
   type RememberOptions,
 } from "./LocalMemoryStore.js";
+import { matchFtsContent, shouldUseFtsRecall } from "../fts-recall.js";
 
 export class InMemoryLocalMemoryStore extends LocalMemoryStore {
   private readonly rows = new Map<string, MemoryRecord>();
@@ -25,11 +26,18 @@ export class InMemoryLocalMemoryStore extends LocalMemoryStore {
   async recall(params: RecallParams): Promise<MemoryRecord[]> {
     LocalMemoryStore.assertNonEmptyNamespace(params.namespace);
     const limit = LocalMemoryStore.clampRecallLimit(params.limit);
-    const q = params.query.trim().toLowerCase();
+    const q = params.query.trim();
+    const useFts = shouldUseFtsRecall(q, params.searchMode ?? "auto");
     const out: MemoryRecord[] = [];
     for (const r of this.rows.values()) {
       if (r.namespace !== params.namespace) continue;
-      if (q && !r.content.toLowerCase().includes(q)) continue;
+      if (q) {
+        if (useFts) {
+          if (!matchFtsContent(r.content, q)) continue;
+        } else if (!r.content.toLowerCase().includes(q.toLowerCase())) {
+          continue;
+        }
+      }
       out.push({ ...r });
     }
     out.sort((a, b) => b.updatedAtMs - a.updatedAtMs);

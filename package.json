@@ -17,6 +17,8 @@
     "agent:demo": "pnpm --filter agent-swarm run demo",
     "agent:bounty-hunt": "pnpm --filter agent-swarm run bounty-hunt",
     "agent:shared-memory": "pnpm --filter agent-swarm run shared-memory",
+    "agent:resume-session": "pnpm --filter agent-swarm run resume-session",
+    "bench:recall": "tsx scripts/bench-recall.ts",
     "mcp:e2e:portable": "pnpm mcp:build && pnpm --filter @memwalpp/mcp exec vitest run test/e2e-portable.test.ts",
     "memwal:restore-smoke": "tsx scripts/memwal-restore-smoke.ts",
     "contracts:build": "cd packages/sui-contracts && sui move build",

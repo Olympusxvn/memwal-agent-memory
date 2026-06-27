@@ -278,57 +278,57 @@
 
 ---
 
-### Phase 14 — Long-running integration (Gap B) ◐
+### Phase 14 — Long-running integration (Gap B) ✓
 
 **Goal:** Main repo narrative + optional stub for “resume session”; production proof stays in Special One.
 
 | Exit criterion | Status |
 |----------------|--------|
-| Companion doc bidirectional links | ○ |
-| SUBMISSION/README hero link to Special One | ◐ (partial in SUBMISSION) |
-| Optional `agent:resume-session` stub | ○ |
-| Demo video “long-running” chapter | ○ |
+| Companion doc bidirectional links | ✓ |
+| SUBMISSION/README hero link to Special One | ✓ |
+| Optional `agent:resume-session` stub | ✓ |
+| Demo video “long-running” chapter | ✓ |
 
 **Companion:** [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md)
 
 ---
 
-### Phase 15 — Dashboard Walrus metrics + benchmarks (Gap G, H) ○
+### Phase 15 — Dashboard Walrus metrics + benchmarks (Gap G, H) ✓
 
 | Exit criterion | Status |
 |----------------|--------|
-| Dashboard panel: blobs promoted, verify status, namespace count | ○ |
-| Links to memory.walrus.xyz + Suiscan | ○ |
-| Kiosk labeled “indexer pending” (no fake listings) | ○ |
-| `docs/benchmarks/hybrid-memory.md` | ○ |
-| Optional `pnpm bench:recall` | ○ |
+| Dashboard panel: blobs promoted, verify status, namespace count | ✓ |
+| Links to memory.walrus.xyz + Suiscan | ✓ |
+| Kiosk labeled “indexer pending” (no fake listings) | ✓ |
+| `docs/benchmarks/hybrid-memory.md` | ✓ |
+| Optional `pnpm bench:recall` | ✓ |
 
 **Depends on:** Phase 8 (dashboard shell). Indexer E2E remains P3 backlog.
 
 ---
 
-### Phase 16 — Trust model & Seal (Gap F) ○
+### Phase 16 — Trust model & Seal (Gap F) ✓
 
 **Goal:** Document trust boundaries; defer MemWalManual wire-up.
 
 | Exit criterion | Status |
 |----------------|--------|
-| Trust model table in SUBMISSION + Doc Hub | ○ |
-| `walrus-memory-alignment.md` linked from PROJECT | ◐ |
-| Optional MemWalManual spike ADR | ○ |
+| Trust model table in SUBMISSION + Doc Hub | ✓ |
+| `walrus-memory-alignment.md` linked from PROJECT | ✓ |
+| Optional MemWalManual spike ADR | ✓ |
 
 ---
 
-### Phase 17 — Developer tooling expansion ○
+### Phase 17 — Developer tooling expansion ✓
 
 **Goal:** Competitive polish from Phase 1.2 research — after Tier A complete.
 
 | Exit criterion | Status |
 |----------------|--------|
-| MCP profiles (cursor, claude-desktop, openclaw) | ○ |
-| Auto-capture hooks (oc-memwal alignment) | ○ |
-| SQLite FTS5 hybrid search mode | ○ |
-| Optional `examples/crewai_memwal.py` snippet | ○ |
+| MCP profiles (cursor, claude-desktop, openclaw) | ✓ |
+| Auto-capture hooks (oc-memwal alignment) | ✓ |
+| SQLite FTS5 hybrid search mode | ✓ |
+| Optional `examples/crewai_memwal.py` snippet | ✓ |
 
 **Explicitly deferred:** Full CrewAI/LangGraph adapters, Streamable HTTP MCP, `analyze`/`ask` facade — see [`walrus-memory-alignment.md`](docs/walrus-memory-alignment.md).
 

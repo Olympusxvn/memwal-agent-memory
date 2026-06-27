@@ -14,8 +14,8 @@
 | Tier | Done | Total | Notes |
 |------|------|-------|-------|
 | **S** Narrative | 5 | 5 | Tier S complete (2026-06-27) |
-| **A** Implementation | 0 | 4 | Demos + MCP + upload v1 |
-| **B** Polish | 0 | 6 | Dashboard, benchmarks, tooling |
+| **A** Implementation | 4 | 4 | Demos + MCP + upload v1 ✓ |
+| **B** Polish | 6 | 6 | Dashboard, benchmarks, tooling ✓ |
 | **Strengths preserved** | 11 | 11 | Baseline at submit — do not regress |
 
 **Target:** Complete Tier **S** + **A** before next judge-facing release tag.
@@ -101,42 +101,42 @@
 
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
-| B1 | Companion doc bidirectional links | companion-mvp doc | ☐ |
-| B2 | `agent:resume-session` stub (optional) | exit 0 offline | ☐ |
-| B3 | Demo video “long-running” chapter | script | ☐ |
+| B1 | Companion doc bidirectional links | companion-mvp doc | ✓ |
+| B2 | `agent:resume-session` stub (optional) | exit 0 offline | ✓ |
+| B3 | Demo video “long-running” chapter | script | ✓ |
 
 ### Gap G — Dashboard (Phase 15)
 
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
-| G1 | Walrus stats panel (blobs, verify) | dashboard page | ☐ |
-| G2 | memory.walrus.xyz + Suiscan links | UI footer | ☐ |
-| G3 | Kiosk “indexer pending” label | no fake data | ☐ |
+| G1 | Walrus stats panel (blobs, verify) | dashboard page | ✓ |
+| G2 | memory.walrus.xyz + Suiscan links | UI footer | ✓ |
+| G3 | Kiosk “indexer pending” label | no fake data | ✓ |
 
 ### Gap H — Benchmarks (Phase 15)
 
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
-| H1 | `docs/benchmarks/hybrid-memory.md` | latency table | ☐ |
-| H2 | `pnpm bench:recall` script (optional) | JSON/md output | ☐ |
-| H3 | Doc Hub one benchmark table | slides optional | ☐ |
+| H1 | `docs/benchmarks/hybrid-memory.md` | latency table | ✓ |
+| H2 | `pnpm bench:recall` script (optional) | JSON/md output | ✓ |
+| H3 | Doc Hub one benchmark table | slides optional | ✓ |
 
 ### Gap F — Trust / Seal (Phase 16)
 
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
-| F1 | Trust model in SUBMISSION + Doc Hub | table | ☐ |
-| F2 | walrus-memory-alignment linked from PROJECT | link | ☐ |
-| F3 | MemWalManual spike ADR (optional) | doc only | ☐ |
+| F1 | Trust model in SUBMISSION + Doc Hub | table | ✓ |
+| F2 | walrus-memory-alignment linked from PROJECT | link | ✓ |
+| F3 | MemWalManual spike ADR (optional) | doc only | ✓ |
 
 ### Developer tooling (Phase 17)
 
 | # | Task | Acceptance | Status |
 |---|------|------------|--------|
-| T1 | MCP profiles (cursor, claude, openclaw) | `profiles/` + docs | ☐ |
-| T2 | Auto-capture hooks (oc-memwal align) | agent-swarm or plugin | ☐ |
-| T3 | SQLite FTS5 hybrid search | local-memory | ☐ |
-| T4 | `examples/crewai_memwal.py` snippet | optional | ☐ |
+| T1 | MCP profiles (cursor, claude, openclaw) | `profiles/` + docs | ✓ |
+| T2 | Auto-capture hooks (oc-memwal align) | agent-swarm or plugin | ✓ |
+| T3 | SQLite FTS5 hybrid search | local-memory | ✓ |
+| T4 | `examples/crewai_memwal.py` snippet | optional | ✓ |
 
 ---
 
@@ -160,13 +160,13 @@
 | Phase | Name | Status | Blocked by |
 |-------|------|--------|------------|
 | **10** | Track narrative polish | ✓ | — |
-| **11** | Multi-agent shared memory | ◐ | A2–A6 |
-| **12** | Artifacts + portable verify | ☐ | C*, E* |
-| **13** | Smart upload v1 | ☐ | D* |
-| **14** | Long-running integration | ◐ | B2–B3 (S3 done) |
-| **15** | Dashboard + benchmarks | ☐ | G*, H* |
-| **16** | Trust model & Seal docs | ☐ | F* |
-| **17** | Dev tooling expansion | ☐ | T* |
+| **11** | Multi-agent shared memory | ✓ | — |
+| **12** | Artifacts + portable verify | ◐ | C3–C4, E3–E4 |
+| **13** | Smart upload v1 | ✓ | — |
+| **14** | Long-running integration | ✓ | — |
+| **15** | Dashboard + benchmarks | ✓ | — |
+| **16** | Trust model & Seal docs | ✓ | — |
+| **17** | Dev tooling expansion | ✓ | — |
 
 ---
 
@@ -187,5 +187,6 @@ pnpm contracts:test   # if Move touched
 
 | Date | Update |
 |------|--------|
+| 2026-06-13 | Tier B complete — resume-session, dashboard stats, benchmarks, trust model, FTS5, MCP profiles |
 | 2026-06-27 | Tier S complete — SUBMISSION §3, Doc Hub track map, README hero, mcp-setup, demo storyboard |
 | 2026-06-13 | Initial checklist from openspec-walrus-track-gaps v1.0; spec A1 locked |

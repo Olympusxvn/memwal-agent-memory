@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DemoCommands } from "../components/DemoCommands";
 import { SiteHeader } from "../components/SiteHeader";
+import { WalrusStatsPanel } from "../components/WalrusStatsPanel";
 
 const PACKAGE_ID =
   process.env.NEXT_PUBLIC_MARKETPLACE_PACKAGE_ID ??
@@ -113,6 +114,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        <WalrusStatsPanel />
+
         <section className="section" id="demo">
           <h2 className="section__title">Judge demo commands</h2>
           <p className="section__subtitle">
@@ -141,10 +144,21 @@ export default function HomePage() {
 
         <footer className="site-footer">
           <p>
-            <strong>Mainnet package:</strong> <code>{PACKAGE_ID}</code>
+            <strong>Mainnet package:</strong>{" "}
+            <a
+              href={`https://suiscan.xyz/mainnet/object/${PACKAGE_ID}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <code>{PACKAGE_ID}</code>
+            </a>
           </p>
           <p>
             Network: <code>{process.env.NEXT_PUBLIC_SUI_NETWORK ?? "mainnet"}</code> ·{" "}
+            <a href="https://memory.walrus.xyz" target="_blank" rel="noopener noreferrer">
+              memory.walrus.xyz
+            </a>{" "}
+            ·{" "}
             <a href={REPO} target="_blank" rel="noopener noreferrer">
               github.com/Olympusxvn/memwal-agent-memory
             </a>

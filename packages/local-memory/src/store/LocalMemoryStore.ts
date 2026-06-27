@@ -15,6 +15,8 @@ export interface RecallParams {
   /** Empty string → all rows in namespace (newest first). */
   query: string;
   limit: number;
+  /** substring (default) | fts (AND tokens) | auto (fts when 2+ tokens). */
+  searchMode?: "substring" | "fts" | "auto";
 }
 
 export interface PruneParams {

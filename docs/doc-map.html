@@ -306,6 +306,8 @@
     <a href="#verify">Verify</a>
     <a href="#scoring">Scoring</a>
     <a href="#track-map">Track map</a>
+    <a href="#trust">Trust</a>
+    <a href="#benchmarks">Benchmarks</a>
     <a href="#architecture">Architecture</a>
     <a href="#flows">Flows</a>
     <a href="#code">Source</a>
@@ -512,8 +514,8 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
           </tr>
           <tr>
             <td class="q">Multi-agent coordination</td>
-            <td class="where"><code>pnpm agent:bounty-hunt</code> (Poster + Hunter)</td>
-            <td class="pass">Partial → Phase 11</td>
+            <td class="where"><code>pnpm agent:shared-memory</code> · <code>pnpm agent:bounty-hunt</code></td>
+            <td class="pass">Shipped</td>
           </tr>
           <tr>
             <td class="q">Long-running workflows</td>
@@ -522,12 +524,12 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
           </tr>
           <tr>
             <td class="q">Artifact-driven workflows</td>
-            <td class="where">MCP <code>saveArtifact</code> (Phase 12)</td>
-            <td class="pass">Planned</td>
+            <td class="where">MCP <code>saveArtifact</code> · <code>pnpm mcp:e2e</code></td>
+            <td class="pass">Shipped</td>
           </tr>
           <tr>
             <td class="q">Developer tooling (MCP)</td>
-            <td class="where"><a href="mcp-setup.md">mcp-setup.md</a> · 9 tools · Doc Hub</td>
+            <td class="where"><a href="mcp-setup.md">mcp-setup.md</a> · 10 tools · <code>packages/mcp/profiles/</code></td>
             <td class="pass">Shipped</td>
           </tr>
           <tr>
@@ -539,6 +541,85 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
             <td class="q">On-chain economy</td>
             <td class="where"><code>pnpm contracts:info</code> · <a href="deploy.md">deploy.md</a></td>
             <td class="pass">Shipped</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Trust model -->
+  <section id="trust">
+    <h2>Trust model (privacy before Walrus)</h2>
+    <p class="section-desc">
+      Who sees plaintext at each layer. Full text: <a href="../SUBMISSION.md">SUBMISSION.md</a> §3.2 ·
+      <a href="walrus-memory-alignment.md">walrus-memory-alignment.md</a> ·
+      <a href="decisions/ADR-014-memwal-manual-spike.md">ADR-014</a>.
+    </p>
+    <div class="panel judge">
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Trust boundary</th>
+            <th>This repo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="q">Managed relayer</td>
+            <td class="where">Walrus Foundation sees plaintext during embed/encrypt</td>
+            <td class="pass">Default after local redact</td>
+          </tr>
+          <tr>
+            <td class="q">MemWalManual</td>
+            <td class="where">Relayer sees encrypted payloads only</td>
+            <td class="pass">Not wired (spike ADR)</td>
+          </tr>
+          <tr>
+            <td class="q">On-chain ownership</td>
+            <td class="where">Sui <code>memwal:account</code> delegates</td>
+            <td class="pass">Shipped</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Benchmarks -->
+  <section id="benchmarks">
+    <h2>Hybrid memory benchmarks</h2>
+    <p class="section-desc">
+      Local recall latency (substring vs FTS5). Regenerate: <code>pnpm bench:recall</code> ·
+      <a href="benchmarks/hybrid-memory.md">benchmarks/hybrid-memory.md</a>.
+    </p>
+    <div class="panel judge">
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th>Store</th>
+            <th>Mode</th>
+            <th>Typical p95 (500 rows)</th>
+            <th>Command</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="q">SQLite</td>
+            <td class="where">substring</td>
+            <td class="pass">&lt; 1 ms (dev machine)</td>
+            <td class="where"><code>pnpm bench:recall</code></td>
+          </tr>
+          <tr>
+            <td class="q">SQLite</td>
+            <td class="where">FTS5 AND tokens</td>
+            <td class="pass">&lt; 1 ms (dev machine)</td>
+            <td class="where"><code>MEMWAL_RECALL_FTS=1</code></td>
+          </tr>
+          <tr>
+            <td class="q">Walrus durable</td>
+            <td class="where">network RTT</td>
+            <td class="pass">Manual — see alignment doc</td>
+            <td class="where"><code>MEMWAL_AUTO_PUSH=1</code></td>
           </tr>
         </tbody>
       </table>
