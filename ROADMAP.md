@@ -41,7 +41,7 @@
 | **7** | Move contracts v2 refactor | ✓ Complete (mainnet) | `openspec-move-contracts-refactor.md`; bootstrapped 2026-06-01 |
 | **8** | Dashboard + live chain integration | ◐ In progress | Kiosk v1 PTBs wired; indexer schema-only |
 | **9** | Submission polish & judge experience | ✓ Complete | `SUBMISSION.md`, `JUDGE_GUIDE.md`, demo video |
-| **10** | Walrus Track narrative polish | ◐ In progress | `openspec-walrus-track-gaps.md` Tier S |
+| **10** | Walrus Track narrative polish | ✓ Complete | `openspec-walrus-track-gaps.md` Tier S |
 | **11** | Multi-agent shared memory (Gap A) | ◐ Planned | `agent:shared-memory` |
 | **12** | Artifacts + portable verify (Gap C, E) | ○ Planned | MCP `saveArtifact`, JUDGE Path D |
 | **13** | Smart upload decision v1 (Gap D) | ○ Planned | `promote`, `MEMWAL_UPLOAD_THRESHOLD` |
@@ -211,7 +211,7 @@
 
 ---
 
-### Phase 10 — Walrus Track narrative polish ◐
+### Phase 10 — Walrus Track narrative polish ✓
 
 **Goal:** Map every official track pillar to a judge-verifiable command or URL — minimal code.
 
@@ -219,13 +219,13 @@
 
 | Exit criterion | Status |
 |----------------|--------|
-| SUBMISSION §3 track pillar → evidence table | ○ |
-| Doc Hub scoring lens + track map | ○ |
-| Special One elevated as long-running proof (README + SUBMISSION) | ○ |
-| Demo video storyboard: 3-agent + verify | ○ |
-| “Integrate in 5 minutes” in `docs/mcp-setup.md` | ○ |
+| SUBMISSION §3 track pillar → evidence table | ✓ |
+| Doc Hub scoring lens + track map (`#track-map`) | ✓ |
+| Special One elevated as long-running proof (README + SUBMISSION §3.1) | ✓ |
+| Demo video storyboard: 3-agent + verify (README addendum) | ✓ |
+| “Integrate in 5 minutes” in `docs/mcp-setup.md` | ✓ |
 
-**Depends on:** Phase 9 (submission baseline). **Does not block** Phase 11 implementation.
+**Completed:** 2026-06-27 · Checklist: [`walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md)
 
 ---
 
@@ -369,7 +369,7 @@ Phases **12–13** (Tier A) follow. **15–17** (Tier B) can run in parallel whe
 
 | Sprint | Focus | Deliverable | Tier |
 |--------|-------|-------------|------|
-| **S6** | Track narrative | SUBMISSION map, Doc Hub, Special One hero, mcp-setup 5-min | S |
+| **S6** | Track narrative | SUBMISSION map, Doc Hub, Special One hero, mcp-setup 5-min | S | ✓ |
 | **S7** | Multi-agent demo | `pnpm agent:shared-memory`, JUDGE Path D draft | A |
 | **S8** | Artifacts + portable | `saveArtifact`, `mcp:e2e:portable`, Path D complete | A |
 | **S9** | Smart upload v1 | `promote`, threshold, accessCount, tests | A |

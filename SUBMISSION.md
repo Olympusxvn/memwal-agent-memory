@@ -45,17 +45,24 @@ We built on the official **[Walrus Memory Workshop](https://mystenlabs.notion.si
 
 ## 3. Walrus value (why this track)
 
-Walrus is on the **critical path**, not marketing copy:
+Walrus is on the **critical path**, not marketing copy. The table below maps the
+[official Walrus Track problem statement](https://mystenlabs.notion.site/walrus-track-problem-statement)
+to **evidence you can verify in this repo** (commands, URLs, source files).
 
+| Track pillar | Problem the track highlights | MemWal Agent Memory delivery | How to verify | Status |
+|--------------|------------------------------|------------------------------|---------------|--------|
+| **Durable off-chain storage** | Large, persistent blobs on Walrus | `DurableMemoryStore.remember()` → MemWal relayer → **Walrus**; `MemoryRecord.walrusBlobId` | `MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt` → `✓ Promoted — blob …` | **Shipped** |
+| **Verifiable data** | Prove memory exists; not vendor lock-in | Layered `verify`, `contentHash`, proof JSON; bounty `walrus_blob_id` | `pnpm mcp:e2e`; MCP `verify` · [`packages/mcp/docs/VERIFY.md`](packages/mcp/docs/VERIFY.md) | **Shipped** |
+| **AI agent integration** | Agents need memory beyond one session | Hybrid hooks + `pnpm agent:demo`, `pnpm agent:bounty-hunt` | Offline exit `0` — no keys | **Shipped** |
+| **Multi-agent coordination** | Share context across agents/workflows | Poster → Hunter swarm; same namespace + hybrid `pullQuery` | `pnpm agent:bounty-hunt` (steps 2–5) | **Partial** → Phase 11: 3-agent shared memory |
+| **Long-running workflows** | State over hours/days | **Production:** [Mr. Toxic Special One](https://special-one-agent.vercel.app/chat) (companion repo) | §3.1 below (~30 s browser) | **Shipped** (companion) |
+| **Artifact-driven workflows** | Reports, datasets, logs on Walrus | Planned: MCP `saveArtifact` + promote path | Phase 12 spec | **Planned** |
+| **Developer tooling** | MCP, adapters, inspect memory | `@memwalpp/mcp` — 9 tools, stdio E2E, Doc Hub | [`docs/mcp-setup.md`](docs/mcp-setup.md) · `pnpm mcp:e2e` | **Shipped** |
+| **Privacy before share** | Sensitive data must not leak upstream | `redactForUpstream` + quality gate **before** MemWal push | `memory-sync-service.ts`; MCP cannot bypass | **Shipped** |
+| **On-chain economy** | Incentives tied to verifiable fulfillment | Mainnet Move: marketplace, bounty escrow, NFT pack, royalty | `pnpm contracts:info` · [`docs/deploy.md`](docs/deploy.md) | **Shipped** |
+| **Judge-friendly demo** | Runnable without setup pain | 5-min offline path; honest stub labels | [`JUDGE_GUIDE.md`](JUDGE_GUIDE.md) · [`docs/doc-map.html`](docs/doc-map.html) | **Shipped** |
 
-| Walrus track ask      | MemWal Agent Memory delivery                                               |
-| --------------------- | -------------------------------------------------------------------------- |
-| Durable blob storage  | `DurableMemoryStore.remember()` → MemWal relayer → **Walrus**              |
-| Verifiable recall     | `pullQuery` / MemWal semantic search → hydrate local cache                 |
-| Agent integration     | `pnpm agent:demo`, `pnpm agent:bounty-hunt` (exit 0 offline)               |
-| Proof surface         | `MemoryRecord.walrusBlobId` + `bounty::submit_fulfillment(walrus_blob_id)` |
-| Privacy before upload | `redactForUpstream` in `MemorySyncService` **before** push                 |
-
+**Post-submit roadmap (gaps A–H):** [`docs/specs/openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md) · progress: [`docs/walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md)
 
 ```
 LocalMemoryStore → redactForUpstream → quality gate → MemWal remember → Walrus blob
@@ -64,6 +71,21 @@ LocalMemoryStore → redactForUpstream → quality gate → MemWal remember → 
 ```
 
 **Code path (30 s skim):** `packages/core/src/memory/memory-sync-service.ts` · `packages/memwal-client/src/durable/durable-memory-store.ts`
+
+### 3.1 Live production proof — Mr. Toxic Special One
+
+**Start here for long-running Walrus memory** (browser, ~30 s). This companion repo uses the same MemWal mainnet stack as the platform — memory *is* the product, not only a CLI demo.
+
+| | |
+|---|---|
+| **Live** | [https://special-one-agent.vercel.app/chat](https://special-one-agent.vercel.app/chat) |
+| **Repo** | [https://github.com/Olympusxvn/special-one-agent](https://github.com/Olympusxvn/special-one-agent) |
+| **Platform map** | [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) |
+| **Also** | Walrus Sessions 4 · Memory World Cup |
+
+**Judge walkthrough:** connect Sui wallet → **Settings** → paste free Gemini key → send a prediction → confirm **Walrus Memory Ledger** sidebar + **MemWal 🟢 LIVE** + [MemWalAccount on SuiScan](https://suiscan.xyz/mainnet/object/0x73b07979a6712f54283c02ddf70e2bdfb3ec729627c9ef0e0d8a214015066a99).
+
+**Overflow framing:** *This repo = how to build hybrid verifiable memory + economy. Special One = what users get in production on mainnet.*
 
 ---
 
@@ -115,22 +137,7 @@ Look for `✓ Promoted — blob …` in poster step 3.
 
 **One line:** Judges verify **memory + Walrus + MCP** without keys; **on-chain IDs and Move tests are real**; CLI bounty escrow is a **labeled stub**, not a hidden mock of Walrus.
 
-### Companion MVP — production proof (Mr. Toxic Special One) - Build for Walrus Sessions 4 - World Cup 2026
-
-Separate repo, same MemWal mainnet stack — **user-facing agent** where memory drives the product (not infrastructure demos).
-
-
-|              |                                                                                                    |
-| ------------ | -------------------------------------------------------------------------------------------------- |
-| **Live**     | [https://special-one-agent.vercel.app/chat](https://special-one-agent.vercel.app/chat)             |
-| **Repo**     | [https://github.com/Olympusxvn/special-one-agent](https://github.com/Olympusxvn/special-one-agent) |
-| **Also for** | Walrus Sessions 4 Memory World Cup                                                                 |
-| **Map**      | `[docs/companion-mvp-special-one-agent.md](docs/companion-mvp-special-one-agent.md)`               |
-
-
-**Why cite it in Overflow:** closes the gap on **Product Experience** and **live Walrus proof** — per-wallet namespaces, prediction ledger (PENDING/CORRECT/WRONG), MemWal 🟢 LIVE on Vercel, [MemWalAccount on mainnet](https://suiscan.xyz/mainnet/object/0x73b07979a6712f54283c02ddf70e2bdfb3ec729627c9ef0e0d8a214015066a99). Platform repo = **how to build**; Special One = **what users get**.
-
-**Judge (~30 s):** wallet → Settings → Gemini key → prediction → **Walrus Memory Ledger** sidebar.
+**Long-running Walrus proof:** see **§3.1** (Special One live app) — do not skip if scoring “persistent memory over time.”
 
 ---
 

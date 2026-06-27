@@ -305,6 +305,7 @@
     <a href="#open">Open</a>
     <a href="#verify">Verify</a>
     <a href="#scoring">Scoring</a>
+    <a href="#track-map">Track map</a>
     <a href="#architecture">Architecture</a>
     <a href="#flows">Flows</a>
     <a href="#code">Source</a>
@@ -327,6 +328,7 @@
     <div class="hero-links">
       <a class="primary" href="../JUDGE_GUIDE.md">JUDGE_GUIDE.md (runbook)</a>
       <a href="../SUBMISSION.md">SUBMISSION.md</a>
+      <a href="https://special-one-agent.vercel.app/chat" target="_blank" rel="noopener">Live Walrus app (30 s)</a>
       <a href="https://memwalpp-dashboard.vercel.app/doc-hub/" target="_blank" rel="noopener">Live Doc Hub</a>
       <a href="https://memwalpp-dashboard.vercel.app/" target="_blank" rel="noopener">Live dashboard</a>
       <a href="https://github.com/Olympusxvn/memwal-agent-memory" target="_blank" rel="noopener">GitHub repo</a>
@@ -458,7 +460,85 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
           <tr>
             <td class="num">5</td>
             <td class="q">Can any agent use it?</td>
-            <td class="where"><code>pnpm mcp:e2e</code> — stdio MCP is the universal access layer.</td>
+            <td class="where"><code>pnpm mcp:e2e</code> — stdio MCP is the universal access layer. Quick start: <a href="mcp-setup.md">mcp-setup.md</a> § Integrate in 5 minutes.</td>
+          </tr>
+          <tr>
+            <td class="num">6</td>
+            <td class="q">Does memory persist across sessions?</td>
+            <td class="where"><a href="https://special-one-agent.vercel.app/chat" target="_blank" rel="noopener">Special One</a> — live mainnet MemWal ledger (~30 s). Map: <a href="companion-mvp-special-one-agent.md">companion-mvp-special-one-agent.md</a>.</td>
+          </tr>
+          <tr>
+            <td class="num">7</td>
+            <td class="q">Do agents share context on Walrus?</td>
+            <td class="where"><code>pnpm agent:bounty-hunt</code> — Poster promotes → Hunter hybrid recall. Phase 11: 3-agent shared memory (planned).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Track problem statement map -->
+  <section id="track-map">
+    <h2>Walrus Track problem statement map</h2>
+    <p class="section-desc">
+      Official track pillars → evidence in this repo. Full table: <a href="../SUBMISSION.md">SUBMISSION.md</a> §3.
+      Post-submit gaps: <a href="specs/openspec-walrus-track-gaps.md">openspec-walrus-track-gaps.md</a> ·
+      <a href="walrus-track-post-submit-checklist.md">checklist</a>.
+    </p>
+    <div class="panel judge">
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th>Track pillar</th>
+            <th>Verify here</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="q">Durable off-chain storage (Walrus)</td>
+            <td class="where"><code>pushOne</code> → <code>walrusBlobId</code> · optional <code>MEMWAL_AUTO_PUSH=1</code></td>
+            <td class="pass">Shipped</td>
+          </tr>
+          <tr>
+            <td class="q">Verifiable data</td>
+            <td class="where">MCP <code>verify</code> · <code>search(includeProof)</code> · Move bounty blob ref</td>
+            <td class="pass">Shipped</td>
+          </tr>
+          <tr>
+            <td class="q">AI agent integration</td>
+            <td class="where"><code>pnpm agent:demo</code> · <code>pnpm mcp:e2e</code></td>
+            <td class="pass">Shipped</td>
+          </tr>
+          <tr>
+            <td class="q">Multi-agent coordination</td>
+            <td class="where"><code>pnpm agent:bounty-hunt</code> (Poster + Hunter)</td>
+            <td class="pass">Partial → Phase 11</td>
+          </tr>
+          <tr>
+            <td class="q">Long-running workflows</td>
+            <td class="where"><a href="https://special-one-agent.vercel.app/chat" target="_blank" rel="noopener">special-one-agent.vercel.app/chat</a></td>
+            <td class="pass">Shipped (companion)</td>
+          </tr>
+          <tr>
+            <td class="q">Artifact-driven workflows</td>
+            <td class="where">MCP <code>saveArtifact</code> (Phase 12)</td>
+            <td class="pass">Planned</td>
+          </tr>
+          <tr>
+            <td class="q">Developer tooling (MCP)</td>
+            <td class="where"><a href="mcp-setup.md">mcp-setup.md</a> · 9 tools · Doc Hub</td>
+            <td class="pass">Shipped</td>
+          </tr>
+          <tr>
+            <td class="q">Privacy before upload</td>
+            <td class="where"><code>redactForUpstream</code> in <code>memory-sync-service.ts</code></td>
+            <td class="pass">Shipped</td>
+          </tr>
+          <tr>
+            <td class="q">On-chain economy</td>
+            <td class="where"><code>pnpm contracts:info</code> · <a href="deploy.md">deploy.md</a></td>
+            <td class="pass">Shipped</td>
           </tr>
         </tbody>
       </table>

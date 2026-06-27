@@ -3,7 +3,7 @@
 **Status:** Living document — update after each phase PR  
 **Spec:** [`docs/specs/openspec-walrus-track-gaps.md`](specs/openspec-walrus-track-gaps.md)  
 **Roadmap:** [`ROADMAP.md`](../ROADMAP.md) Phases 10–17  
-**Last updated:** 2026-06-13
+**Last updated:** 2026-06-27
 
 **Legend:** ☐ not started · ◐ in progress · ✓ done · — deferred (future)
 
@@ -13,7 +13,7 @@
 
 | Tier | Done | Total | Notes |
 |------|------|-------|-------|
-| **S** Narrative | 0 | 4 | Docs / Doc Hub / SUBMISSION |
+| **S** Narrative | 5 | 5 | Tier S complete (2026-06-27) |
 | **A** Implementation | 0 | 4 | Demos + MCP + upload v1 |
 | **B** Polish | 0 | 6 | Dashboard, benchmarks, tooling |
 | **Strengths preserved** | 11 | 11 | Baseline at submit — do not regress |
@@ -44,11 +44,11 @@
 
 | # | Task | Gap | Deliverable | Status |
 |---|------|-----|-------------|--------|
-| S1 | Track pillar → evidence table | all | SUBMISSION §3 expanded | ☐ |
-| S2 | Doc Hub scoring lens + track map | all | `docs/doc-map.html` section | ☐ |
-| S3 | Special One hero placement | B | README + SUBMISSION above fold | ☐ |
-| S4 | Demo video storyboard (3-agent + verify) | A, E | `scripts/demo-video/README.md` | ☐ |
-| S5 | “Integrate in 5 minutes” MCP section | tooling | `docs/mcp-setup.md` | ☐ |
+| S1 | Track pillar → evidence table | all | SUBMISSION §3 expanded | ✓ |
+| S2 | Doc Hub scoring lens + track map | all | `docs/doc-map.html` section | ✓ |
+| S3 | Special One hero placement | B | README + SUBMISSION above fold | ✓ |
+| S4 | Demo video storyboard (3-agent + verify) | A, E | `scripts/demo-video/README.md` | ✓ |
+| S5 | “Integrate in 5 minutes” MCP section | tooling | `docs/mcp-setup.md` | ✓ |
 
 ---
 
@@ -159,11 +159,11 @@
 
 | Phase | Name | Status | Blocked by |
 |-------|------|--------|------------|
-| **10** | Track narrative polish | ◐ | S1–S5 |
+| **10** | Track narrative polish | ✓ | — |
 | **11** | Multi-agent shared memory | ◐ | A2–A6 |
 | **12** | Artifacts + portable verify | ☐ | C*, E* |
 | **13** | Smart upload v1 | ☐ | D* |
-| **14** | Long-running integration | ◐ | S3, B* |
+| **14** | Long-running integration | ◐ | B2–B3 (S3 done) |
 | **15** | Dashboard + benchmarks | ☐ | G*, H* |
 | **16** | Trust model & Seal docs | ☐ | F* |
 | **17** | Dev tooling expansion | ☐ | T* |
@@ -187,4 +187,5 @@ pnpm contracts:test   # if Move touched
 
 | Date | Update |
 |------|--------|
+| 2026-06-27 | Tier S complete — SUBMISSION §3, Doc Hub track map, README hero, mcp-setup, demo storyboard |
 | 2026-06-13 | Initial checklist from openspec-walrus-track-gaps v1.0; spec A1 locked |
