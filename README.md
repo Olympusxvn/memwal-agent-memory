@@ -154,7 +154,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 
 | Resource | Link |
 |:---------|:-----|
-| **📦 npm package** | [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp) · `npx -y @memwalpp/mcp@0.1.0 --transport stdio` |
+| **📦 npm package** | [`@memwalpp/mcp@0.1.1`](https://www.npmjs.com/package/@memwalpp/mcp) · `npx -y @memwalpp/mcp@0.1.1 --transport stdio` |
 | **🧩 Cursor plugin** | [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) · Marketplace review pending |
 | **📦 Package README** | [packages/mcp/README.md](packages/mcp/README.md) |
 | **🔧 Tool reference** | [packages/mcp/docs/TOOLS.md](packages/mcp/docs/TOOLS.md) · includes `saveArtifact` |
@@ -164,7 +164,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 | **📊 Official vs hybrid** | [Comparison.md](Comparison.md) |
 | **📐 OpenSpec** | [docs/specs/openspec-mcp-server.md](docs/specs/openspec-mcp-server.md) |
 | **💬 Technical feedback** | [FINAL_FEEDBACK.md](FINAL_FEEDBACK.md) |
-| **✅ Verify in 2 min** | `pnpm mcp:build && pnpm mcp:e2e` · or `npx -y @memwalpp/mcp@0.1.0 --transport stdio` |
+| **✅ Verify in 2 min** | `pnpm mcp:build && pnpm mcp:e2e` · or `npx -y @memwalpp/mcp@0.1.1 --transport stdio` |
 
 ---
 
@@ -196,7 +196,7 @@ pnpm install && pnpm mcp:build && pnpm mcp:e2e && pnpm agent:demo && pnpm agent:
 | **📖 Product guide** | [docs/product/README.md](docs/product/README.md) |
 | **🧩 Cursor plugin repo** | [github.com/Olympusxvn/cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
 | **🏪 Cursor Marketplace** | Application submitted · [publish portal](https://cursor.com/marketplace/publish) · listing pending review |
-| **📦 npm install** | `npx -y @memwalpp/mcp@0.1.0 --transport stdio` · [npmjs.com/@memwalpp/mcp](https://www.npmjs.com/package/@memwalpp/mcp) |
+| **📦 npm install** | `npx -y @memwalpp/mcp@0.1.1 --transport stdio` · [npmjs.com/@memwalpp/mcp](https://www.npmjs.com/package/@memwalpp/mcp) |
 | **📄 MVP spec** | [docs/specs/openspec-product-mvp-cursor-claude.md](docs/specs/openspec-product-mvp-cursor-claude.md) |
 | **🤖 Claude instructions** | [docs/product/claude-instructions.md](docs/product/claude-instructions.md) |
 | **🪝 Auto-capture hooks** | [docs/auto-capture-hooks.md](docs/auto-capture-hooks.md) |
@@ -452,7 +452,7 @@ pnpm contracts:build && pnpm contracts:test && pnpm contracts:info
 
 | Resource | URL |
 |:---------|:----|
-| MCP npm package | [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp) |
+| MCP npm package | [`@memwalpp/mcp@0.1.1`](https://www.npmjs.com/package/@memwalpp/mcp) |
 | Cursor plugin repo | [Olympusxvn/cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
 | Marketplace submit | [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish) (application submitted) |
 | Plugin submit playbook | [docs in plugin repo](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory/blob/master/docs/SUBMIT-PLAYBOOK.md) |

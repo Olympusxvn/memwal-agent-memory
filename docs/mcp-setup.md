@@ -13,7 +13,7 @@ Minimal path for any MCP-compatible agent (Cursor, Claude Desktop, custom client
 | Step | Action | Time |
 |------|--------|------|
 | **1** | **Node 20+** installed | — |
-| **2** | **No clone:** `npx -y @memwalpp/mcp@0.1.0 --transport stdio` — or clone repo + `pnpm install && pnpm mcp:build` | ~1 min |
+| **2** | **No clone:** `npx -y @memwalpp/mcp@0.1.1 --transport stdio` — or clone repo + `pnpm install && pnpm mcp:build` | ~1 min |
 | **3** | Add MCP server to client config (see [Cursor](#cursor-project-config) or [Claude Desktop](#claude-desktop)) | ~1 min |
 | **4** | Restart client; confirm **10 tools** listed (`remember`, `recall`, `search`, `saveArtifact`, `verify`, …) | ~30 s |
 | **5** | In chat: ask agent to **`remember`** a test phrase, then **`recall`** it — optional **`verify`** on the returned proof | ~2 min |
@@ -41,7 +41,7 @@ pnpm mcp:e2e:portable   # optional Path G — fresh store + verify PASS
 
 **Package docs:** [`packages/mcp/README.md`](../packages/mcp/README.md) · **Technical feedback:** [`FINAL_FEEDBACK.md`](../FINAL_FEEDBACK.md)
 
-**npm (no clone):** [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp) · **Cursor plugin:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) (Marketplace review pending)
+**npm (no clone):** [`@memwalpp/mcp@0.1.1`](https://www.npmjs.com/package/@memwalpp/mcp) · **Cursor plugin:** [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) (Marketplace review pending)
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ pnpm mcp:e2e:portable   # optional Path G — fresh store + verify PASS
 Node 20+. No monorepo clone required:
 
 ```bash
-npx -y @memwalpp/mcp@0.1.0 --transport stdio
+npx -y @memwalpp/mcp@0.1.1 --transport stdio
 ```
 
 Or install the **Cursor Marketplace plugin** from [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) (local load or Marketplace listing when approved). Plugin `mcp.json` uses the same `npx` command.
@@ -109,7 +109,7 @@ Add to `~/.cursor/mcp.json` or enable the [Cursor plugin](https://github.com/Oly
   "mcpServers": {
     "memwal-agent-memory": {
       "command": "npx",
-      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "args": ["-y", "@memwalpp/mcp@0.1.1", "--transport", "stdio"],
       "env": {
         "MEMWAL_NAMESPACE": "cursor",
         "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"

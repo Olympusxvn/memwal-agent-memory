@@ -6,7 +6,7 @@
 |                               |                                                                                                                              |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | **Repository**                | [https://github.com/Olympusxvn/memwal-agent-memory](https://github.com/Olympusxvn/memwal-agent-memory)                       |
-| **MCP npm**                   | [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp) · `npx -y @memwalpp/mcp@0.1.0 --transport stdio`      |
+| **MCP npm**                   | [`@memwalpp/mcp@0.1.1`](https://www.npmjs.com/package/@memwalpp/mcp) · `npx -y @memwalpp/mcp@0.1.1 --transport stdio`      |
 | **Cursor plugin**             | [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) · Marketplace review pending |
 | **Hackathon**                 | [Sui Overflow 2026](https://overflow.sui.io) · [Walrus track](https://mystenlabs.notion.site/walrus-track-problem-statement) |
 | **Live demo**                 | [https://memwalpp-dashboard.vercel.app/](https://memwalpp-dashboard.vercel.app/)                                             |
@@ -72,7 +72,7 @@ Think of three layers:
 
 ### Developers
 
-- **Drop-in MCP** — `pnpm mcp:e2e` proves stdio tools without wallet setup; **`npx -y @memwalpp/mcp@0.1.0`** for product installs
+- **Drop-in MCP** — `pnpm mcp:e2e` proves stdio tools without wallet setup; **`npx -y @memwalpp/mcp@0.1.1`** for product installs
 - **Cursor plugin** — [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) bundles MCP wiring, rules, and skills; Marketplace application submitted (review pending)
 - **Hybrid sync** — `MemorySyncService` handles redact → gate → promote in one place
 - **Mainnet Move** — marketplace and bounty modules already published (see `[docs/deploy.md](docs/deploy.md)`)

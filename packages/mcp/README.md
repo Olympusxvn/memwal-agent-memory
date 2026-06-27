@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-64748b?style=flat-square)](../../LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-stdio%20%7C%20HTTP-8b5cf6?style=flat-square)](https://modelcontextprotocol.io/)
 
-**Server name:** `memwal-agent-memory` · **npm:** [`@memwalpp/mcp@0.1.0`](https://www.npmjs.com/package/@memwalpp/mcp)
+**Server name:** `memwal-agent-memory` · **npm:** [`@memwalpp/mcp@0.1.1`](https://www.npmjs.com/package/@memwalpp/mcp)
 
 > **Local SQLite speed. Optional Walrus durability. Proof you can check.**  
 > The MCP server that gives Cursor, Claude, and any MCP agent **hybrid memory** — without importing `@memwalpp/core`.
@@ -36,7 +36,7 @@ verify   → layered proof: local · blob · chain read
 ### 1. Smoke test (terminal)
 
 ```bash
-npx -y @memwalpp/mcp@0.1.0 --transport stdio
+npx -y @memwalpp/mcp@0.1.1 --transport stdio
 ```
 
 Process stays open on stdio — configure your client below, then restart the IDE.
@@ -51,7 +51,7 @@ Create or edit **`.cursor/mcp.json`** in your project (or Cursor global MCP sett
     "memwal-agent-memory": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "args": ["-y", "@memwalpp/mcp@0.1.1", "--transport", "stdio"],
       "env": {
         "MEMWAL_NAMESPACE": "cursor",
         "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
@@ -91,7 +91,7 @@ Edit **`claude_desktop_config.json`** (macOS: `~/Library/Application Support/Cla
   "mcpServers": {
     "memwal-agent-memory": {
       "command": "npx",
-      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "args": ["-y", "@memwalpp/mcp@0.1.1", "--transport", "stdio"],
       "env": {
         "MEMWAL_NAMESPACE": "claude-desktop",
         "MEMWAL_MCP_DATA_DIR": "${HOME}/.memwal-agent-memory/mcp"

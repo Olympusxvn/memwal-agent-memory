@@ -27,7 +27,7 @@ Chain marketplace tools are **not** part of this product guide — see [`docs/de
 | Use case | Package | Setup |
 |----------|---------|-------|
 | **Pure Walrus Memory** (remember/recall/analyze/restore on relayer) | [`@mysten-incubation/memwal-mcp`](https://www.npmjs.com/package/@mysten-incubation/memwal-mcp) | `npx -y @mysten-incubation/memwal-mcp --prod` → agent calls `memwal_login` |
-| **Hybrid project memory** (local SQLite + optional promote + redact gate) | **`@memwalpp/mcp`** (this repo) | `npx -y @memwalpp/mcp@0.1.0 --transport stdio` or [Cursor plugin](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
+| **Hybrid project memory** (local SQLite + optional promote + redact gate) | **`@memwalpp/mcp`** (this repo) | `npx -y @memwalpp/mcp@0.1.1 --transport stdio` or [Cursor plugin](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
 | **Hackathon judges (no keys)** | **`@memwalpp/mcp`** | `pnpm mcp:e2e` |
 
 They complement each other — not replacements. Full comparison: [`Comparison.md`](../../Comparison.md). Post-hackathon alignment notes: [`walrus-memory-alignment.md`](../walrus-memory-alignment.md).
@@ -61,7 +61,7 @@ pnpm install && pnpm mcp:build
   "mcpServers": {
     "memwal-agent-memory": {
       "command": "npx",
-      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "args": ["-y", "@memwalpp/mcp@0.1.1", "--transport", "stdio"],
       "env": {
         "MEMWAL_NAMESPACE": "cursor",
         "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
@@ -116,7 +116,7 @@ Then use MCP tools with `promote: true` on `remember`, or call `sync` / `promote
 
 | Method | Status | Command / path |
 |--------|--------|----------------|
-| **`npx @memwalpp/mcp`** | **Live** | `npx -y @memwalpp/mcp@0.1.0 --transport stdio` · [npm](https://www.npmjs.com/package/@memwalpp/mcp) |
+| **`npx @memwalpp/mcp`** | **Live** | `npx -y @memwalpp/mcp@0.1.1 --transport stdio` · [npm](https://www.npmjs.com/package/@memwalpp/mcp) |
 | **Cursor Marketplace plugin** | Review pending | [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) |
 | **Open repo in Cursor** | Available | `.cursor/mcp.json` + `pnpm mcp:build` |
 | **Clone + Claude config** | Available | [`claude_desktop_config.json`](../examples/claude_desktop_config.json) |
@@ -136,7 +136,7 @@ Global config template (`~/.cursor/mcp.json`):
   "mcpServers": {
     "memwal-agent-memory": {
       "command": "npx",
-      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "args": ["-y", "@memwalpp/mcp@0.1.1", "--transport", "stdio"],
       "env": {
         "MEMWAL_NAMESPACE": "cursor",
         "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
@@ -188,7 +188,7 @@ Expected: recall returns the stored phrase (JSON text from MCP tool).
 | [landing.html](landing.html) | Repo copy (same content) |
 | [claude-instructions.md](claude-instructions.md) | Paste into Claude project |
 | [e2e-matrix.md](e2e-matrix.md) | QA: Windows + macOS × clients |
-| [npm-publish.md](npm-publish.md) | `@memwalpp/mcp@0.1.0` publish record |
+| [npm-publish.md](npm-publish.md) | `@memwalpp/mcp@0.1.1` publish record |
 | [Cursor plugin](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) | Marketplace bundle |
 | [mcp-setup.md](../mcp-setup.md) | Technical MCP reference |
 | [openspec-product-mvp-cursor-claude.md](../specs/openspec-product-mvp-cursor-claude.md) | Full MVP spec |

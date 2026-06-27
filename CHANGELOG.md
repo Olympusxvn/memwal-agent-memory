@@ -6,9 +6,21 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-### Added — `@memwalpp/mcp` npm bundle (2026-06-18)
+## [0.1.1] — 2026-06-27
 
-Prepare **`npx -y @memwalpp/mcp@0.1.0 --transport stdio`** for Cursor Marketplace and plugin distribution.
+### Added — `@memwalpp/mcp@0.1.1` npm (Walrus Track follow-up)
+
+Ship **`npx -y @memwalpp/mcp@0.1.1 --transport stdio`** with post-submit MCP features missing from `0.1.0`.
+
+- **`saveArtifact` tool** — JSON/markdown reports with `artifact: true` metadata (10 v1 tools total).
+- **Walrus Track bundle** — includes Tier A/B sync, upload-decision, and portable E2E fixes baked into `dist/bundle.mjs`.
+- **Verified:** `pnpm --filter @memwalpp/mcp test` (45/45), `pnpm mcp:e2e` (5 flows), `pnpm mcp:e2e:portable`.
+- **Published:** `@memwalpp/mcp@0.1.1` on npm — https://www.npmjs.com/package/@memwalpp/mcp
+- **Pin updated:** MCP profiles (`packages/mcp/profiles/*`), README, setup skill, product docs.
+
+## [0.1.0] — 2026-06-18
+
+### Added — `@memwalpp/mcp` npm bundle
 
 - **`packages/mcp/scripts/bundle.mjs`:** esbuild bundles `@memwalpp/*` workspace into `dist/bundle.mjs` (~134KB); native/heavy deps stay external (`better-sqlite3`, `@mysten-incubation/memwal`, `@mysten/sui`, MCP SDK, Express, Zod).
 - **`packages/mcp/package.json`:** npm-publish-ready — `publishConfig.access: public`, `files: [dist/bundle.mjs, README.md]`, `bin.memwal-mcp` → bundle, runtime deps listed, workspace packages moved to `devDependencies`.

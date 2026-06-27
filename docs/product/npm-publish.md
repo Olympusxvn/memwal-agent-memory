@@ -1,6 +1,6 @@
 # npm publish — `@memwalpp/mcp` / `memwal-mcp`
 
-**Status:** **Published** — `@memwalpp/mcp@0.1.0` (2026-06-18)
+**Status:** **Published** — `@memwalpp/mcp@0.1.1` (2026-06-27) · prior `0.1.0` (2026-06-18)
 
 **Registry:** https://www.npmjs.com/package/@memwalpp/mcp  
 **npm org:** `@memwalpp` (owner: `olympusxvn`)
@@ -8,7 +8,7 @@
 **User install:**
 
 ```bash
-npx -y @memwalpp/mcp@0.1.0 --transport stdio
+npx -y @memwalpp/mcp@0.1.1 --transport stdio
 ```
 
 **Cursor plugin** (Marketplace distribution): [cursor-plugin-memwal-agent-memory](https://github.com/Olympusxvn/cursor-plugin-memwal-agent-memory) — publisher application submitted via [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish) (review pending).
@@ -30,9 +30,9 @@ npx -y @memwalpp/mcp@0.1.0 --transport stdio
 
 ```bash
 npm view @memwalpp/mcp version
-# → 0.1.0
+# → 0.1.1
 
-npx -y @memwalpp/mcp@0.1.0 --transport stdio
+npx -y @memwalpp/mcp@0.1.1 --transport stdio
 # MCP stdio server (Ctrl+C to exit)
 ```
 
@@ -47,7 +47,7 @@ Monorepo CI path unchanged: `pnpm mcp:build && pnpm mcp:e2e`.
   "mcpServers": {
     "memwal-agent-memory": {
       "command": "npx",
-      "args": ["-y", "@memwalpp/mcp@0.1.0", "--transport", "stdio"],
+      "args": ["-y", "@memwalpp/mcp@0.1.1", "--transport", "stdio"],
       "env": {
         "MEMWAL_NAMESPACE": "cursor",
         "MEMWAL_MCP_DATA_DIR": "${userHome}/.memwal-agent-memory/mcp"
