@@ -93,6 +93,41 @@ tradable memory economy.
 - **Agentic web** — runnable hooks and an autonomous bounty-hunter flow demonstrate real
   agent-to-agent collaboration, not dead SDK imports.
 
+### Shipped strengths (preserve — do not regress)
+
+Post-submit work **extends** these; it does not replace the hybrid pipeline or judge offline path.
+
+| Strength | Where |
+|----------|--------|
+| Hybrid local → redact → gate → Walrus | `MemorySyncService`, `pnpm agent:demo` |
+| MCP universal access | `@memwalpp/mcp`, `pnpm mcp:e2e` |
+| Layered verify + proof JSON | MCP `verify`, `search(includeProof)` |
+| Mainnet Move economy | `packages/sui-contracts`, `pnpm contracts:info` |
+| 2-agent bounty swarm | `pnpm agent:bounty-hunt` |
+| Judge docs + Doc Hub | `JUDGE_GUIDE.md`, `/doc-hub/` |
+| Long-running production proof | [special-one-agent](https://github.com/Olympusxvn/special-one-agent) — see [`docs/companion-mvp-special-one-agent.md`](docs/companion-mvp-special-one-agent.md) |
+
+### Post-submit track gaps (Phases 10–17)
+
+**Submitted** for Sui Overflow 2026 Walrus Track; development continues where ideas strengthen the
+story for judges and follow-on programs.
+
+| Gap | Track theme | Phase | Priority |
+|-----|-------------|-------|----------|
+| **A** | Multi-agent shared memory on Walrus | 11 | Tier A |
+| **B** | Long-running workflows | 14 | Tier S + B |
+| **C** | Artifact-driven (reports, JSON on Walrus) | 12 | Tier A |
+| **D** | Intelligent upload decision v1 | 13 | Tier A |
+| **E** | Verifiable + portable judge path | 12 | Tier A |
+| **F** | Privacy / Seal trust model (docs) | 16 | Tier B |
+| **G** | Dashboard Walrus metrics | 15 | Tier B |
+| **H** | Benchmarks (local vs Walrus) | 15 | Tier B |
+
+**Canonical plan:** [`docs/specs/openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md)  
+**Progress checklist:** [`docs/walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md)  
+**Execution order:** Tier **S** (narrative) → Tier **A** (demos + MCP) → Tier **B** (polish).  
+**Deferred:** zk-proof, full framework adapters, production indexer, MemWalManual wire-up — see spec §6.
+
 ---
 
 ## Success Metrics
@@ -136,6 +171,7 @@ tradable memory economy.
 ## Learn More
 
 - **Master OpenSpec**: [`docs/specs/openspec-memwal-agent-memory.md`](docs/specs/openspec-memwal-agent-memory.md)
+- **Walrus Track gaps (post-submit)**: [`docs/specs/openspec-walrus-track-gaps.md`](docs/specs/openspec-walrus-track-gaps.md) · [`docs/walrus-track-post-submit-checklist.md`](docs/walrus-track-post-submit-checklist.md)
 - **Architecture**: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - **MCP Server**: [`docs/specs/openspec-mcp-server.md`](docs/specs/openspec-mcp-server.md)
 - **Product MVP (Cursor + Claude)**: [`docs/specs/openspec-product-mvp-cursor-claude.md`](docs/specs/openspec-product-mvp-cursor-claude.md) · [`docs/product/README.md`](docs/product/README.md)
