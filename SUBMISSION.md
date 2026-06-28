@@ -41,6 +41,65 @@ Chat logs and opaque databases fail judges and marketplaces: there is no durable
 
 We built on the official **[Walrus Memory Workshop](https://mystenlabs.notion.site/Walrus-Memory-Workshop-Build-on-the-Memory-Layer-3666d9dcb4e9801dadb0e67ad368235e)** ([hands-on kit](https://github.com/DionisisLougaris/walrus-memory-workshop-kit) · `[SKILL.md](https://github.com/DionisisLougaris/walrus-memory-workshop-kit/blob/main/SKILL.md)`, [recording](https://www.youtube.com/watch?v=GncjVUEJw9Y)) — `remember` / `recall` / namespaces on Walrus — and extended it with hybrid gates, judge MCP, and **mainnet** Move. Judges verify **this repository** only; see `[docs/judge-walrus-memory-workshop.md](docs/judge-walrus-memory-workshop.md)`.
 
+### 2.1 Alignment with “What we’re looking for”
+
+MemWal Agent Memory is built as a **production-ready, functioning system** — not a slide-deck demo. The architecture below maps directly to the three core criteria judges care about when scoring agent memory on Walrus.
+
+#### 1 — Agents become more useful when they remember and build over time
+
+**Problem:** Flat chat-log memory causes context bloat, rising token cost, and **memory drift** — stale text pollutes the model’s current task.
+
+**Our answer — structured lifecycle, not a dumping ground:**
+
+| Capability | What it does | Verify |
+|------------|--------------|--------|
+| **`saveArtifact`** | Persists **structured outputs** (decisions, ADR notes, debug postmortems, session summaries) with artifact metadata — not raw conversational noise | MCP tool · `pnpm mcp:e2e` flow 4 |
+| **`getVersionHistory`** | Timeline of local edits + Walrus promotions for a memory id | MCP tool · [`packages/mcp/docs/TOOLS.md`](packages/mcp/docs/TOOLS.md) |
+| **`getLineage`** | Layered ancestry graph (local + optional on-chain pack refs) for audit and “build on verified knowledge” | MCP tool · metadata-only (S-8) |
+| **`remember` / `recall` / `search`** | Hybrid ranked recall — local first, optional durable hydrate | `pnpm mcp:e2e` · `pnpm agent:demo` |
+
+Agents **choose** what to store (via MCP or OpenClaw hooks); we do not silently log every token. That keeps long-running work focused on durable decisions and artifacts instead of replaying chat history.
+
+#### 2 — Workflows improve when data is shared, durable, and portable
+
+**Problem:** Machine-bound agent state vanishes on restart; conversely, forcing every read/write over the network adds multi-second latency and breaks flow.
+
+**Our answer — hybrid memory plane (speed decoupled from durability):**
+
+```
+Agent / IDE (Cursor, Claude) → SQLite local (ms recall)
+                                    ↓ redact + quality gate
+                              MemWal relayer → Walrus blob
+                                    ↓
+                         walrusBlobId + optional Sui pack refs
+```
+
+| Capability | What it does | Verify |
+|------------|--------------|--------|
+| **Shared context** | Multi-namespace design; swarm demos share one namespace | `pnpm agent:shared-memory` |
+| **Durable anchor** | `sync` promotes redacted rows to Walrus when `MEMWAL_*` is set | `MEMWAL_AUTO_PUSH=1 pnpm agent:bounty-hunt` → `✓ Promoted — blob …` |
+| **Portable hydration** | Fresh local store rehydrates from durable layer; layered `verify` | `pnpm mcp:e2e:portable` (offline mock durable) · live Walrus with env keys |
+| **Long-running proof** | Production companion app on mainnet MemWal | [Mr. Toxic Special One](https://special-one-agent.vercel.app/chat) · §3.1 |
+
+Local inference stays **local-first**; Walrus is the durable, cross-session, cross-machine layer — not the hot path for every recall.
+
+#### 3 — Developers move beyond fragile, siloed memory setups
+
+**Problem:** Developers face a false choice: **local-only silos** that die with one IDE session, or **cloud RAG** that can leak secrets and source code into shared indexes.
+
+**Our answer — MCP + local gatekeeper + open durable layer:**
+
+| Capability | What it does | Verify |
+|------------|--------------|--------|
+| **Standard MCP server** | `@memwalpp/mcp` — 10 tools, stdio, Cursor / Claude profiles | [`docs/mcp-setup.md`](docs/mcp-setup.md) · `npx -y @memwalpp/mcp@0.1.1 --transport stdio` |
+| **Pro Local (no keys)** | Embeddable SQLite + optional FTS5 (`MEMWAL_RECALL_FTS=1`); sub-10 ms local recall on typical dev hardware | `pnpm bench:recall` · [`docs/benchmarks/hybrid-memory.md`](docs/benchmarks/hybrid-memory.md) |
+| **Privacy before share** | `redactForUpstream` + quality gate (`MEMWAL_SYNC_QUALITY_MIN`) **before** MemWal push; optional `redactLocal` on write | `memory-sync-service.ts` · MCP cannot bypass gate |
+| **Break the silo** | Same namespace + Walrus blob id across agents, MCP clients, and dashboard | `pnpm mcp:e2e` · product path: [`docs/product/README.md`](docs/product/README.md) |
+
+**Honest scope:** Managed MemWal relayer sees plaintext **after** local redaction (see §3.2). MemWalManual / self-hosted relayer paths are documented but not wired in the default demo.
+
+**One-line pitch:** *Local speed and privacy gates at the developer’s machine; Walrus durability and Sui verifiability when stakes are real — one MCP install, no monorepo required.*
+
 ---
 
 ## 3. Walrus value (why this track)
